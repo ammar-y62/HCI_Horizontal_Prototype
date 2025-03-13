@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
+import CalendarView from "./components/pages/CalendarView";
 
 function App() {
   const [message, setMessage] = useState("");
-  
+
   useEffect(() => {
     // Example: fetch data from Flask
     fetch("http://127.0.0.1:5000/api/hello")
@@ -14,15 +15,13 @@ function App() {
   }, []);
 
   return (
+
     <div style={{ padding: "1rem" }}>
-      <h1>Medical Clinic Scheduling Tool</h1>
+
+            <CalendarView />
+      {/* <h1>Medical Clinic Scheduling Tool</h1>
       <h2>Home Page - Calendar Placeholder</h2>
-      <p>Message from Flask: {message}</p>
-      {/* 
-        TODO: Add your calendar component here or any other UI components.
-        For example, you can integrate libraries like react-calendar or 
-        react-big-calendar for a scheduling view.
-      */}
+      <p>Message from Flask: {message}</p> */}
     </div>
   );
 }
