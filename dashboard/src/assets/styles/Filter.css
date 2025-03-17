@@ -1,0 +1,86 @@
+/* Filter Popup */
+.filter-popup {
+    position: absolute;
+    top: 50px;
+    left: 10px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    min-width: 180px;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Filter Options */
+.filter-option {
+    background: #2b6cb0;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.filter-option:hover {
+    background: #1e4a8a;
+}
+
+/* Sub Filter Popup */
+.sub-filter-popup {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    min-width: 200px;
+    z-index: 300;
+}
+
+.sub-filter-title {
+    font-size: 16px;
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+
+/* Back Button */
+.back-button {
+    background: none;
+    border: none;
+    color: #2b6cb0;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    color: #1e4a8a;
+}
+
+/* Search Bar */
+.filter-search input {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+/* Checkbox Styles */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    padding: 5px 0;
+}

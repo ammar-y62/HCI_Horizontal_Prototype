@@ -1,130 +1,158 @@
 /* Calendar Styling - CalendarView.css */
 .calendar-container {
-    padding: 1rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-  .calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 1rem;
-  }
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+}
 
-  .filter-button {
-    background: #2b6cb0;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
+.filter-button {
+  background: #2b6cb0;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
 
-  .profiles-button {
-    background: #2b6cb0;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    margin-left: -5px; /* Reduce space between buttons */
-  }
+.profiles-button {
+  background: #2b6cb0;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  margin-left: -5px;
+}
 
-  .view-toggle {
-    display: flex;
-    background: #eae6f7;
-    border-radius: 50px;
-    padding: 4px;
-  }
+.view-toggle {
+  display: flex;
+  background: #eae6f7;
+  border-radius: 50px;
+  padding: 4px;
+}
 
-  .view-toggle button {
-    background: transparent;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    padding: 5px 10px;
-    transition: color 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    border-radius: 50px;
-  }
+.view-toggle button {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 50px;
+}
 
-  .view-toggle .active {
-    font-weight: bold;
-    background: #d0c4f0;
-    color: #2b6cb0;
-  }
+.view-toggle .active {
+  font-weight: bold;
+  background: #d0c4f0;
+  color: #2b6cb0;
+}
 
-  .navigation {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    background: #d3d3d3;
-    border-radius: 50px;
-    padding: 4px;
-  }
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #d3d3d3;
+  border-radius: 50px;
+  padding: 4px;
+}
 
-  .nav-button {
-    background: transparent;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 50px;
-  }
+.nav-button {
+  background: transparent;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 50px;
+}
 
-  .calendar-title {
-    font-size: 20px;
-    font-weight: bold;
-    padding: 0 10px;
-  }
+.calendar-title {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 0 10px;
+}
 
-  .calendar-wrapper {
-    border-top: 2px solid #2b6cb0;
-    padding-top: 1rem;
-  }
+.calendar-wrapper {
+  border-top: 2px solid #2b6cb0;
+  padding-top: 1rem;
+}
 
-  .weekday-header {
-    background: #6585c0;
-    color: white;
-    text-align: center;
-    padding: 5px 0;
-  }
+/* Updated Styles */
+.fc-daygrid-day-number {
+  font-size: 12px;
+}
 
-  .weekend-header {
-    background: #d3d3d3;
-    color: black;
-    text-align: center;
-    padding: 5px 0;
-  }
+/* Blue Header Row */
+.fc-col-header-cell {
+  background: #7A8AFF !important;
+  color: white !important;
+  font-weight: bold;
+  text-align: center;
+}
 
-  .weekday-cell {
-    background: white;
-  }
+/* Grey Background for Saturday and Sunday */
+.fc-day-sat,
+.fc-day-sun {
+  background: #E0E0E0 !important;
+}
 
-  .weekend-cell {
-    background: #f0f0f0;
-  }
+/* Smaller Grid Boxes */
+.fc-daygrid-day-frame {
+  min-height: 50px !important;
+  max-height: 50px !important;
+  padding: 2px !important;
+}
 
-  .event-badge {
-    background: #1e3a8a;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    text-align: center;
-    cursor: pointer;
-  }
+/* Smaller Time Slots in Day View */
+.fc-timegrid-slot {
+  min-height: 30px !important;
+  max-height: 30px !important;
+  font-size: 12px;
+}
 
-  .event-badge:hover {
-    opacity: 0.7;
-  }
+/* Blue Header Row for Time Grid View */
+.fc-timegrid .fc-col-header-cell {
+  background: #7A8AFF !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+/* Grey Background for Time Column */
+.fc-timegrid-slot-label {
+  background: #E0E0E0 !important;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Fixed Navigation Bar */
+.fixed-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  padding: 10px;
+  z-index: 100;
+}
+
+/* Styles for Room Headers */
+.fc-resourceTimeGridDay-view .fc-col-header-cell {
+  background: #7A8AFF !important;
+  color: white !important;
+  font-weight: bold;
+  text-align: center;
+}

@@ -15,14 +15,24 @@ async function apiFetch(endpoint, options = {}) {
   }
 }
 
-// Example API get
-export const fetchFileName = () =>
-    apiFetch('/api/get_file_name');
+// Fetch all people
+export const fetchPeople = () => apiFetch("/api/people");
 
-// Example API send
-export const saveScript = (scriptContent) =>
-    apiFetch('/api/save_script', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ script: scriptContent }),
-    });
+// Add a new person
+export const addPerson = (personData) =>
+  apiFetch("/api/people", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(personData),
+  });
+
+// Fetch all appointments
+export const fetchAppointments = () => apiFetch("/api/appointments");
+
+// Add a new appointment
+export const addAppointment = (appointmentData) =>
+  apiFetch("/api/appointments", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(appointmentData),
+  });
