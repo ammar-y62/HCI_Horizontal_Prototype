@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid"; // Added plugin for room headers
+import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import "../assets/styles/CalendarView.css";
+
 import {
-  FaFilter, FaUser, FaCalendarAlt, FaList,
-  FaChevronLeft, FaChevronRight
+  FaFilter,
+  FaUser,
+  FaCalendarAlt,
+  FaList,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
+
 import { fetchAppointments } from "../api/api";
 import Filter from "./Filter";
 import Profiles from "./Profiles";
+import AppointmentPopup from "./Appointments";
 
 const CalendarView = () => {
   const [view, setView] = useState("dayGridMonth");
@@ -18,6 +25,7 @@ const CalendarView = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [showProfiles, setShowProfiles] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedSlot, setSelectedSlot] = useState(null);
 
   useEffect(() => {
     const loadAppointments = async () => {
@@ -26,9 +34,9 @@ const CalendarView = () => {
         setEvents(
           data.map((appointment) => ({
             title: `Room ${appointment.room_number} - ${appointment.patient_id}`,
-            date: appointment.date_time.split("T")[0], // Format date
-            start: appointment.date_time, // Full date-time for day view
-            resourceId: appointment.room_number.toString(), // Assign room as a resource
+            date: appointment.date_time.split("T")[0],
+            start: appointment.date_time,
+            resourceId: appointment.room_number.toString(),
           }))
         );
       } catch (error) {
@@ -38,45 +46,42 @@ const CalendarView = () => {
     loadAppointments();
   }, []);
 
-  // Function to change date
   const changeDate = (direction) => {
+    const newDate = new Date(currentDate);
     if (view === "dayGridMonth") {
-      // Change by month
-      setCurrentDate(prev => {
-        const newDate = new Date(prev);
-        newDate.setMonth(prev.getMonth() + (direction === "next" ? 1 : -1));
-        return newDate;
-      });
+      newDate.setMonth(newDate.getMonth() + (direction === "next" ? 1 : -1));
     } else {
-      // Change by day
-      setCurrentDate(prev => {
-        const newDate = new Date(prev);
-        newDate.setDate(prev.getDate() + (direction === "next" ? 1 : -1));
-        return newDate;
-      });
+      newDate.setDate(newDate.getDate() + (direction === "next" ? 1 : -1));
     }
+    setCurrentDate(newDate);
   };
 
-  // Format the title based on the view
   const getTitle = () => {
     if (view === "dayGridMonth") {
       return currentDate.toLocaleString("en-US", { month: "long", year: "numeric" });
     }
-    return currentDate.toLocaleString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+    return currentDate.toLocaleString("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
   };
 
   return (
     <div className="calendar-container">
-      {/* Fixed Navigation Bar */}
+      {/* Navigation Header */}
       <div className="calendar-header fixed-header">
         <button className="filter-button" onClick={() => setShowFilter(!showFilter)}>
           <FaFilter /> Filter
         </button>
         {showFilter && <Filter onClose={() => setShowFilter(false)} />}
+
         <button className="profiles-button" onClick={() => setShowProfiles(!showProfiles)}>
           <FaUser /> Profiles
         </button>
         {showProfiles && <Profiles onClose={() => setShowProfiles(false)} />}
+
         <div className="view-toggle">
           <button className={view === "dayGridMonth" ? "active" : ""} onClick={() => setView("dayGridMonth")}>
             <FaCalendarAlt /> Month
@@ -85,27 +90,33 @@ const CalendarView = () => {
             <FaList /> Day
           </button>
         </div>
+
         <div className="navigation">
-          <button className="nav-button" onClick={() => changeDate("prev")}>
-            <FaChevronLeft />
-          </button>
+          <button className="nav-button" onClick={() => changeDate("prev")}><FaChevronLeft /></button>
           <h2 className="calendar-title">{getTitle()}</h2>
-          <button className="nav-button" onClick={() => changeDate("next")}>
-            <FaChevronRight />
-          </button>
+          <button className="nav-button" onClick={() => changeDate("next")}><FaChevronRight /></button>
         </div>
       </div>
 
-      {/* Calendar View */}
+      {/* Calendar Body */}
       <div className="calendar-wrapper">
         <FullCalendar
           plugins={[dayGridPlugin, resourceTimeGridPlugin, interactionPlugin]}
           initialView={view}
-          key={view} // Forces rerender when view changes
+          key={view}
           events={events}
-          headerToolbar={false} // Hide default header
-          date={currentDate} // Ensure the selected date updates
-          allDaySlot={false} // Remove "All Day" row in day view
+          headerToolbar={false}
+          date={currentDate}
+          allDaySlot={false}
+          selectable={true}
+          select={(info) => {
+            if (view === "resourceTimeGridDay") {
+              setSelectedSlot({
+                room: info.resource?.title || "N/A",
+                time: new Date(info.start).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+              });
+            }
+          }}
           slotMinTime="09:00:00"
           slotMaxTime="17:00:00"
           resources={[
@@ -117,11 +128,10 @@ const CalendarView = () => {
             { id: "6", title: "Room 6" },
             { id: "7", title: "Room 7" },
           ]}
-          resourceLabelText="Rooms"
           views={{
             dayGridMonth: { type: "dayGridMonth" },
             resourceTimeGridDay: {
-              type: "resourceTimeGrid",
+              type: "resourceTimeGridDay",
               slotDuration: "01:00:00",
               slotLabelInterval: { hours: 1 },
               slotLabelFormat: { hour: "numeric", minute: "2-digit", hour12: true },
@@ -129,13 +139,22 @@ const CalendarView = () => {
               resourceAreaHeaderContent: "Rooms",
             },
           }}
+          dayHeaderClassNames={(date) => (date.isWeekend ? "weekend-header" : "weekday-header")}
+          dayCellClassNames={(date) => (date.isWeekend ? "weekend-cell" : "weekday-cell")}
           eventContent={({ event }) => (
-            <div className="event-badge" title={event.title}>
-              {event.title}
-            </div>
+            <div className="event-badge" title={event.title}>{event.title}</div>
           )}
         />
       </div>
+
+      {/* Appointment Popup */}
+      {selectedSlot && (
+        <AppointmentPopup
+          room={selectedSlot.room}
+          time={selectedSlot.time}
+          onClose={() => setSelectedSlot(null)}
+        />
+      )}
     </div>
   );
 };
