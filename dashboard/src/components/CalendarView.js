@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+// src/components/CalendarView.jsx
+
+import React, { useState, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import "../assets/styles/CalendarView.css";
 
 import {
   FaFilter,
@@ -12,6 +13,7 @@ import {
   FaList,
   FaChevronLeft,
   FaChevronRight,
+  FaEdit,
 } from "react-icons/fa";
 
 import { fetchAppointments } from "../api/api";
@@ -19,58 +21,108 @@ import Filter from "./Filter";
 import Profiles from "./Profiles";
 import AppointmentPopup from "./Appointments";
 
+import "../assets/styles/CalendarView.css";
+
 const CalendarView = () => {
+  // Ref for calling .prev() / .next() directly
+  const calendarRef = useRef(null);
+
+  // Which view we're in: "dayGridMonth" or "resourceTimeGridDay"
   const [view, setView] = useState("dayGridMonth");
+
+  // Title text (e.g. "April 2025") that we show in the header
+  const [titleText, setTitleText] = useState("");
+
+  // The events for the current visible date range
   const [events, setEvents] = useState([]);
+
+  // Toggles for Filter/Profiles drawers
   const [showFilter, setShowFilter] = useState(false);
   const [showProfiles, setShowProfiles] = useState(false);
-  const [currentDate, setCurrentDate] = useState(new Date());
+
+  // If user selects a time slot in Day View, open popup
   const [selectedSlot, setSelectedSlot] = useState(null);
 
-  useEffect(() => {
-    const loadAppointments = async () => {
-      try {
-        const data = await fetchAppointments();
-        setEvents(
-          data.map((appointment) => ({
-            title: `Room ${appointment.room_number} - ${appointment.patient_id}`,
-            date: appointment.date_time.split("T")[0],
-            start: appointment.date_time,
-            resourceId: appointment.room_number.toString(),
-          }))
-        );
-      } catch (error) {
-        console.error("Failed to fetch appointments:", error);
-      }
-    };
-    loadAppointments();
-  }, []);
+  /**
+   * Called automatically by FullCalendar whenever:
+   *   - The user clicks Next/Prev
+   *   - The user changes the view (Month <-> Day)
+   *   - The initial render occurs
+   *
+   * This is where we:
+   *   1) fetch all your appointments
+   *   2) filter them to the new date range
+   *   3) set them in state
+   *   4) update the header title to match FullCalendar's built‐in title
+   */
+  const handleDatesSet = async (dateInfo) => {
+    try {
+      // 1) The new date range
+      const { start, end, view } = dateInfo; // start & end are date objects
+      // 2) Update our title from FullCalendar’s own view.title
+      setTitleText(view.title);
 
-  const changeDate = (direction) => {
-    const newDate = new Date(currentDate);
-    if (view === "dayGridMonth") {
-      newDate.setMonth(newDate.getMonth() + (direction === "next" ? 1 : -1));
-    } else {
-      newDate.setDate(newDate.getDate() + (direction === "next" ? 1 : -1));
+      // 3) Fetch your entire appointments list from the backend
+      const data = await fetchAppointments();
+
+      // 4) Filter them to fall within [start, end)
+      const filtered = data.filter((apt) => {
+        const apptDate = new Date(apt.date_time);
+        return apptDate >= start && apptDate < end;
+      });
+
+      // 5) Transform them into event objects that FullCalendar expects
+      const newEvents = filtered.map((apt) => ({
+        id: apt.id,
+        title: `Room ${apt.room_number}`, // e.g. "Room 3"
+        start: apt.date_time,             // e.g. "2025-04-03T09:00:00"
+        date: apt.date_time.split("T")[0],
+        resourceId: String(apt.room_number), // must match "1".."7" if day view
+        patient: apt.patient_id,
+        doctor: apt.doctor_id,
+      }));
+
+      setEvents(newEvents);
+    } catch (error) {
+      console.error("Failed to fetch appointments:", error);
     }
-    setCurrentDate(newDate);
   };
 
-  const getTitle = () => {
-    if (view === "dayGridMonth") {
-      return currentDate.toLocaleString("en-US", { month: "long", year: "numeric" });
+  /**
+   * Custom buttons for month navigation
+   * We call getApi() on the FullCalendar instance (via ref),
+   * but only if it’s non‐null to avoid errors.
+   */
+  const handlePrev = () => {
+    if (calendarRef.current) {
+      calendarRef.current.getApi().prev();
     }
-    return currentDate.toLocaleString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
+  };
+  const handleNext = () => {
+    if (calendarRef.current) {
+      calendarRef.current.getApi().next();
+    }
+  };
+
+  /**
+   * Switch to Month View or Day View
+   */
+  const switchToMonthView = () => {
+    setView("dayGridMonth");
+    if (calendarRef.current) {
+      calendarRef.current.getApi().changeView("dayGridMonth");
+    }
+  };
+  const switchToDayView = () => {
+    setView("resourceTimeGridDay");
+    if (calendarRef.current) {
+      calendarRef.current.getApi().changeView("resourceTimeGridDay");
+    }
   };
 
   return (
     <div className="calendar-container">
-      {/* Navigation Header */}
+      {/* ---- Top Navigation ---- */}
       <div className="calendar-header fixed-header">
         <button className="filter-button" onClick={() => setShowFilter(!showFilter)}>
           <FaFilter /> Filter
@@ -82,43 +134,112 @@ const CalendarView = () => {
         </button>
         {showProfiles && <Profiles onClose={() => setShowProfiles(false)} />}
 
+        {/* Toggle Month/Day view */}
         <div className="view-toggle">
-          <button className={view === "dayGridMonth" ? "active" : ""} onClick={() => setView("dayGridMonth")}>
+          <button
+            className={view === "dayGridMonth" ? "active" : ""}
+            onClick={switchToMonthView}
+          >
             <FaCalendarAlt /> Month
           </button>
-          <button className={view === "resourceTimeGridDay" ? "active" : ""} onClick={() => setView("resourceTimeGridDay")}>
+          <button
+            className={view === "resourceTimeGridDay" ? "active" : ""}
+            onClick={switchToDayView}
+          >
             <FaList /> Day
           </button>
         </div>
 
+        {/* Arrows + Title */}
         <div className="navigation">
-          <button className="nav-button" onClick={() => changeDate("prev")}><FaChevronLeft /></button>
-          <h2 className="calendar-title">{getTitle()}</h2>
-          <button className="nav-button" onClick={() => changeDate("next")}><FaChevronRight /></button>
+          <button className="nav-button" onClick={handlePrev}>
+            <FaChevronLeft />
+          </button>
+          <h2 className="calendar-title">{titleText}</h2>
+          <button className="nav-button" onClick={handleNext}>
+            <FaChevronRight />
+          </button>
         </div>
       </div>
 
-      {/* Calendar Body */}
+      {/* ---- The Calendar ---- */}
       <div className="calendar-wrapper">
         <FullCalendar
+          ref={calendarRef}
           plugins={[dayGridPlugin, resourceTimeGridPlugin, interactionPlugin]}
-          initialView={view}
-          key={view}
-          events={events}
           headerToolbar={false}
-          date={currentDate}
-          allDaySlot={false}
+          footerToolbar={false}
+          initialView={view}
+          // This fires whenever the user navigates or changes view
+          datesSet={handleDatesSet}
+          // Our events from state
+          events={events}
+          // We allow selecting time slots in Day View
           selectable={true}
-          select={(info) => {
-            if (view === "resourceTimeGridDay") {
-              setSelectedSlot({
-                room: info.resource?.title || "N/A",
-                time: new Date(info.start).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-              });
-            }
+
+          /* =============== MONTH VIEW CONFIG =============== */
+          views={{
+            dayGridMonth: {
+              // Hide real events (bullets) so we can show "X appointments" ourselves
+              eventDisplay: "none",
+              // Clicking a day in month view -> switch to day view for that date
+              dateClick: (info) => {
+                switchToDayView();
+                if (calendarRef.current) {
+                  calendarRef.current.getApi().gotoDate(info.date);
+                }
+              },
+              // Show day number plus "X appointments"
+              dayCellContent: (arg) => {
+                const dayNumber = arg.dayNumberText;
+                const dateStr = arg.dateStr;
+                const dayEvents = events.filter((evt) => evt.date === dateStr);
+
+                if (dayEvents.length > 0) {
+                  return {
+                    html: `
+                      <div class="fc-daygrid-day-number">${dayNumber}</div>
+                      <div class="month-appointments">${dayEvents.length} appointments</div>
+                    `,
+                  };
+                }
+                // Otherwise just the day number
+                return {
+                  html: `<div class="fc-daygrid-day-number">${dayNumber}</div>`,
+                };
+              },
+            },
+
+            /* =============== DAY VIEW CONFIG =============== */
+            resourceTimeGridDay: {
+              type: "resourceTimeGridDay",
+              allDaySlot: false,          // remove the "all‐day" row
+              slotMinTime: "09:00:00",    // start at 9 AM
+              slotMaxTime: "16:00:00",    // go until 4 PM
+              slotDuration: "01:00:00",   // 1 hour per slot
+              slotLabelInterval: { hours: 1 },
+              slotLabelFormat: { hour: "numeric", minute: "2-digit", hour12: true },
+              resourceAreaHeaderContent: "Rooms",
+              resourceAreaWidth: "120px",
+              eventDisplay: "auto",       // show the event in a colored box
+
+              // Custom rendering of each event in day view
+              eventContent: (arg) => {
+                const { event } = arg;
+                const { title, extendedProps } = event;
+                return (
+                  <div style={{ backgroundColor: "#d0f0ff", padding: "5px", borderRadius: "4px" }}>
+                    <div><strong>{title}</strong></div>
+                    <div style={{ fontSize: "0.85rem" }}>
+                      {extendedProps.patient} w/ {extendedProps.doctor}
+                    </div>
+                  </div>
+                );
+              },
+            },
           }}
-          slotMinTime="09:00:00"
-          slotMaxTime="17:00:00"
+
+          // Hard-coded rooms 1..7
           resources={[
             { id: "1", title: "Room 1" },
             { id: "2", title: "Room 2" },
@@ -128,30 +249,30 @@ const CalendarView = () => {
             { id: "6", title: "Room 6" },
             { id: "7", title: "Room 7" },
           ]}
-          views={{
-            dayGridMonth: { type: "dayGridMonth" },
-            resourceTimeGridDay: {
-              type: "resourceTimeGridDay",
-              slotDuration: "01:00:00",
-              slotLabelInterval: { hours: 1 },
-              slotLabelFormat: { hour: "numeric", minute: "2-digit", hour12: true },
-              resourceAreaWidth: "15%",
-              resourceAreaHeaderContent: "Rooms",
-            },
+
+          /* User selects a slot in Day View => open your AppointmentPopup */
+          select={(info) => {
+            if (info.view.type === "resourceTimeGridDay") {
+              setSelectedSlot({
+                // The raw room number "1".."7"
+                room: info.resource?.id || "",
+                // e.g. "09:00 AM"
+                time: new Date(info.start).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                }),
+              });
+            }
           }}
-          dayHeaderClassNames={(date) => (date.isWeekend ? "weekend-header" : "weekday-header")}
-          dayCellClassNames={(date) => (date.isWeekend ? "weekend-cell" : "weekday-cell")}
-          eventContent={({ event }) => (
-            <div className="event-badge" title={event.title}>{event.title}</div>
-          )}
         />
       </div>
 
-      {/* Appointment Popup */}
+      {/* ---- Popup for new/edit appointment ---- */}
       {selectedSlot && (
         <AppointmentPopup
           room={selectedSlot.room}
           time={selectedSlot.time}
+          // If you need the date, you can store info.start in selectedSlot
           onClose={() => setSelectedSlot(null)}
         />
       )}
