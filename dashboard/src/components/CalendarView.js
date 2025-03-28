@@ -14,6 +14,7 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaEdit,
+  FaCaretDown,
 } from "react-icons/fa";
 
 import { fetchAppointments } from "../api/api";
@@ -75,7 +76,7 @@ const CalendarView = () => {
       const newEvents = filtered.map((apt) => ({
         id: apt.id,
         title: `Room ${apt.room_number}`, // e.g. "Room 3"
-        start: apt.date_time,             // e.g. "2025-04-03T09:00:00"
+        start: apt.date_time, // e.g. "2025-04-03T09:00:00"
         date: apt.date_time.split("T")[0],
         resourceId: String(apt.room_number), // must match "1".."7" if day view
         patient: apt.patient_id,
@@ -123,42 +124,60 @@ const CalendarView = () => {
   return (
     <div className="calendar-container">
       {/* ---- Top Navigation ---- */}
-      <div className="calendar-header fixed-header">
-        <button className="filter-button" onClick={() => setShowFilter(!showFilter)}>
-          <FaFilter /> Filter
-        </button>
-        {showFilter && <Filter onClose={() => setShowFilter(false)} />}
-
-        <button className="profiles-button" onClick={() => setShowProfiles(!showProfiles)}>
-          <FaUser /> Profiles
-        </button>
-        {showProfiles && <Profiles onClose={() => setShowProfiles(false)} />}
-
-        {/* Toggle Month/Day view */}
-        <div className="view-toggle">
+      <div className="calendar-header">
+        <div className="left-section">
           <button
-            className={view === "dayGridMonth" ? "active" : ""}
-            onClick={switchToMonthView}
+            className="icon-button"
+            onClick={() => setShowFilter(!showFilter)}
           >
-            <FaCalendarAlt /> Month
+            <FaFilter /> Filter
+            <FaCaretDown />
           </button>
+          {showFilter && <Filter onClose={() => setShowFilter(false)} />}
+
           <button
-            className={view === "resourceTimeGridDay" ? "active" : ""}
-            onClick={switchToDayView}
+            className="icon-button"
+            onClick={() => setShowProfiles(!showProfiles)}
           >
-            <FaList /> Day
+            <FaUser /> Profiles
           </button>
+          {showProfiles && <Profiles onClose={() => setShowProfiles(false)} />}
         </div>
 
-        {/* Arrows + Title */}
-        <div className="navigation">
-          <button className="nav-button" onClick={handlePrev}>
-            <FaChevronLeft />
-          </button>
+        <div className="right-section">
+          {/* Toggle Month/Day view */}
+          <div className="view-toggle">
+            <button
+              className={view === "dayGridMonth" ? "active" : ""}
+              onClick={switchToMonthView}
+            >
+              <FaCalendarAlt /> Month
+            </button>
+            <button
+              className={view === "resourceTimeGridDay" ? "active" : ""}
+              onClick={switchToDayView}
+            >
+              <FaList /> Day
+            </button>
+            {showProfiles && (
+              <Profiles onClose={() => setShowProfiles(false)} />
+            )}
+          </div>
+
+          {/* Arrows + Title */}
+          <div className="navigation">
+            <button className="nav-button nav-button-left" onClick={handlePrev}>
+              <FaChevronLeft />
+            </button>
+
+            <button
+              className="nav-button nav-button-right"
+              onClick={handleNext}
+            >
+              <FaChevronRight />
+            </button>
+          </div>
           <h2 className="calendar-title">{titleText}</h2>
-          <button className="nav-button" onClick={handleNext}>
-            <FaChevronRight />
-          </button>
         </div>
       </div>
 
@@ -176,7 +195,6 @@ const CalendarView = () => {
           events={events}
           // We allow selecting time slots in Day View
           selectable={true}
-
           /* =============== MONTH VIEW CONFIG =============== */
           views={{
             dayGridMonth: {
@@ -213,23 +231,35 @@ const CalendarView = () => {
             /* =============== DAY VIEW CONFIG =============== */
             resourceTimeGridDay: {
               type: "resourceTimeGridDay",
-              allDaySlot: false,          // remove the "all‐day" row
-              slotMinTime: "09:00:00",    // start at 9 AM
-              slotMaxTime: "16:00:00",    // go until 4 PM
-              slotDuration: "01:00:00",   // 1 hour per slot
+              allDaySlot: false, // remove the "all‐day" row
+              slotMinTime: "09:00:00", // start at 9 AM
+              slotMaxTime: "16:00:00", // go until 4 PM
+              slotDuration: "01:00:00", // 1 hour per slot
               slotLabelInterval: { hours: 1 },
-              slotLabelFormat: { hour: "numeric", minute: "2-digit", hour12: true },
+              slotLabelFormat: {
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true,
+              },
               resourceAreaHeaderContent: "Rooms",
               resourceAreaWidth: "120px",
-              eventDisplay: "auto",       // show the event in a colored box
+              eventDisplay: "auto", // show the event in a colored box
 
               // Custom rendering of each event in day view
               eventContent: (arg) => {
                 const { event } = arg;
                 const { title, extendedProps } = event;
                 return (
-                  <div style={{ backgroundColor: "#d0f0ff", padding: "5px", borderRadius: "4px" }}>
-                    <div><strong>{title}</strong></div>
+                  <div
+                    style={{
+                      backgroundColor: "#d0f0ff",
+                      padding: "5px",
+                      borderRadius: "4px",
+                    }}
+                  >
+                    <div>
+                      <strong>{title}</strong>
+                    </div>
                     <div style={{ fontSize: "0.85rem" }}>
                       {extendedProps.patient} w/ {extendedProps.doctor}
                     </div>
@@ -238,7 +268,6 @@ const CalendarView = () => {
               },
             },
           }}
-
           // Hard-coded rooms 1..7
           resources={[
             { id: "1", title: "Room 1" },
@@ -249,7 +278,6 @@ const CalendarView = () => {
             { id: "6", title: "Room 6" },
             { id: "7", title: "Room 7" },
           ]}
-
           /* User selects a slot in Day View => open your AppointmentPopup */
           select={(info) => {
             if (info.view.type === "resourceTimeGridDay") {
