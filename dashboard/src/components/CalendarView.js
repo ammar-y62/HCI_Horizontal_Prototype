@@ -300,6 +300,7 @@ const CalendarView = () => {
         <AppointmentPopup
           room={selectedSlot.room}
           time={selectedSlot.time}
+          date={titleText}
           // If you need the date, you can store info.start in selectedSlot
           onClose={() => setSelectedSlot(null)}
         />
