@@ -233,7 +233,7 @@ const CalendarView = () => {
               type: "resourceTimeGridDay",
               allDaySlot: false, // remove the "all‐day" row
               slotMinTime: "09:00:00", // start at 9 AM
-              slotMaxTime: "16:00:00", // go until 4 PM
+              slotMaxTime: "17:00:00", // go until 5 PM
               slotDuration: "01:00:00", // 1 hour per slot
               slotLabelInterval: { hours: 1 },
               slotLabelFormat: {
