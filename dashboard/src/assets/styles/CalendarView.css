@@ -17,7 +17,7 @@
   background: white;
   z-index: 100;
   border-bottom: 10px solid #7cc4ff;
-  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
 }
 
 .left-section {
@@ -116,13 +116,14 @@
 
 /* Updated Styles */
 .fc-daygrid-day-number {
-  font-size: 12px;
+  font-size: 15px;
+  font-weight: bold;
 }
 
 /* Blue Header Row */
 .fc-col-header-cell {
   background: #7a8aff !important;
-  color: white !important;
+  color: white;
   font-weight: bold;
   text-align: center;
 }
@@ -130,7 +131,7 @@
 /* Grey Background for Saturday and Sunday */
 .fc-day-sat,
 .fc-day-sun {
-  background: #e0e0e0 !important;
+  background: #e0e0e0;
 }
 
 /* Smaller Grid Boxes */
