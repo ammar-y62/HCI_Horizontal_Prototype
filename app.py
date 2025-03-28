@@ -53,8 +53,8 @@ with app.app_context():
 
     db.session.query(Appointment).delete()  # Clear existing appointments
 
-    appointment1 = Appointment(room_number="101", date_time="2025-03-25 10:00", doctor_id=1, patient_id=3, urgency=1)
-    appointment2 = Appointment(room_number="102", date_time="2025-03-25 11:00", doctor_id=2, patient_id=4, urgency=2)
+    appointment1 = Appointment(room_number="1", date_time="2025-03-25 10:00", doctor_id=1, patient_id=3, urgency=1)
+    appointment2 = Appointment(room_number="2", date_time="2025-03-25 11:00", doctor_id=2, patient_id=4, urgency=2)
 
 
     # Add the appointments to the session and commit
