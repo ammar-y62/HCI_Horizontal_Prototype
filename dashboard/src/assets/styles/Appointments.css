@@ -1,0 +1,147 @@
+.popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+
+  .popup-box {
+    background: white;
+    border: 3px solid #7A8AFF;
+    border-radius: 10px;
+    padding: 1rem;
+    width: 250px;
+    position: relative;
+    font-family: sans-serif;
+  }
+
+  .popup-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .close-icon {
+    cursor: pointer;
+    color: red;
+  }
+
+  .popup-section {
+    margin-bottom: 1rem;
+  }
+
+  .input-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 2px 5px;
+  }
+
+  .input-with-icon select {
+    flex: 1;
+    border: none;
+    outline: none;
+  }
+
+  .urgency-box {
+    width: 20px;
+    height: 20px;
+    background-color: #4caf50;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .popup-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .clear-btn, .save-btn {
+    background: #2b6cb0;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+/* Urgency Color Styles */
+.urgency-box select {
+    width: 100%;
+    padding: 5px;
+    font-size: 14px;
+  }
+
+  .urgency-low {
+    background-color: #4caf50; /* Green */
+    color: white;
+  }
+
+  .urgency-medium {
+    background-color: #ffeb3b; /* Yellow */
+    color: black;
+  }
+
+  .urgency-high {
+    background-color: #f44336; /* Red */
+    color: white;
+  }
+
+  /* Rest of your styling for popup, buttons, etc. */
+  .popup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .popup-box {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+  }
+
+  .popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .popup-section {
+    margin-bottom: 1rem;
+  }
+
+  .popup-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .clear-btn, .save-btn {
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+  }
+
+  .clear-btn {
+    background-color: #e0e0e0;
+  }
+
+  .save-btn {
+    background-color: #2b6cb0;
+    color: white;
+  }
