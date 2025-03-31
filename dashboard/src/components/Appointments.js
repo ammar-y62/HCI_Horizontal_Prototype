@@ -4,7 +4,7 @@ import { FaTimes, FaSearch } from "react-icons/fa";
 import { fetchPeople, fetchAppointments } from "../api/api"; // Fetching data from API
 import { addAppointment } from "../api/api";
 
-const AppointmentPopup = ({ room, time, date, onClose, appointmentId }) => {
+const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointmentAdded  }) => {
   const [patients, setPatients] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(""); // Store the patient ID, not name
@@ -55,48 +55,56 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId }) => {
     loadAppointmentDetails();
   }, [appointmentId]);
 
-  // Save the updated appointment
-  const handleSave = async () => {
-    // Extract only the date part from the Date object (no time)
-    const formattedDate = new Date(date).toISOString().split('T')[0];  // Format as YYYY-MM-DD
+// Save the updated appointment
+const handleSave = async () => {
+  // Extract only the date part from the Date object (no time)
+  const formattedDate = new Date(date).toISOString().split('T')[0];  // Format as YYYY-MM-DD
 
-    // Function to convert 12-hour AM/PM format to 24-hour format
-    const convertTo24HourFormat = (time12hr) => {
-      const [time, modifier] = time12hr.split(" ");  // Split time and AM/PM
-      let [hours, minutes] = time.split(":");  // Split hours and minutes
-      hours = parseInt(hours); // Convert hours to number
+  // Function to convert 12-hour AM/PM format to 24-hour format
+  const convertTo24HourFormat = (time12hr) => {
+    const [time, modifier] = time12hr.split(" ");  // Split time and AM/PM
+    let [hours, minutes] = time.split(":");  // Split hours and minutes
+    hours = parseInt(hours); // Convert hours to number
 
-      if (modifier === "PM" && hours !== 12) {
-        hours += 12;  // Convert PM time to 24-hour format
-      } else if (modifier === "AM" && hours === 12) {
-        hours = 0;  // Convert 12 AM to 00:00
-      }
-
-      return `${hours.toString().padStart(2, '0')}:${minutes}`;  // Return formatted time
-    };
-
-    // Convert the time to 24-hour format
-    const formattedTime = convertTo24HourFormat(time);
-
-    const formattedDateTime = `${formattedDate} ${formattedTime}`;
-    // Extract just the room number from the "Room X" format (e.g., "Room 5" -> "5")
-    const updatedAppointment = {
-      room: room,
-      date_time: formattedDateTime,  // Send formatted date_time
-      patient: selectedPatient, // Send the patient ID
-      doctor: selectedDoctor, // Send the doctor ID
-      urgency: selectedUrgency,
-    };
-
-    console.log(updatedAppointment);  // Log the request payload
-
-    // Call API to save appointment
-    try {
-      await addAppointment(updatedAppointment);
-    } catch (error) {
-      console.error("Error saving appointment:", error);
+    if (modifier === "PM" && hours !== 12) {
+      hours += 12;  // Convert PM time to 24-hour format
+    } else if (modifier === "AM" && hours === 12) {
+      hours = 0;  // Convert 12 AM to 00:00
     }
+
+    return `${hours.toString().padStart(2, '0')}:${minutes}`;  // Return formatted time
   };
+
+  // Convert the time to 24-hour format
+  const formattedTime = convertTo24HourFormat(time);
+  const formattedDateTime = `${formattedDate} ${formattedTime}`;
+
+  // Extract just the room number from the "Room X" format (e.g., "Room 5" -> "5")
+  const updatedAppointment = {
+    room: room,
+    date_time: formattedDateTime,  // Send formatted date_time
+    patient: selectedPatient, // Send the patient ID
+    doctor: selectedDoctor, // Send the doctor ID
+    urgency: selectedUrgency,
+  };
+
+  console.log(updatedAppointment);  // Log the request payload
+
+  // Call API to save appointment
+  try {
+    await addAppointment(updatedAppointment);
+
+    // Trigger refresh of the calendar events by calling the callback provided via props.
+    if (onAppointmentAdded) {
+      await onAppointmentAdded();
+    }
+
+    // Close the popup after saving
+    onClose();
+  } catch (error) {
+    console.error("Error saving appointment:", error);
+  }
+};
 
   // Clear form fields
   const handleClear = () => {

@@ -87,7 +87,7 @@ def add_person():
 @app.route("/api/appointments", methods=["GET"])
 def get_appointments():
     appointments = Appointment.query.all()
-    return jsonify([{ "id": a.id, "room_number": a.room_number, "date_time": a.date_time, "doctor_id": a.doctor_id, "patient_id": a.patient_id } for a in appointments])
+    return jsonify([{ "id": a.id, "room_number": a.room_number, "date_time": a.date_time, "doctor_id": a.doctor_id, "patient_id": a.patient_id, "urgency": a.urgency } for a in appointments])
 
 @app.route("/api/appointments", methods=["POST"])
 def add_appointment():

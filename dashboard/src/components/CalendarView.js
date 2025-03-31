@@ -43,6 +43,7 @@ const CalendarView = () => {
 
   // If user selects a time slot in Day View, open popup
   const [selectedSlot, setSelectedSlot] = useState(null);
+  const [currentRange, setCurrentRange] = useState(null);
 
   /**
    * Called automatically by FullCalendar whenever:
@@ -58,34 +59,60 @@ const CalendarView = () => {
    */
   const handleDatesSet = async (dateInfo) => {
     try {
-      // 1) The new date range
-      const { start, end, view } = dateInfo; // start & end are date objects
-      // 2) Update our title from FullCalendar’s own view.title
+      const { start, end, view } = dateInfo;
+      setCurrentRange({ start, end }); // store current range
       setTitleText(view.title);
 
-      // 3) Fetch your entire appointments list from the backend
       const data = await fetchAppointments();
-
-      // 4) Filter them to fall within [start, end)
       const filtered = data.filter((apt) => {
         const apptDate = new Date(apt.date_time);
         return apptDate >= start && apptDate < end;
       });
 
-      // 5) Transform them into event objects that FullCalendar expects
       const newEvents = filtered.map((apt) => ({
         id: apt.id,
-        title: `Room ${apt.room_number}`, // e.g. "Room 3"
-        start: apt.date_time, // e.g. "2025-04-03T09:00:00"
+        title: `Room ${apt.room_number}`,
+        start: apt.date_time,
         date: apt.date_time.split("T")[0],
-        resourceId: String(apt.room_number), // must match "1".."7" if day view
-        patient: apt.patient_id,
-        doctor: apt.doctor_id,
+        resourceId: String(apt.room_number),
+        extendedProps: {
+          patient: apt.patient_id,
+          doctor: apt.doctor_id,
+          urgency: apt.urgency,
+        },
       }));
 
       setEvents(newEvents);
     } catch (error) {
       console.error("Failed to fetch appointments:", error);
+    }
+  };
+
+  const refreshEvents = async () => {
+    if (!currentRange) return; // if not set, do nothing
+    try {
+      const data = await fetchAppointments();
+      const filtered = data.filter((apt) => {
+        const apptDate = new Date(apt.date_time);
+        return apptDate >= currentRange.start && apptDate < currentRange.end;
+      });
+
+      const newEvents = filtered.map((apt) => ({
+        id: apt.id,
+        title: `Room ${apt.room_number}`,
+        start: apt.date_time,
+        date: apt.date_time.split("T")[0],
+        resourceId: String(apt.room_number),
+        extendedProps: {
+          patient: apt.patient_id,
+          doctor: apt.doctor_id,
+          urgency: apt.urgency,
+        },
+      }));
+
+      setEvents(newEvents);
+    } catch (error) {
+      console.error("Failed to refresh events:", error);
     }
   };
 
@@ -249,25 +276,33 @@ const CalendarView = () => {
               eventContent: (arg) => {
                 const { event } = arg;
                 const { title, extendedProps } = event;
-                return (
-                  <div
-                    style={{
-                      backgroundColor: "#d0f0ff",
-                      padding: "5px",
-                      borderRadius: "4px",
-                    }}
-                  >
-                    <div>
-                      <strong>{title}</strong>
+                const urgencyColors = {
+                  1: "#66FF66", // e.g. green
+                  2: "#FFD700", // e.g. yellow
+                  3: "#FF6666", // e.g. red
+                };
+
+                const backgroundColor =
+                  urgencyColors[extendedProps.urgency] || "#d0f0ff"; // fallback
+                  return (
+                    <div
+                      style={{
+                        backgroundColor,
+                        padding: "5px",
+                        borderRadius: "4px",
+                      }}
+                    >
+                      <div>
+                        <strong>{title}</strong>
+                      </div>
+                      <div style={{ fontSize: "0.85rem" }}>
+                        {extendedProps.patient} w/ {extendedProps.doctor}
+                      </div>
                     </div>
-                    <div style={{ fontSize: "0.85rem" }}>
-                      {extendedProps.patient} w/ {extendedProps.doctor}
-                    </div>
-                  </div>
-                );
+                  );
+                },
               },
-            },
-          }}
+            }}
           // Hard-coded rooms 1..7
           resources={[
             { id: "1", title: "Room 1" },
@@ -297,14 +332,14 @@ const CalendarView = () => {
 
       {/* ---- Popup for new/edit appointment ---- */}
       {selectedSlot && (
-        <AppointmentPopup
-          room={selectedSlot.room}
-          time={selectedSlot.time}
-          date={titleText}
-          // If you need the date, you can store info.start in selectedSlot
-          onClose={() => setSelectedSlot(null)}
-        />
-      )}
+      <AppointmentPopup
+        room={selectedSlot.room}
+        time={selectedSlot.time}
+        date={titleText}
+        onClose={() => setSelectedSlot(null)}
+        onAppointmentAdded={refreshEvents} // new prop for refresh
+      />
+    )}
     </div>
   );
 };
