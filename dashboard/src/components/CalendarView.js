@@ -149,64 +149,54 @@ const CalendarView = () => {
   };
 
   return (
-    <div className="calendar-container">
-      {/* ---- Top Navigation ---- */}
-      <div className="calendar-header">
-        <div className="left-section">
-          <button
-            className="icon-button"
-            onClick={() => setShowFilter(!showFilter)}
-          >
-            <FaFilter /> Filter
-            <FaCaretDown />
-          </button>
-          {showFilter && <Filter onClose={() => setShowFilter(false)} />}
+<div className="calendar-container">
+    {/* ---- Top Navigation ---- */}
+    <div className="calendar-header">
+      <div className="left-section">
+        <button
+          className="icon-button"
+          onClick={() => setShowFilter(!showFilter)}
+        >
+          <FaFilter /> Filter <FaCaretDown />
+        </button>
+        {showFilter && <Filter onClose={() => setShowFilter(false)} />}
 
-          <button
-            className="icon-button"
-            onClick={() => setShowProfiles(!showProfiles)}
-          >
-            <FaUser /> Profiles
-          </button>
-          {showProfiles && <Profiles onClose={() => setShowProfiles(false)} />}
-        </div>
-
-        <div className="right-section">
-          {/* Toggle Month/Day view */}
-          <div className="view-toggle">
-            <button
-              className={view === "dayGridMonth" ? "active" : ""}
-              onClick={switchToMonthView}
-            >
-              <FaCalendarAlt /> Month
-            </button>
-            <button
-              className={view === "resourceTimeGridDay" ? "active" : ""}
-              onClick={switchToDayView}
-            >
-              <FaList /> Day
-            </button>
-            {showProfiles && (
-              <Profiles onClose={() => setShowProfiles(false)} />
-            )}
-          </div>
-
-          {/* Arrows + Title */}
-          <div className="navigation">
-            <button className="nav-button nav-button-left" onClick={handlePrev}>
-              <FaChevronLeft />
-            </button>
-
-            <button
-              className="nav-button nav-button-right"
-              onClick={handleNext}
-            >
-              <FaChevronRight />
-            </button>
-          </div>
-          <h2 className="calendar-title">{titleText}</h2>
-        </div>
+        <button
+          className="icon-button"
+          onClick={() => setShowProfiles(!showProfiles)}
+        >
+          <FaUser /> Profiles
+        </button>
+        {showProfiles && <Profiles onClose={() => setShowProfiles(false)} />}
       </div>
+
+      <div className="right-section">
+        <div className="view-toggle">
+          <button
+            className={view === "dayGridMonth" ? "active" : ""}
+            onClick={switchToMonthView}
+          >
+            <FaCalendarAlt /> Month
+          </button>
+          <button
+            className={view === "resourceTimeGridDay" ? "active" : ""}
+            onClick={switchToDayView}
+          >
+            <FaList /> Day
+          </button>
+        </div>
+
+        <div className="navigation">
+          <button className="nav-button nav-button-left" onClick={handlePrev}>
+            <FaChevronLeft />
+          </button>
+          <button className="nav-button nav-button-right" onClick={handleNext}>
+            <FaChevronRight />
+          </button>
+        </div>
+        <h2 className="calendar-title">{titleText}</h2>
+      </div>
+    </div>
 
       {/* ---- The Calendar ---- */}
       <div className="calendar-wrapper">
