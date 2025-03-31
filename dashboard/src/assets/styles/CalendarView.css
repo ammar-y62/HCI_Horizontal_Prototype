@@ -139,9 +139,35 @@
   min-height: 50px !important;
   max-height: 50px !important;
   padding: 2px !important;
+  position: relative; /* Needed for the hover icon */
 }
 
-/* If you want each hour row exactly 40px */
+/* ---- Month View Hover Effects ---- */
+/* Hide the hover icon by default */
+.hover-icon {
+  opacity: 0;
+  transition: opacity 0.2s;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #666;
+  font-size: 14px;
+}
+
+/* On hover, change background and show the icon */
+.fc-daygrid-day-frame:hover {
+  background-color: #f2f2f2;
+}
+.fc-daygrid-day-frame:hover .hover-icon {
+  opacity: 1;
+}
+
+/* If you include the icon in your dayCellContent, for example:
+   <div class="hover-icon"><i class="fa fa-arrow-right"></i></div>
+*/
+
+/* ---- Time Grid (Day View) Base Styles ---- */
+/* Each hour row set to exactly 40px */
 .fc-timegrid-slot {
   min-height: 40px !important;
   max-height: 40px !important;
@@ -171,6 +197,7 @@
   font-weight: bold;
   text-align: center;
 }
+
 /* Day View Event Box Styling */
 .fc-timegrid-slot {
   min-height: 50px !important;
@@ -180,6 +207,64 @@
   border: 1px solid #e0e0e0;
 }
 
+/* ---- Day View Hover Effects for Events ---- */
+/* Container for an existing appointment event */
+.custom-event {
+  position: relative;
+  /* You can override background via inline style (e.g., urgency-based color) */
+  padding: 5px;
+  border-radius: 4px;
+}
+
+/* Hide the edit icon by default */
+.edit-icon {
+  display: none;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  color: #444;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Show the edit icon on hover */
+.custom-event:hover .edit-icon {
+  display: inline-block;
+}
+
+/* ---- Day View Hover Effects for Empty Slots ---- */
+/* When hovering over an empty time slot lane */
+.fc-timegrid-slot-lane {
+  position: relative;
+}
+
+.fc-timegrid-slot-lane:hover {
+  background-color: #f2f2f2;
+  cursor: pointer;
+}
+
+/* Display a plus icon on hover for empty slots */
+/* Adjust selector if needed; ensure Font Awesome is loaded */
+.fc-timegrid-slot-lane:hover::after {
+  content: "\f067"; /* Font Awesome plus icon */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #666;
+  font-size: 16px;
+}
+
+/* If a slot has an event, you might want to hide the plus icon.
+   This requires that you mark such slots (e.g., adding a .has-event class).
+   Example:
+*/
+.fc-timegrid-slot-lane.has-event:hover::after {
+  content: "";
+}
+
+/* Blue Header Row for Time Grid View (duplicate block if needed) */
 .fc-timegrid .fc-col-header-cell {
   background: #7a8aff !important;
   color: white !important;
@@ -187,6 +272,7 @@
   text-align: center;
 }
 
+/* Room Header Duplicate */
 .fc-resourceTimeGridDay-view .fc-col-header-cell {
   background: #7a8aff !important;
   color: white !important;
@@ -194,6 +280,7 @@
   text-align: center;
 }
 
+/* Time Slot Label Duplicate */
 .fc-timegrid-slot-label {
   background: #e0e0e0 !important;
   font-weight: bold;
