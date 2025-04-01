@@ -25,8 +25,14 @@ const Filter = ({ onClose = () => {} }) => {  // Ensure onClose is always a func
       <button className="filter-option" onClick={onClose}>
         <FaTrash /> Clear Filters
       </button>
-      <button className="filter-option" onClick={() => setSubFilter("caretaker")}>By Caretaker <FaCaretRight /></button>
-      <button className="filter-option" onClick={() => setSubFilter("patient")}>By Patient <FaCaretRight /></button>
+      <button className="filter-option" 
+      onMouseOver={() => setSubFilter("caretaker")} 
+      onMouseOut={() => setSubFilter(null)}
+      >By Caretaker <FaCaretRight /></button>
+      <button className="filter-option" 
+      onMouseOver={() => setSubFilter("patient")}
+      onMouseOut={() => setSubFilter(null)}
+      >By Patient <FaCaretRight /></button>
 
       {subFilter && (
         <div className="sub-filter-popup">
@@ -42,6 +48,7 @@ const Filter = ({ onClose = () => {} }) => {  // Ensure onClose is always a func
             <>
               <h3 className="sub-filter-title">Filter By Patient</h3>
               <div className="filter-search"><input type="text" placeholder="Search..." /></div>
+
               <label className="checkbox-label"><input type="checkbox" /> Patient 1</label>
               <label className="checkbox-label"><input type="checkbox" /> Patient 2</label>
               <label className="checkbox-label"><input type="checkbox" /> Patient 3</label>
