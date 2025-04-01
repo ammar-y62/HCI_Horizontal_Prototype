@@ -61,8 +61,16 @@ const CalendarView = () => {
     try {
       const { start, end, view } = dateInfo;
       setCurrentRange({ start, end }); // store current range
-      setTitleText(view.title);
-
+      let title = view.title;
+      if (view.type === "resourceTimeGridDay") {
+        const dayOptions = { weekday: "long" };
+        const dateOptions = { month: "long", day: "numeric", year: "numeric" };
+        const dayName = start.toLocaleDateString("en-US", dayOptions);
+        const dateStr = start.toLocaleDateString("en-US", dateOptions);
+        // Insert <br/> between dayName and dateStr
+        title = `${dayName}<br/>${dateStr}`;
+      }
+      setTitleText(title);
       const data = await fetchAppointments();
       const filtered = data.filter((apt) => {
         const apptDate = new Date(apt.date_time);
@@ -194,7 +202,10 @@ const CalendarView = () => {
             <FaChevronRight />
           </button>
         </div>
-        <h2 className="calendar-title">{titleText}</h2>
+        <h2
+          className="calendar-title"
+          dangerouslySetInnerHTML={{ __html: titleText }}
+        ></h2>
       </div>
     </div>
 
