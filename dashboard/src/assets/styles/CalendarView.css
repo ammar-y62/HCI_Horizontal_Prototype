@@ -1,288 +1,306 @@
-/* Calendar Styling - CalendarView.css */
-.calendar-container {
-  padding: 1rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+/* =====================================================
+   Calendar Container & Header
+   ===================================================== */
+   .calendar-container {
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
 
-.calendar-header {
-  display: grid;
-  grid-template-areas: "leftSection rightSection";
-  grid-template-columns: 20% 80%;
-  align-items: center;
-  height: 90px;
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 100;
-  border-bottom: 10px solid #7cc4ff;
-  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
-}
+  .calendar-header {
+    display: grid;
+    grid-template-areas: "leftSection rightSection";
+    grid-template-columns: 20% 80%;
+    align-items: center;
+    height: 90px;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 100;
+    border-bottom: 10px solid #7cc4ff;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
+  }
 
-.left-section {
-  grid-area: leftSection;
-  display: flex;
-  align-items: center;
-  gap: 25px;
-  margin-left: 10px;
-}
+  .left-section {
+    grid-area: leftSection;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-left: 10px;
+  }
 
-.right-section {
-  grid-area: rightSection;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-}
+  .right-section {
+    grid-area: rightSection;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+  }
 
-.icon-button {
-  background: #2b6cb0;
-  color: white;
-  border: none;
-  padding: 14px 20px;
-  border-radius: 50px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 550;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
+  .icon-button {
+    background: #2b6cb0;
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 550;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
 
-.view-toggle {
-  display: flex;
-  background: #eae6f7;
-  border-radius: 50px;
-  padding: 4px;
-  margin-right: 15px;
-}
+  .view-toggle {
+    display: flex;
+    background: #eae6f7;
+    border-radius: 50px;
+    padding: 4px;
+    margin-right: 15px;
+  }
 
-.view-toggle button {
-  background: transparent;
-  border: none;
-  font-size: 16px;
-  width: 80px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  border-radius: 50px;
-  font-weight: bold;
-}
+  .view-toggle button {
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    width: 80px;
+    padding: 5px 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    border-radius: 50px;
+    font-weight: bold;
+  }
 
-.view-toggle .active {
-  background: #d0c4f0;
-  color: #2b6cb0;
-}
+  .view-toggle .active {
+    background: #d0c4f0;
+    color: #2b6cb0;
+  }
 
-.navigation {
-  display: flex;
-  align-items: center;
-}
+  .navigation {
+    display: flex;
+    align-items: center;
+  }
 
-.nav-button {
-  background: #d3d3d3;
-  border: 1px solid black;
-  height: 40px;
-  width: 45px;
-  cursor: pointer;
-}
+  .nav-button {
+    background: #d3d3d3;
+    border: 1px solid black;
+    height: 40px;
+    width: 45px;
+    cursor: pointer;
+  }
 
-.nav-button-left {
-  border-top-left-radius: 50px;
-  border-bottom-left-radius: 50px;
-}
+  .nav-button-left {
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+  }
 
-.nav-button-right {
-  border-top-right-radius: 50px;
-  border-bottom-right-radius: 50px;
-}
+  .nav-button-right {
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+  }
 
-.nav-button-left:active,
-.nav-button-right:active {
-  background: #aeadad;
-}
+  .nav-button:active {
+    background: #aeadad;
+  }
 
-.calendar-title {
-  font-size: 20px;
-  font-weight: bold;
-  width: 200px;
-  text-align: center;
-}
+  .calendar-title {
+    font-size: 20px;
+    font-weight: bold;
+    width: 200px;
+    text-align: center;
+  }
 
-/* Updated Styles */
-.fc-daygrid-day-number {
-  font-size: 15px;
-  font-weight: bold;
-}
+  /* =====================================================
+     FullCalendar – Month View Styles
+     ===================================================== */
 
-/* Blue Header Row */
-.fc-col-header-cell {
-  background: #7a8aff !important;
-  color: white;
-  font-weight: bold;
-  text-align: center;
-}
+  /* Header Cells */
+  .fc-col-header-cell {
+    background: #7a8aff !important;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+  }
 
-/* Grey Background for Saturday and Sunday */
-.fc-day-sat,
-.fc-day-sun {
-  background: #e0e0e0;
-}
+  /* Hide default event bullets */
+  .fc-daygrid-event,
+  .fc-daygrid-event-dot {
+    display: none !important;
+  }
 
-/* Smaller Grid Boxes */
-.fc-daygrid-day-frame {
-  min-height: 50px !important;
-  max-height: 50px !important;
-  padding: 2px !important;
-  position: relative; /* Needed for the hover icon */
-}
+  /* Day Cell & Frame */
+  .fc-daygrid-day {
+    padding: 0 !important;
+    margin: 0 !important;
+    height: 100% !important;
+    vertical-align: top;
+  }
 
-/* ---- Month View Hover Effects ---- */
-/* Hide the hover icon by default */
-.hover-icon {
-  opacity: 0;
-  transition: opacity 0.2s;
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  color: #666;
-  font-size: 14px;
-}
+  .fc-daygrid-day-frame {
+    /* position: relative; <-- keep if needed */
+    /* Remove the forced 50px lines */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 2px !important;
+  }
 
-/* On hover, change background and show the icon */
-.fc-daygrid-day-frame:hover {
-  background-color: #f2f2f2;
-}
-.fc-daygrid-day-frame:hover .hover-icon {
-  opacity: 1;
-}
+  /* Custom Day Content */
+  .custom-day-content {
+    position: relative;
+    text-align: center;
+  }
 
-/* If you include the icon in your dayCellContent, for example:
-   <div class="hover-icon"><i class="fa fa-arrow-right"></i></div>
-*/
+  .custom-day-content .fc-daygrid-day-number {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #333;
+  }
 
-/* ---- Time Grid (Day View) Base Styles ---- */
-/* Each hour row set to exactly 40px */
-.fc-timegrid-slot {
-  min-height: 40px !important;
-  max-height: 40px !important;
-  font-size: 14px !important;
-  background: #fff !important;
-  border: 1px solid #e0e0e0;
-}
+  .month-appointments {
+    display: inline-block;
+    margin-top: 25px;
+    margin-right: 35px;
+    background-color: #4f94d4;
+    color: #fff;
+    border-radius: 12px;
+    padding: 2px 6px;
+    font-size: 0.85rem;
+    font-weight: bold;
+  }
 
-/* Blue Header Row for Time Grid View */
-.fc-timegrid .fc-col-header-cell {
-  background: #7a8aff !important;
-  color: white !important;
-  font-weight: bold;
-}
+  /* Hover Effects for Month View */
+  .hover-icon {
+    opacity: 0;
+    transition: opacity 0.2s;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: #666;
+    font-size: 14px;
+  }
 
-/* Grey Background for Time Column */
-.fc-timegrid-slot-label {
-  background: #e0e0e0 !important;
-  font-weight: bold;
-  text-align: center;
-}
+  .fc-daygrid-day-frame:hover {
+    background-color: #f2f2f2;
+  }
 
-/* Styles for Room Headers */
-.fc-resourceTimeGridDay-view .fc-col-header-cell {
-  background: #7a8aff !important;
-  color: white !important;
-  font-weight: bold;
-  text-align: center;
-}
+  .fc-daygrid-day-frame:hover .hover-icon {
+    opacity: 1;
+  }
 
-/* Day View Event Box Styling */
-.fc-timegrid-slot {
-  min-height: 50px !important;
-  max-height: 50px !important;
-  font-size: 14px !important;
-  background: #fff !important;
-  border: 1px solid #e0e0e0;
-}
+  /* Grey Background for Saturday & Sunday */
+  .fc-day-sat,
+  .fc-day-sun {
+    background: #e0e0e0;
+  }
 
-/* ---- Day View Hover Effects for Events ---- */
-/* Container for an existing appointment event */
-.custom-event {
-  position: relative;
-  /* You can override background via inline style (e.g., urgency-based color) */
-  padding: 5px;
-  border-radius: 4px;
-}
+  /* =====================================================
+     FullCalendar – Day (Time Grid) View Styles
+     ===================================================== */
 
-/* Hide the edit icon by default */
-.edit-icon {
-  display: none;
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  color: #444;
-  cursor: pointer;
-  font-size: 16px;
-}
+  /* Time Grid Slot */
+  .fc-timegrid-slot {
+    min-height: 50px !important;
+    max-height: 50px !important;
+    font-size: 14px !important;
+    background: #fff !important;
+    border: 1px solid #e0e0e0;
+  }
 
-/* Show the edit icon on hover */
-.custom-event:hover .edit-icon {
-  display: inline-block;
-}
+  /* Time Grid Header & Labels */
+  .fc-timegrid .fc-col-header-cell {
+    background: #7a8aff !important;
+    color: white !important;
+    font-weight: bold;
+    text-align: center;
+  }
 
-/* ---- Day View Hover Effects for Empty Slots ---- */
-/* When hovering over an empty time slot lane */
-.fc-timegrid-slot-lane {
-  position: relative;
-}
+  .fc-timegrid-slot-label {
+    background: #e0e0e0 !important;
+    font-weight: bold;
+    text-align: center;
+  }
 
-.fc-timegrid-slot-lane:hover {
-  background-color: #f2f2f2;
-  cursor: pointer;
-}
+  /* Room Headers in Day View */
+  .fc-resourceTimeGridDay-view .fc-col-header-cell {
+    background: #7a8aff !important;
+    color: white !important;
+    font-weight: bold;
+    text-align: center;
+  }
 
-/* Display a plus icon on hover for empty slots */
-/* Adjust selector if needed; ensure Font Awesome is loaded */
-.fc-timegrid-slot-lane:hover::after {
-  content: "\f067"; /* Font Awesome plus icon */
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  color: #666;
-  font-size: 16px;
-}
+  /* Day View Event Box & Hover */
+  .custom-event {
+    position: relative;
+    padding: 5px;
+    border-radius: 4px;
+  }
 
-/* If a slot has an event, you might want to hide the plus icon.
-   This requires that you mark such slots (e.g., adding a .has-event class).
-   Example:
-*/
-.fc-timegrid-slot-lane.has-event:hover::after {
-  content: "";
-}
+  .edit-icon {
+    display: none;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    color: #444;
+    cursor: pointer;
+    font-size: 16px;
+  }
 
-/* Blue Header Row for Time Grid View (duplicate block if needed) */
-.fc-timegrid .fc-col-header-cell {
-  background: #7a8aff !important;
-  color: white !important;
-  font-weight: bold;
-  text-align: center;
-}
+  .custom-event:hover .edit-icon {
+    display: inline-block;
+  }
 
-/* Room Header Duplicate */
-.fc-resourceTimeGridDay-view .fc-col-header-cell {
-  background: #7a8aff !important;
-  color: white !important;
-  font-weight: bold;
-  text-align: center;
-}
+  /* Time Grid Empty Slot Hover */
+  .fc-timegrid-slot-lane {
+    position: relative;
+  }
 
-/* Time Slot Label Duplicate */
-.fc-timegrid-slot-label {
-  background: #e0e0e0 !important;
-  font-weight: bold;
-  text-align: center;
-}
+  .fc-timegrid-slot-lane:hover {
+    background-color: #f2f2f2;
+    cursor: pointer;
+  }
+
+  .fc-timegrid-slot-lane:hover::after {
+    content: "\f067"; /* Font Awesome plus icon */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: #666;
+    font-size: 16px;
+  }
+
+  .fc-timegrid-slot-lane.has-event:hover::after {
+    content: "";
+  }
+
+  /* =====================================================
+     Duplicate Header & Label Styling (if needed)
+     ===================================================== */
+  .fc-timegrid .fc-col-header-cell,
+  .fc-resourceTimeGridDay-view .fc-col-header-cell,
+  .fc-timegrid-slot-label {
+    /* Adjust as necessary if you need uniform header styling */
+    text-align: center;
+    font-weight: bold;
+  }
+  .month-appointments {
+    display: inline-block;
+    margin-top: 40px;  /* bigger gap from top */
+    margin-bottom: 10px; /* extra space below if desired */
+    background-color: #4f94d4;
+    color: #fff;
+    border-radius: 12px;
+    padding: 2px 6px;
+    font-size: 0.85rem;
+    font-weight: bold;
+  }

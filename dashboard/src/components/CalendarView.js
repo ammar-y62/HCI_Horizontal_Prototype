@@ -212,6 +212,8 @@ const CalendarView = () => {
       {/* ---- The Calendar ---- */}
       <div className="calendar-wrapper">
         <FullCalendar
+          height="auto"
+          aspectRatio={1.2}
           ref={calendarRef}
           plugins={[dayGridPlugin, resourceTimeGridPlugin, interactionPlugin]}
           headerToolbar={false}
@@ -226,6 +228,7 @@ const CalendarView = () => {
           /* =============== MONTH VIEW CONFIG =============== */
           views={{
             dayGridMonth: {
+              expandRows: false,
               // Hide real events (bullets) so we can show "X appointments" ourselves
               eventDisplay: "none",
               // Clicking a day in month view -> switch to day view for that date
@@ -235,25 +238,26 @@ const CalendarView = () => {
                   calendarRef.current.getApi().gotoDate(info.date);
                 }
               },
-              // Show day number plus "X appointments"
               dayCellContent: (arg) => {
                 const dayNumber = arg.dayNumberText;
-                const dateStr = arg.dateStr;
-                const dayEvents = events.filter((evt) => evt.date === dateStr);
+                const localDateStr = arg.date.toLocaleDateString("en-CA");
+                const dayEvents = events.filter((evt) => {
+                  const fixedStart = evt.start.replace(" ", "T");
+                  const evtDate = new Date(fixedStart).toISOString().split("T")[0];
+                  return evtDate === localDateStr;
+                });
 
+                // Build custom HTML
+                let html = `<div class="custom-day-content">`;
+                html += `<div class="fc-daygrid-day-number">${dayNumber}</div>`;
                 if (dayEvents.length > 0) {
-                  return {
-                    html: `
-                      <div class="fc-daygrid-day-number">${dayNumber}</div>
-                      <div class="month-appointments">${dayEvents.length} appointments</div>
-                    `,
-                  };
+                  html += `<div class="month-appointments">${dayEvents.length} appointments</div>`;
                 }
-                // Otherwise just the day number
-                return {
-                  html: `<div class="fc-daygrid-day-number">${dayNumber}</div>`,
-                };
+                html += `</div>`;
+
+                return { html };
               },
+
             },
 
             /* =============== DAY VIEW CONFIG =============== */
