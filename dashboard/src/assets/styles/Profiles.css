@@ -1,8 +1,8 @@
 /* Profiles Popup Styling - Profiles.css */
 .profiles-popup {
     position: absolute;
-    top: 50px;
-    left: 50%;
+    top: 70px;
+    left: 21%;
     transform: translateX(-50%);
     background: white;
     border-radius: 8px;
@@ -15,7 +15,20 @@
     align-items: center;
     border: 2px solid #7A8AFF;
 }
-
+/* .view-toggle button1 {
+    border: none;
+    font-size: 16px;
+    width: 80px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    border-radius: 50px;
+    font-weight: bold;
+  } */
 .profiles-main h3, .profiles-sub h3 {
     font-size: 18px;
     font-weight: bold;

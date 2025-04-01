@@ -1,7 +1,7 @@
 /* Filter Popup */
 .filter-popup {
     position: absolute;
-    top: 68px;
+    top: 73px;
     left: 10px;
     background: white;
     border-radius: 8px;
@@ -13,10 +13,7 @@
     flex-direction: column;
     gap: 5px;
     border: 2px solid #7A8AFF;
-}
 
-.sub-filter-title {
-    padding-top: 20px;
 }
 
 /* Filter Options */
