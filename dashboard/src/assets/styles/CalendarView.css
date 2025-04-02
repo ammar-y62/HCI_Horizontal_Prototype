@@ -1,306 +1,312 @@
 /* =====================================================
    Calendar Container & Header
    ===================================================== */
-   .calendar-container {
-    padding: 1rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+.calendar-container {
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-  .calendar-header {
-    display: grid;
-    grid-template-areas: "leftSection rightSection";
-    grid-template-columns: 20% 80%;
-    align-items: center;
-    height: 90px;
-    position: sticky;
-    top: 0;
-    background: white;
-    z-index: 100;
-    border-bottom: 10px solid #7cc4ff;
-    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
-  }
+.calendar-header {
+  display: grid;
+  grid-template-areas: "leftSection rightSection";
+  grid-template-columns: 20% 80%;
+  align-items: center;
+  height: 90px;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 100;
+  border-bottom: 10px solid #7cc4ff;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
+}
 
-  .left-section {
-    grid-area: leftSection;
-    display: flex;
-    align-items: center;
-    gap: 25px;
-    margin-left: 10px;
-  }
+.left-section {
+  grid-area: leftSection;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-left: 10px;
+}
 
-  .right-section {
-    grid-area: rightSection;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
-  }
+.right-section {
+  grid-area: rightSection;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
 
-  .icon-button {
-    background: #2b6cb0;
-    color: white;
-    border: none;
-    padding: 14px 20px;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 550;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-  }
+.icon-button {
+  background: #2b6cb0;
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 550;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
 
-  .view-toggle {
-    display: flex;
-    background: #eae6f7;
-    border-radius: 50px;
-    padding: 4px;
-    margin-right: 15px;
-  }
+.view-toggle {
+  display: flex;
+  background: #eae6f7;
+  border-radius: 50px;
+  padding: 4px;
+  margin-right: 15px;
+}
 
-  .view-toggle button {
-    background: transparent;
-    border: none;
-    font-size: 16px;
-    width: 80px;
-    padding: 5px 0;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    border-radius: 50px;
-    font-weight: bold;
-  }
+.view-toggle button {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  width: 80px;
+  padding: 5px 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  border-radius: 50px;
+  font-weight: bold;
+}
 
-  .view-toggle .active {
-    background: #d0c4f0;
-    color: #2b6cb0;
-  }
+.view-toggle .active {
+  background: #d0c4f0;
+  color: #2b6cb0;
+}
 
-  .navigation {
-    display: flex;
-    align-items: center;
-  }
+.navigation {
+  display: flex;
+  align-items: center;
+}
 
-  .nav-button {
-    background: #d3d3d3;
-    border: 1px solid black;
-    height: 40px;
-    width: 45px;
-    cursor: pointer;
-  }
+.nav-button {
+  background: #d3d3d3;
+  border: 1px solid black;
+  height: 40px;
+  width: 45px;
+  cursor: pointer;
+}
 
-  .nav-button-left {
-    border-top-left-radius: 50px;
-    border-bottom-left-radius: 50px;
-  }
+.nav-button-left {
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+}
 
-  .nav-button-right {
-    border-top-right-radius: 50px;
-    border-bottom-right-radius: 50px;
-  }
+.nav-button-right {
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+}
 
-  .nav-button:active {
-    background: #aeadad;
-  }
+.nav-button:active {
+  background: #aeadad;
+}
 
-  .calendar-title {
-    font-size: 20px;
-    font-weight: bold;
-    width: 200px;
-    text-align: center;
-  }
+.calendar-title {
+  font-size: 20px;
+  font-weight: bold;
+  width: 200px;
+  text-align: center;
+}
 
-  /* =====================================================
+/* =====================================================
      FullCalendar – Month View Styles
      ===================================================== */
 
-  /* Header Cells */
-  .fc-col-header-cell {
-    background: #7a8aff !important;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-  }
+/* Header Cells */
+.fc-col-header-cell {
+  background: #7a8aff !important;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
 
-  /* Hide default event bullets */
-  .fc-daygrid-event,
-  .fc-daygrid-event-dot {
-    display: none !important;
-  }
+/* Hide default event bullets */
+.fc-daygrid-event,
+.fc-daygrid-event-dot {
+  display: none !important;
+}
 
-  /* Day Cell & Frame */
-  .fc-daygrid-day {
-    padding: 0 !important;
-    margin: 0 !important;
-    height: 100% !important;
-    vertical-align: top;
-  }
+/* Day Cell & Frame */
+.fc-daygrid-day {
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 100% !important;
+  vertical-align: top;
+}
 
-  .fc-daygrid-day-frame {
-    /* position: relative; <-- keep if needed */
-    /* Remove the forced 50px lines */
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding: 2px !important;
-  }
+.fc-daygrid-day-frame {
+  /* position: relative; <-- keep if needed */
+  /* Remove the forced 50px lines */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 2px !important;
+}
 
-  /* Custom Day Content */
-  .custom-day-content {
-    position: relative;
-    text-align: center;
-  }
+/* Custom Day Content */
+.custom-day-content {
+  position: relative;
+  text-align: center;
+}
 
-  .custom-day-content .fc-daygrid-day-number {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: #333;
-  }
+.custom-day-content .fc-daygrid-day-number {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #333;
+}
 
-  .month-appointments {
-    display: inline-block;
-    margin-top: 25px;
-    margin-right: 35px;
-    background-color: #4f94d4;
-    color: #fff;
-    border-radius: 12px;
-    padding: 2px 6px;
-    font-size: 0.85rem;
-    font-weight: bold;
-  }
+.month-appointments {
+  display: inline-block;
+  margin-top: 25px;
+  margin-right: 35px;
+  background-color: #4f94d4;
+  color: #fff;
+  border-radius: 12px;
+  padding: 2px 6px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
 
-  /* Hover Effects for Month View */
-  .hover-icon {
-    opacity: 0;
-    transition: opacity 0.2s;
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    color: #666;
-    font-size: 14px;
-  }
+/* Hover Effects for Month View */
+.hover-icon {
+  opacity: 0;
+  transition: opacity 0.2s;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #666;
+  font-size: 14px;
+}
 
-  .fc-daygrid-day-frame:hover {
-    background-color: #f2f2f2;
-  }
+.fc-daygrid-day-frame:hover {
+  background-color: #f2f2f2;
+}
 
-  .fc-daygrid-day-frame:hover .hover-icon {
-    opacity: 1;
-  }
+.fc-daygrid-day-frame:hover .hover-icon {
+  opacity: 1;
+}
 
-  /* Grey Background for Saturday & Sunday */
-  .fc-day-sat,
-  .fc-day-sun {
-    background: #e0e0e0;
-  }
+/* Grey Background for Saturday & Sunday */
+.fc-day-sat,
+.fc-day-sun {
+  background: #e0e0e0;
+}
 
-  /* =====================================================
+/* =====================================================
      FullCalendar – Day (Time Grid) View Styles
      ===================================================== */
 
-  /* Time Grid Slot */
-  .fc-timegrid-slot {
-    min-height: 50px !important;
-    max-height: 50px !important;
-    font-size: 14px !important;
-    background: #fff !important;
-    border: 1px solid #e0e0e0;
-  }
+/* Time Grid Slot */
+.fc-timegrid-slot {
+  min-height: 50px !important;
+  max-height: 50px !important;
+  height: 50px !important;
+  font-size: 14px !important;
+  background: #fff !important;
+  border: 1px solid #e0e0e0;
+}
 
-  /* Time Grid Header & Labels */
-  .fc-timegrid .fc-col-header-cell {
-    background: #7a8aff !important;
-    color: white !important;
-    font-weight: bold;
-    text-align: center;
-  }
+/* Time Grid Header & Labels */
+.fc-timegrid .fc-col-header-cell {
+  background: #7a8aff !important;
+  color: white !important;
+  font-weight: bold;
+  text-align: center;
+}
 
-  .fc-timegrid-slot-label {
-    background: #e0e0e0 !important;
-    font-weight: bold;
-    text-align: center;
-  }
+.fc-timegrid-slot-label {
+  background: #e0e0e0 !important;
+  font-weight: bold;
+  text-align: center;
+}
 
-  /* Room Headers in Day View */
-  .fc-resourceTimeGridDay-view .fc-col-header-cell {
-    background: #7a8aff !important;
-    color: white !important;
-    font-weight: bold;
-    text-align: center;
-  }
+/* Room Headers in Day View */
+.fc-resourceTimeGridDay-view .fc-col-header-cell {
+  background: #7a8aff !important;
+  color: white !important;
+  font-weight: bold;
+  text-align: center;
+}
 
-  /* Day View Event Box & Hover */
-  .custom-event {
-    position: relative;
-    padding: 5px;
-    border-radius: 4px;
-  }
+/* Day View Event Box & Hover */
+.custom-event {
+  position: relative;
+  padding: 5px;
+  border-radius: 4px;
+}
 
-  .edit-icon {
-    display: none;
-    position: absolute;
-    top: 3px;
-    right: 3px;
-    color: #444;
-    cursor: pointer;
-    font-size: 16px;
-  }
+.edit-icon {
+  display: none;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  color: #444;
+  cursor: pointer;
+  font-size: 16px;
+}
 
-  .custom-event:hover .edit-icon {
-    display: inline-block;
-  }
+.custom-event:hover .edit-icon {
+  display: inline-block;
+}
 
-  /* Time Grid Empty Slot Hover */
-  .fc-timegrid-slot-lane {
-    position: relative;
-  }
+/* Time Grid Empty Slot Hover */
+.fc-timegrid-slot-lane {
+  position: relative;
+  background-color: #00000000 !important;
+}
 
-  .fc-timegrid-slot-lane:hover {
-    background-color: #f2f2f2;
-    cursor: pointer;
-  }
+.fc-timegrid-slot-lane:hover {
+  background-color: #f2f2f2;
+  cursor: pointer;
+}
 
-  .fc-timegrid-slot-lane:hover::after {
-    content: "\f067"; /* Font Awesome plus icon */
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    color: #666;
-    font-size: 16px;
-  }
+.fc-timegrid-slot-lane:hover::after {
+  content: "\f067"; /* Font Awesome plus icon */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #666;
+  font-size: 16px;
+}
 
-  .fc-timegrid-slot-lane.has-event:hover::after {
-    content: "";
-  }
+.fc-timegrid-slot-lane.has-event:hover::after {
+  content: "";
+}
 
-  /* =====================================================
+/* =====================================================
      Duplicate Header & Label Styling (if needed)
      ===================================================== */
-  .fc-timegrid .fc-col-header-cell,
-  .fc-resourceTimeGridDay-view .fc-col-header-cell,
-  .fc-timegrid-slot-label {
-    /* Adjust as necessary if you need uniform header styling */
-    text-align: center;
-    font-weight: bold;
-  }
-  .month-appointments {
-    display: inline-block;
-    margin-top: 40px;  /* bigger gap from top */
-    margin-bottom: 10px; /* extra space below if desired */
-    background-color: #4f94d4;
-    color: #fff;
-    border-radius: 12px;
-    padding: 2px 6px;
-    font-size: 0.85rem;
-    font-weight: bold;
-  }
+.fc-timegrid .fc-col-header-cell,
+.fc-resourceTimeGridDay-view .fc-col-header-cell,
+.fc-timegrid-slot-label {
+  /* Adjust as necessary if you need uniform header styling */
+  text-align: center;
+  font-weight: bold;
+}
+.month-appointments {
+  display: inline-block;
+  margin-top: 40px; /* bigger gap from top */
+  margin-bottom: 10px; /* extra space below if desired */
+  background-color: #4f94d4;
+  color: #fff;
+  border-radius: 12px;
+  padding: 2px 6px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.fc-resource {
+  background-color: white !important;
+}
