@@ -207,7 +207,10 @@
   height: 65px !important;
   font-size: 14px !important;
   background: #fff !important;
-  border: 1px solid #e0e0e0;
+}
+
+.fc-resource {
+  background-color: white !important;
 }
 
 /* Time Grid Header & Labels */
@@ -279,17 +282,16 @@
   content: "";
 }
 
-/* =====================================================
-     Duplicate Header & Label Styling (if needed)
-     ===================================================== */
-.fc-timegrid .fc-col-header-cell,
-.fc-resourceTimeGridDay-view .fc-col-header-cell,
-.fc-timegrid-slot-label {
-  /* Adjust as necessary if you need uniform header styling */
-  text-align: center;
-  font-weight: bold;
+.fc-daygrid-day,
+.fc-timegrid-slot,
+.fc-col-header-cell,
+.fc-scrollgrid-section,
+.fc-scrollgrid-section table,
+.fc-resource {
+  border: 1px solid #79747e !important;
 }
 
-.fc-resource {
-  background-color: white !important;
+.fc-timegrid-axis {
+  border-right: 1px solid #79747e !important;
+  border-bottom: 1px solid #79747e !important;
 }
