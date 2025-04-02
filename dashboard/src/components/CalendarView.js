@@ -157,61 +157,65 @@ const CalendarView = () => {
   };
 
   return (
-<div className="calendar-container">
-    {/* ---- Top Navigation ---- */}
-    <div className="calendar-header">
-      <div className="left-section">
-        <button
-          className="icon-button"
-          onClick={() => setShowFilter(!showFilter)}
-        >
-          <FaFilter /> Filter <FaCaretDown />
-        </button>
-        {showFilter && <Filter onClose={() => setShowFilter(false)} />}
-
-        <button
-          className="icon-button"
-          onClick={() => setShowProfiles(!showProfiles)}
-        >
-          <FaUser /> Profiles
-        </button>
-        {showProfiles && <Profiles onClose={() => setShowProfiles(false)} />}
-      </div>
-
-      <div className="right-section">
-        <div className="view-toggle">
+    <div className="calendar-container">
+      {/* ---- Top Navigation ---- */}
+      <div className="calendar-header">
+        <div className="left-section">
           <button
-            className={view === "dayGridMonth" ? "active" : ""}
-            onClick={switchToMonthView}
+            className="icon-button"
+            onClick={() => setShowFilter(!showFilter)}
           >
-            <FaCalendarAlt /> Month
+            <FaFilter /> Filter <FaCaretDown />
           </button>
+          {showFilter && <Filter onClose={() => setShowFilter(false)} />}
+
           <button
-            className={view === "resourceTimeGridDay" ? "active" : ""}
-            onClick={switchToDayView}
+            className="icon-button"
+            onClick={() => setShowProfiles(!showProfiles)}
           >
-            <FaList /> Day
+            <FaUser /> Profiles
           </button>
+          {showProfiles && <Profiles onClose={() => setShowProfiles(false)} />}
         </div>
 
-        <div className="navigation">
-          <button className="nav-button nav-button-left" onClick={handlePrev}>
-            <FaChevronLeft />
-          </button>
-          <button className="nav-button nav-button-right" onClick={handleNext}>
-            <FaChevronRight />
-          </button>
+        <div className="right-section">
+          <div className="view-toggle">
+            <button
+              className={view === "dayGridMonth" ? "active" : ""}
+              onClick={switchToMonthView}
+            >
+              <FaCalendarAlt /> Month
+            </button>
+            <button
+              className={view === "resourceTimeGridDay" ? "active" : ""}
+              onClick={switchToDayView}
+            >
+              <FaList /> Day
+            </button>
+          </div>
+
+          <div className="navigation">
+            <button className="nav-button nav-button-left" onClick={handlePrev}>
+              <FaChevronLeft />
+            </button>
+            <button
+              className="nav-button nav-button-right"
+              onClick={handleNext}
+            >
+              <FaChevronRight />
+            </button>
+          </div>
+          <h2
+            className="calendar-title"
+            dangerouslySetInnerHTML={{ __html: titleText }}
+          ></h2>
         </div>
-        <h2
-          className="calendar-title"
-          dangerouslySetInnerHTML={{ __html: titleText }}
-        ></h2>
       </div>
-    </div>
 
       {/* ---- The Calendar ---- */}
       <div className="calendar-wrapper">
         <FullCalendar
+          schedulerLicenseKey="GPL-My-Project-Is-Open-Source"
           height="auto"
           aspectRatio={1.2}
           ref={calendarRef}
@@ -243,7 +247,9 @@ const CalendarView = () => {
                 const localDateStr = arg.date.toLocaleDateString("en-CA");
                 const dayEvents = events.filter((evt) => {
                   const fixedStart = evt.start.replace(" ", "T");
-                  const evtDate = new Date(fixedStart).toISOString().split("T")[0];
+                  const evtDate = new Date(fixedStart)
+                    .toISOString()
+                    .split("T")[0];
                   return evtDate === localDateStr;
                 });
 
@@ -257,7 +263,6 @@ const CalendarView = () => {
 
                 return { html };
               },
-
             },
 
             /* =============== DAY VIEW CONFIG =============== */
@@ -289,25 +294,25 @@ const CalendarView = () => {
 
                 const backgroundColor =
                   urgencyColors[extendedProps.urgency] || "#d0f0ff"; // fallback
-                  return (
-                    <div
-                      style={{
-                        backgroundColor,
-                        padding: "5px",
-                        borderRadius: "4px",
-                      }}
-                    >
-                      <div>
-                        <strong>{title}</strong>
-                      </div>
-                      <div style={{ fontSize: "0.85rem" }}>
-                        {extendedProps.patient} w/ {extendedProps.doctor}
-                      </div>
+                return (
+                  <div
+                    style={{
+                      backgroundColor,
+                      padding: "5px",
+                      borderRadius: "4px",
+                    }}
+                  >
+                    <div>
+                      <strong>{title}</strong>
                     </div>
-                  );
-                },
+                    <div style={{ fontSize: "0.85rem" }}>
+                      {extendedProps.patient} w/ {extendedProps.doctor}
+                    </div>
+                  </div>
+                );
               },
-            }}
+            },
+          }}
           // Hard-coded rooms 1..7
           resources={[
             { id: "1", title: "Room 1" },
@@ -337,14 +342,14 @@ const CalendarView = () => {
 
       {/* ---- Popup for new/edit appointment ---- */}
       {selectedSlot && (
-      <AppointmentPopup
-        room={selectedSlot.room}
-        time={selectedSlot.time}
-        date={titleText}
-        onClose={() => setSelectedSlot(null)}
-        onAppointmentAdded={refreshEvents} // new prop for refresh
-      />
-    )}
+        <AppointmentPopup
+          room={selectedSlot.room}
+          time={selectedSlot.time}
+          date={titleText}
+          onClose={() => setSelectedSlot(null)}
+          onAppointmentAdded={refreshEvents} // new prop for refresh
+        />
+      )}
     </div>
   );
 };
