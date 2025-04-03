@@ -300,6 +300,8 @@ const CalendarView = () => {
                       backgroundColor,
                       padding: "5px",
                       borderRadius: "4px",
+                      height: "99%",
+                      border: "1px solid #79747e",
                     }}
                   >
                     <div>

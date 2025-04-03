@@ -184,6 +184,7 @@
 
 .fc-daygrid-day-frame:hover {
   background-color: #f2f2f2;
+  cursor: pointer;
 }
 
 .fc-daygrid-day-frame:hover .hover-icon {
@@ -235,51 +236,8 @@
   text-align: center;
 }
 
-/* Day View Event Box & Hover */
-.custom-event {
-  position: relative;
-  padding: 5px;
-  border-radius: 4px;
-}
-
-.edit-icon {
-  display: none;
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  color: #444;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.custom-event:hover .edit-icon {
-  display: inline-block;
-}
-
-/* Time Grid Empty Slot Hover */
 .fc-timegrid-slot-lane {
-  position: relative;
   background-color: #00000000 !important;
-}
-
-.fc-timegrid-slot-lane:hover {
-  background-color: #f2f2f2;
-  cursor: pointer;
-}
-
-.fc-timegrid-slot-lane:hover::after {
-  content: "\f067"; /* Font Awesome plus icon */
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  color: #666;
-  font-size: 16px;
-}
-
-.fc-timegrid-slot-lane.has-event:hover::after {
-  content: "";
 }
 
 .fc-daygrid-day,
@@ -294,4 +252,10 @@
 .fc-timegrid-axis {
   border-right: 1px solid #79747e !important;
   border-bottom: 1px solid #79747e !important;
+}
+
+.fc-timegrid-event {
+  height: 95%;
+  background-color: #00000000;
+  border: none;
 }
