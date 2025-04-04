@@ -43,8 +43,10 @@
     background: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding-top: 100px;
+    padding-top: 30px;
+    padding-left: 20px;
     min-width: 200px;
+    height: 200px;
     z-index: 300;
 }
 
@@ -88,4 +90,11 @@
     gap: 5px;
     font-size: 14px;
     padding: 5px 0;
+    overflow-y:scroll;
+}
+
+.person-list {
+    height: 104px;
+    overflow:hidden; 
+    overflow-y:scroll;
 }
