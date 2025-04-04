@@ -26,12 +26,10 @@ const Filter = ({ onClose = () => {} }) => {  // Ensure onClose is always a func
         <FaTrash /> Clear Filters
       </button>
       <button className="filter-option" 
-      onMouseOver={() => setSubFilter("caretaker")} 
-      onMouseOut={() => setSubFilter(null)}
+      onClick={() => setSubFilter("caretaker")}
       >By Caretaker <FaCaretRight /></button>
       <button className="filter-option" 
-      onMouseOver={() => setSubFilter("patient")}
-      onMouseOut={() => setSubFilter(null)}
+      onClick={() => setSubFilter("patient")}
       >By Patient <FaCaretRight /></button>
 
       {subFilter && (
