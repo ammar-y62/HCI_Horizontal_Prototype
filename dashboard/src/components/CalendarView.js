@@ -14,6 +14,7 @@ import {
   FaEdit,
   FaCaretDown,
 } from "react-icons/fa";
+import { FiPlusCircle } from "react-icons/fi";
 import { fetchAppointments } from "../api/api";
 import Filter from "./Filter";
 import Profiles from "./Profiles";
@@ -317,8 +318,20 @@ const CalendarView = () => {
                         height: "100%",
                         backgroundColor: "rgba(187, 222, 251, 0.8)",
                         opacity: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
                       }}
-                    ></div>
+                    >
+                      <FaEdit
+                        style={{
+                          marginLeft: "2.5%",
+                          marginBottom: "2.5",
+                          fontSize: "2.25rem",
+                          color: "black",
+                        }}
+                      />
+                    </div>
                   </div>
                 );
               },
@@ -335,7 +348,14 @@ const CalendarView = () => {
               }}
             >
               {resources.map((resource) => (
-                <div className="slot-cell" key={resource.id}></div>
+                <div className="slot-cell" key={resource.id}>
+                  <FiPlusCircle
+                    style={{
+                      fontSize: "2.25rem",
+                      color: "black",
+                    }}
+                  />
+                </div>
               ))}
             </div>
           )}

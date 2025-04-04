@@ -259,6 +259,9 @@
   text-align: center;
   opacity: 0;
   z-index: 9999 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     background-color: rgba(187, 222, 251, 0.8);
