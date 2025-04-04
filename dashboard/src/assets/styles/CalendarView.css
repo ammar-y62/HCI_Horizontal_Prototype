@@ -254,8 +254,26 @@
   border-bottom: 1px solid #79747e !important;
 }
 
-.fc-timegrid-event {
-  height: 95%;
+.slot-cell {
+  flex: 1;
+  text-align: center;
+  opacity: 0;
+  z-index: 9999 !important;
+
+  &:hover {
+    background-color: rgba(187, 222, 251, 0.8);
+    cursor: pointer;
+    opacity: 1;
+  }
+}
+
+.fc-timegrid-event-harness-inset .fc-timegrid-event {
+  margin-left: -1.25%;
+  margin-top: -0.6%;
+  width: 104%;
+  height: 98.5%;
   background-color: #00000000;
   border: none;
+  box-shadow: none;
+  border-radius: 0px;
 }
