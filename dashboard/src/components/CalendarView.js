@@ -1,5 +1,5 @@
 // src/components/CalendarView.jsx
-import React, { useState, useRef } from "react";
+import React, { useState, useRef,useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -37,6 +37,12 @@ const CalendarView = () => {
   // If user selects a time slot in Day View, open popup
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [currentRange, setCurrentRange] = useState(null);
+  const [filters, setFilters] = useState({ patient: [], doctor: [] });
+  useEffect(() => {
+    if (currentRange) {
+      refreshEvents();
+    }
+  }, [filters]);
   /**
    * Called automatically by FullCalendar whenever:
    *   - The user clicks Next/Prev
@@ -86,13 +92,23 @@ const CalendarView = () => {
     }
   };
   const refreshEvents = async () => {
-    if (!currentRange) return; // if not set, do nothing
+    if (!currentRange) return;
     try {
       const data = await fetchAppointments();
-      const filtered = data.filter((apt) => {
+      let filtered = data.filter((apt) => {
         const apptDate = new Date(apt.date_time);
         return apptDate >= currentRange.start && apptDate < currentRange.end;
       });
+
+      // Apply patient filter if any
+      if (filters.patient.length > 0) {
+        filtered = filtered.filter(apt => filters.patient.includes(apt.patient_id));
+      }
+      // Apply doctor filter if any
+      if (filters.doctor.length > 0) {
+        filtered = filtered.filter(apt => filters.doctor.includes(apt.doctor_id));
+      }
+
       const newEvents = filtered.map((apt) => ({
         id: apt.id,
         title: `Room ${apt.room_number}`,
@@ -160,7 +176,13 @@ const CalendarView = () => {
           >
             <FaFilter /> Filter <FaCaretDown />
           </button>
-          {showFilter && <Filter onClose={() => setShowFilter(false)} />}
+          {showFilter && (
+            <Filter
+              onClose={() => setShowFilter(false)}
+              onFilterChange={(newFilters) => setFilters(newFilters)}
+            />
+          )}
+
           <button
             className="icon-button"
             onClick={() => setShowProfiles(!showProfiles)}
