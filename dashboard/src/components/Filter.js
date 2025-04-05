@@ -26,12 +26,10 @@ const Filter = ({ onClose = () => {} }) => {  // Ensure onClose is always a func
         <FaTrash /> Clear Filters
       </button>
       <button className="filter-option" 
-      onMouseOver={() => setSubFilter("caretaker")} 
-      onMouseOut={() => setSubFilter(null)}
+      onClick={() => setSubFilter("caretaker")}
       >By Caretaker <FaCaretRight /></button>
       <button className="filter-option" 
-      onMouseOver={() => setSubFilter("patient")}
-      onMouseOut={() => setSubFilter(null)}
+      onClick={() => setSubFilter("patient")}
       >By Patient <FaCaretRight /></button>
 
       {subFilter && (
@@ -41,17 +39,26 @@ const Filter = ({ onClose = () => {} }) => {  // Ensure onClose is always a func
             <>
               <h3 className="sub-filter-title">Filter By Caretaker</h3>
               <div className="filter-search"><input type="text" placeholder="Search..." /></div>
-              <label className="checkbox-label"><input type="checkbox" /> Caretaker 1</label>
-              <label className="checkbox-label"><input type="checkbox" /> Caretaker 2</label>
+              <div className="person-list">
+                <label className="checkbox-label"><input type="checkbox" /> Caretaker 1</label>
+                <label className="checkbox-label"><input type="checkbox" /> Caretaker 2</label>
+              </div>
             </>
           ) : (
             <>
               <h3 className="sub-filter-title">Filter By Patient</h3>
               <div className="filter-search"><input type="text" placeholder="Search..." /></div>
-
-              <label className="checkbox-label"><input type="checkbox" /> Patient 1</label>
-              <label className="checkbox-label"><input type="checkbox" /> Patient 2</label>
-              <label className="checkbox-label"><input type="checkbox" /> Patient 3</label>
+              <div className="person-list">
+                <label className="checkbox-label"><input type="checkbox" /> Patient 1</label>
+                <label className="checkbox-label"><input type="checkbox" /> Patient 2</label>
+                <label className="checkbox-label"><input type="checkbox" /> Patient 3</label>
+                <label className="checkbox-label"><input type="checkbox" /> Patient 1</label>
+                <label className="checkbox-label"><input type="checkbox" /> Patient 2</label>
+                <label className="checkbox-label"><input type="checkbox" /> Patient 3</label>
+                <label className="checkbox-label"><input type="checkbox" /> Patient 1</label>
+                <label className="checkbox-label"><input type="checkbox" /> Patient 2</label>
+                <label className="checkbox-label"><input type="checkbox" /> Patient 3</label>
+              </div>
             </>
           )}
         </div>
