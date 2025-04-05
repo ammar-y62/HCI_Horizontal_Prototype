@@ -1,5 +1,6 @@
 // src/components/CalendarView.jsx
 import React, { useState, useRef } from "react";
+import ReactDOM from "react-dom/client";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
@@ -14,6 +15,7 @@ import {
   FaEdit,
   FaCaretDown,
 } from "react-icons/fa";
+import { IoEnterOutline } from "react-icons/io5";
 import { FiPlusCircle } from "react-icons/fi";
 import { fetchAppointments } from "../api/api";
 import Filter from "./Filter";
@@ -247,6 +249,25 @@ const CalendarView = () => {
                 }
                 html += `</div>`;
                 return { html };
+              },
+              dayCellDidMount: (info) => {
+                const overlay = document.createElement("div");
+                overlay.className = "day-hover-overlay";
+
+                const icon = document.createElement("div");
+                icon.className = "day-hover-icon";
+                ReactDOM.createRoot(icon).render(
+                  <IoEnterOutline
+                    style={{
+                      fontSize: "3rem",
+                      color: "black",
+                    }}
+                  />
+                );
+
+                overlay.appendChild(icon);
+                info.el.appendChild(overlay);
+                info.el.style.position = "relative";
               },
             },
             /* =============== DAY VIEW CONFIG =============== */

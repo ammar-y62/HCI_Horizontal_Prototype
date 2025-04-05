@@ -141,14 +141,13 @@
 }
 
 .fc-daygrid-day-frame {
-  /* position: relative; <-- keep if needed */
-  /* Remove the forced 50px lines */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding: 2px !important;
   height: 85px !important;
+  cursor: pointer;
 }
 
 .custom-day-content .fc-daygrid-day-number {
@@ -159,9 +158,28 @@
   color: #333;
 }
 
+.day-hover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(187, 222, 251, 0.8);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.fc-daygrid-day:hover .day-hover-overlay {
+  opacity: 1;
+}
+
 .month-appointments {
   display: inline-block;
-  margin-top: 5px;
+  margin-top: 3px;
   margin-right: 35px;
   background-color: #4f94d4;
   color: #fff;
@@ -180,15 +198,6 @@
   right: 5px;
   color: #666;
   font-size: 14px;
-}
-
-.fc-daygrid-day-frame:hover {
-  background-color: #f2f2f2;
-  cursor: pointer;
-}
-
-.fc-daygrid-day-frame:hover .hover-icon {
-  opacity: 1;
 }
 
 /* Grey Background for Saturday & Sunday */
