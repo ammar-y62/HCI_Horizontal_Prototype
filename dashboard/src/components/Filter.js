@@ -98,7 +98,6 @@ const Filter = ({ onClose = () => {}, onFilterChange = () => {} }) => {
       >
         <FaTrash className="icon-left" />
         <span className="button-text">Clear Filters</span>
-        {/* no right icon */}
       </button>
 
       <button className="filter-option" onClick={() => setSubFilter("caretaker")}>
@@ -115,30 +114,92 @@ const Filter = ({ onClose = () => {}, onFilterChange = () => {} }) => {
 
       {/* ---- Sub‐Filter Popup ---- */}
       {subFilter && (
-        <div className="sub-filter-popup">
-          <button className="back-button" onClick={() => setSubFilter(null)}>
-            <FaArrowLeft /> Back
-          </button>
+        <div
+          className="sub-filter-popup"
+          style={{
+            border: "2px solid #7a8aff",
+            borderRadius: "8px",
+            boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+            background: "#fff",
+            padding: "12px",
+            minWidth: "200px",
+            zIndex: 300,
+            position: "absolute",
+            top: 0,
+            left: "100%",
+            transform: "translateX(8px)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+          }}
+        >
+          {/* Header: Back button and Title */}
+          <div className="sub-header">
+            <button className="back-button" onClick={() => setSubFilter(null)}>
+              <FaArrowLeft />
+            </button>
+            <h3 className="sub-filter-title" style={{ margin: 0 }}>
+              {subFilter === "caretaker" ? "Filter By Caretaker" : "Filter By Patient"}
+            </h3>
+          </div>
 
-          {subFilter === "caretaker" ? (
-            <>
-              <h3 className="sub-filter-title">Filter By Caretaker</h3>
+          {/* Search Bar */}
+          <div
+            className="filter-search"
+            style={{ position: "relative", marginBottom: "8px" }}
+          >
+            <FaSearch
+              className="search-icon"
+              style={{
+                position: "absolute",
+                left: "8px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "#999",
+              }}
+            />
+            <input
+              type="text"
+              placeholder={
+                subFilter === "caretaker"
+                  ? "Search caretaker..."
+                  : "Search patient..."
+              }
+              value={subFilter === "caretaker" ? caretakerSearch : patientSearch}
+              onChange={(e) =>
+                subFilter === "caretaker"
+                  ? setCaretakerSearch(e.target.value)
+                  : setPatientSearch(e.target.value)
+              }
+              style={{
+                width: "100%",
+                padding: "6px 8px 6px 28px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                fontSize: "14px",
+              }}
+            />
+          </div>
 
-              {/* Bubble‐style Search Bar */}
-              <div className="filter-search">
-                <FaSearch className="search-icon" />
-                <input
-                  type="text"
-                  placeholder="Search caretaker..."
-                  value={caretakerSearch}
-                  onChange={(e) => setCaretakerSearch(e.target.value)}
-                />
-              </div>
-
-              <div className="person-list">
-                {filteredCaretakers.map((caretaker) => (
-                  <label key={caretaker.id} className="checkbox-label">
-                    {/* Name on left, checkbox on right */}
+          {/* List of People */}
+          <div
+            className="person-list"
+            style={{ maxHeight: "120px", overflowY: "auto" }}
+          >
+            {subFilter === "caretaker"
+              ? filteredCaretakers.map((caretaker) => (
+                  <label
+                    key={caretaker.id}
+                    className="checkbox-label"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "6px 0",
+                      fontSize: "14px",
+                      cursor: "pointer",
+                    }}
+                  >
                     <span>{caretaker.name}</span>
                     <input
                       type="checkbox"
@@ -148,26 +209,20 @@ const Filter = ({ onClose = () => {}, onFilterChange = () => {} }) => {
                       }
                     />
                   </label>
-                ))}
-              </div>
-            </>
-          ) : (
-            <>
-              <h3 className="sub-filter-title">Filter By Patient</h3>
-
-              <div className="filter-search">
-                <FaSearch className="search-icon" />
-                <input
-                  type="text"
-                  placeholder="Search patient..."
-                  value={patientSearch}
-                  onChange={(e) => setPatientSearch(e.target.value)}
-                />
-              </div>
-
-              <div className="person-list">
-                {filteredPatients.map((patient) => (
-                  <label key={patient.id} className="checkbox-label">
+                ))
+              : filteredPatients.map((patient) => (
+                  <label
+                    key={patient.id}
+                    className="checkbox-label"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "6px 0",
+                      fontSize: "14px",
+                      cursor: "pointer",
+                    }}
+                  >
                     <span>{patient.name}</span>
                     <input
                       type="checkbox"
@@ -176,9 +231,7 @@ const Filter = ({ onClose = () => {}, onFilterChange = () => {} }) => {
                     />
                   </label>
                 ))}
-              </div>
-            </>
-          )}
+          </div>
         </div>
       )}
     </div>

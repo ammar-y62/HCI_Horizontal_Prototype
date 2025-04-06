@@ -1,144 +1,161 @@
-/* --- Main Popup Container --- */
+/* Filter Popup */
 .filter-popup {
     position: absolute;
-    top: 73px; /* adjust to fit your layout */
+    top: 73px;
     left: 10px;
-    background: #ffffff;
+    background: white;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
     min-width: 180px;
     z-index: 200;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-  }
+    gap: 5px;
+    border: 2px solid #7a8aff;
+}
 
-  /* --- Main Filter Buttons (pill or rectangular) --- */
-  .filter-option {
-    position: relative; /* needed if you want an icon on the far right */
+/* Filter Options */
+.filter-option {
+    position: relative;
+    /* allows absolute positioning for the right icon */
     display: flex;
     align-items: center;
     width: 100%;
     padding: 8px 16px;
+    /* adjust as needed */
     background: #2b6cb0;
+    /* your desired color */
     color: #fff;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
-  }
+}
 
-  .filter-option:hover {
+.filter-option:hover {
     background: #1e4a8a;
-  }
+    /* darker hover color */
+}
 
-  /* Left icon */
-  .icon-left {
+/* Left icon spacing */
+.icon-left {
     margin-right: 8px;
-  }
+}
 
-  /* Center text (margin auto to push it to center) */
-  .button-text {
+/* Center text: margin auto pushes it to the center */
+.button-text {
     margin: 0 auto;
-  }
+    /* horizontally center this text */
+}
 
-  /* Right icon pinned to the right */
-  .icon-right {
+/* Right icon pinned to the right edge */
+.icon-right {
     position: absolute;
     right: 16px;
-  }
+    /* adjust as needed */
+    /* top: 50%;               if you want vertical centering,
+                               then also do transform: translateY(-50%); */
+}
 
-  /* --- Sub‐Filter Popup (nested card) --- */
-  .sub-filter-popup {
+.filter-option:hover {
+    background: #1e4a8a;
+}
+
+/* Sub Filter Popup */
+.sub-filter-popup {
     position: absolute;
     top: 0;
-    left: 100%;
-    background: #ffffff;
+    left: 97%;
+    transform: translateX(8px); /* shifts it right of the main popup */
+
+    background: #fff;
+    border: 2px solid #7a8aff; /* your blue border */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    padding: 16px;
-    min-width: 220px;
+
+    /* Let it grow with content instead of fixed height */
+    min-width: 200px;
     z-index: 300;
+
+    /* Stacks child elements vertically with spacing */
     display: flex;
     flex-direction: column;
+    gap: 8px;
+    padding: 12px;
   }
 
   /* Back Button */
   .back-button {
+    /* IMPORTANT: remove any absolute positioning from old code! */
+    position: static; /* or just omit 'position' entirely */
+
     background: none;
     border: none;
     color: #2b6cb0;
     font-size: 14px;
+
     display: inline-flex;
     align-items: center;
+    gap: 6px;  /* space between icon & text */
     cursor: pointer;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
 
   .back-button:hover {
     color: #1e4a8a;
   }
 
-  /* Title */
+  /* Sub‐Filter Title */
   .sub-filter-title {
+    margin: 0;            /* remove default H3 margin */
     font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 12px;
-    text-align: center;
+    font-weight: bold;
+    margin-bottom: 4px;   /* spacing below the title */
   }
 
-  /* --- Bubble‐style Search Bar --- */
+  /* Search Bar */
   .filter-search {
     position: relative;
     display: flex;
     align-items: center;
-    background-color: #f3f3f3; /* or white with border */
-    border-radius: 24px;
-    padding: 4px 12px;
-    margin-bottom: 10px;
-  }
-
-  .filter-search input {
-    flex: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-size: 14px;
-    margin-left: 6px;
+    margin-bottom: 4px;
   }
 
   .search-icon {
-    color: #555;
+    position: absolute;
+    left: 8px;
+    color: #999;
+  }
+
+  .filter-search input {
+    width: 100%;
+    padding: 6px 8px 6px 28px; /* left padding for icon space */
+    border: 1px solid #ccc;
+    border-radius: 4px;
     font-size: 14px;
+    outline: none;
   }
 
-  /* --- Person List Container --- */
+  /* Person List */
   .person-list {
-    max-height: 140px; /* scrollable if many items */
+    max-height: 120px; /* scroll if more items than fit */
     overflow-y: auto;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 8px;
   }
 
-  /* Each row: name on left, checkbox on right */
+  /* Each caretaker/patient row: name on left, checkbox on right */
   .checkbox-label {
     display: flex;
-    justify-content: space-between; /* name left, checkbox right */
+    justify-content: space-between;
     align-items: center;
+    gap: 5px;
     font-size: 14px;
-    margin-bottom: 8px;
+    padding: 6px 0;
     cursor: pointer;
   }
-
-  /* Optional: black checkmark color in modern browsers */
-  .checkbox-label input[type="checkbox"] {
-    accent-color: #000; /* black checkbox */
-  }
-
-  /* Remove bottom margin on last row */
-  .checkbox-label:last-child {
-    margin-bottom: 0;
+  .sub-header {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Button on the left, title on the right */
+    gap: 8px;
   }
