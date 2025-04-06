@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../assets/styles/Appointments.css";
 import { FaTimes, FaSearch } from "react-icons/fa";
-import { fetchPeople, fetchAppointments } from "../api/api"; // Fetching data from API
+import { fetchPeople, fetchAppointments, fetchAppointmentById } from "../api/api"; // Fetching data from API
 import { addAppointment } from "../api/api";
 
 const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointmentAdded  }) => {
@@ -10,10 +10,13 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
   const [selectedPatient, setSelectedPatient] = useState(""); // Store the patient ID, not name
   const [selectedDoctor, setselectedDoctor] = useState(""); // Store the doctor ID, not name
   const [selectedUrgency, setSelectedUrgency] = useState(1); // Default urgency to 1
+  const [selectedRoom, setSelectedRoom] = useState("");  // Initialize selectedRoom state
 
   // Fetch people and appointments
   useEffect(() => {
     const loadPeople = async () => {
+      setSelectedRoom(room); // Set the room here
+
       try {
         const people = await fetchPeople();
 
@@ -34,17 +37,16 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
     loadPeople();
   }, []);
 
-  // Fetch the appointment details if editing an existing appointment
   useEffect(() => {
     const loadAppointmentDetails = async () => {
       if (appointmentId) {
         try {
-          const appointments = await fetchAppointments();
-          const appointment = appointments.find(a => a.id === appointmentId);
+          const appointment = await fetchAppointmentById(appointmentId);
           if (appointment) {
-            setSelectedPatient(appointment.patient_id); // Use patient ID here
-            setselectedDoctor(appointment.doctor_id); // Use doctor ID here
+            setSelectedPatient(appointment.patient_id);
+            setselectedDoctor(appointment.doctor_id);
             setSelectedUrgency(appointment.urgency);
+            setSelectedRoom(appointment.room_number); // Set the room here
           }
         } catch (error) {
           console.error("Error fetching appointment:", error);
@@ -78,10 +80,9 @@ const handleSave = async () => {
   // Convert the time to 24-hour format
   const formattedTime = convertTo24HourFormat(time);
   const formattedDateTime = `${formattedDate} ${formattedTime}`;
-
   // Extract just the room number from the "Room X" format (e.g., "Room 5" -> "5")
   const updatedAppointment = {
-    room: room,
+    room: selectedRoom,
     date_time: formattedDateTime,  // Send formatted date_time
     patient: selectedPatient, // Send the patient ID
     doctor: selectedDoctor, // Send the doctor ID
@@ -117,7 +118,7 @@ const handleSave = async () => {
     <div className="popup-container">
       <div className="popup-box">
         <div className="popup-header">
-          <span>{`Room ${room} - ${time}`}</span>
+          <span>{`Room ${selectedRoom} - ${time}`}</span>
           <FaTimes className="close-icon" onClick={onClose} />
         </div>
 

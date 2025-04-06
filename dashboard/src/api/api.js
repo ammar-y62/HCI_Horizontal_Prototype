@@ -28,6 +28,7 @@ export const addPerson = (personData) =>
 
 // Fetch all appointments
 export const fetchAppointments = () => apiFetch("/api/appointments");
+export const fetchAppointmentById = (id) => apiFetch(`/api/appointments/${id}`);
 
 // Add a new appointment
 export const addAppointment = (appointmentData) =>

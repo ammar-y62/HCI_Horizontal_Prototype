@@ -319,6 +319,22 @@ const CalendarView = () => {
                 };
                 const backgroundColor =
                   urgencyColors[extendedProps.urgency] || "#d0f0ff"; // fallback
+
+                const handleEventClick = () => {
+                  console.log(event.extendedProps.resourceId,event.id);
+                  // Open AppointmentPopup and pass the event's appointment data
+                  setSelectedSlot({
+                    room: event.extendedProps.resourceId, // Room number
+                    time: new Date(event.start).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }),
+                    appointmentId: event.id, // Pass the appointment ID to edit it
+                  });
+
+
+                };
+
                 return (
                   <div
                     style={{
@@ -331,6 +347,7 @@ const CalendarView = () => {
                       overflow: "hidden",
                       cursor: "pointer",
                     }}
+                    onClick={handleEventClick} // Add onClick to open the popup
                     onMouseEnter={(e) => {
                       const overlay = e.currentTarget.querySelector(
                         ".event-hover-overlay"
@@ -424,8 +441,9 @@ const CalendarView = () => {
           room={selectedSlot.room}
           time={selectedSlot.time}
           date={titleText}
+          appointmentId={selectedSlot.appointmentId} // Pass the appointmentId for editing
           onClose={() => setSelectedSlot(null)}
-          onAppointmentAdded={refreshEvents} // new prop for refresh
+          onAppointmentAdded={refreshEvents}
         />
       )}
     </div>

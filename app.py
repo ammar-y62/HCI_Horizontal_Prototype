@@ -110,6 +110,20 @@ def add_appointment():
     except Exception as e:
         print(f"Error adding appointment: {e}")
         return jsonify({"message": "Error saving appointment"}), 500
+@app.route("/api/appointments/<int:id>", methods=["GET"])
+def get_appointment(id):
+    appointment = Appointment.query.get(id)
+    if appointment:
+        return jsonify({
+            "id": appointment.id,
+            "room_number": appointment.room_number,
+            "date_time": appointment.date_time,
+            "doctor_id": appointment.doctor_id,
+            "patient_id": appointment.patient_id,
+            "urgency": appointment.urgency,
+        })
+    else:
+        return jsonify({"error": "Appointment not found"}), 404
 
 if __name__ == "__main__":
     app.run(debug=True)
