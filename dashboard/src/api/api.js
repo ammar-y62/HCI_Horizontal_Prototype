@@ -42,3 +42,10 @@ export const deleteAppointment = (id) =>
   apiFetch(`/api/appointments/${id}`, {
     method: "DELETE",
   });
+  // API call to update an existing appointment
+export const updateAppointment = (id, appointmentData) =>
+  apiFetch(`/api/appointments/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(appointmentData),
+  });

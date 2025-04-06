@@ -137,6 +137,30 @@ def delete_appointment(id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+# Update an existing appointment (PUT)
+@app.route("/api/appointments/<int:id>", methods=["PUT"])
+def update_appointment(id):
+    appointment = Appointment.query.get(id)
+    if not appointment:
+        return jsonify({"message": "Appointment not found"}), 404
 
+    data = request.json
+    # Check if the received data has the expected structure
+    if not all(key in data for key in ['room', 'date_time', 'patient', 'doctor', 'urgency']):
+        return jsonify({"message": "Missing fields in request"}), 400
+
+    try:
+        # Update the existing appointment fields
+        appointment.room_number = data['room']
+        appointment.date_time = data['date_time']
+        appointment.doctor_id = data['doctor']
+        appointment.patient_id = data['patient']
+        appointment.urgency = data['urgency']
+
+        db.session.commit()
+        return jsonify({"message": "Appointment updated successfully!"}), 200
+    except Exception as e:
+        print(f"Error updating appointment: {e}")
+        return jsonify({"message": "Error updating appointment"}), 500
 if __name__ == "__main__":
     app.run(debug=True)
