@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../assets/styles/Appointments.css";
 import { FaTimes, FaSearch } from "react-icons/fa";
-import { fetchPeople, fetchAppointments, fetchAppointmentById } from "../api/api"; // Fetching data from API
+import { fetchPeople, fetchAppointmentById, deleteAppointment } from "../api/api"; // Fetching data from API
 import { addAppointment } from "../api/api";
 
 const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointmentAdded  }) => {
@@ -113,7 +113,17 @@ const handleSave = async () => {
     setselectedDoctor("");
     setSelectedUrgency(1); // Reset to default urgency
   };
-
+  const handleDelete = async () => {
+    try {
+      await deleteAppointment(appointmentId);  // Call delete API
+      if (onAppointmentAdded) {
+        await onAppointmentAdded();  // Trigger a refresh after deletion
+      }
+      onClose();  // Close the popup after deletion
+    } catch (error) {
+      console.error("Error deleting appointment:", error);
+    }
+  };
   return (
     <div className="popup-container">
       <div className="popup-box">
@@ -177,6 +187,9 @@ const handleSave = async () => {
         <div className="popup-buttons">
           <button className="clear-btn" onClick={handleClear}>Clear</button>
           <button className="save-btn" onClick={handleSave}>Save</button>
+          {appointmentId && (
+            <button className="delete-btn" onClick={handleDelete}>Delete Appointment</button>
+          )}
         </div>
       </div>
     </div>

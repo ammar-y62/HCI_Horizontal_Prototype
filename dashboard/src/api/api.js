@@ -37,3 +37,8 @@ export const addAppointment = (appointmentData) =>
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(appointmentData),
   });
+// Delete an appointment by ID
+export const deleteAppointment = (id) =>
+  apiFetch(`/api/appointments/${id}`, {
+    method: "DELETE",
+  });

@@ -124,6 +124,19 @@ def get_appointment(id):
         })
     else:
         return jsonify({"error": "Appointment not found"}), 404
+@app.route("/api/appointments/<int:id>", methods=["DELETE"])
+def delete_appointment(id):
+    appointment = Appointment.query.get(id)
+    if not appointment:
+        return jsonify({"error": "Appointment not found"}), 404
+
+    try:
+        db.session.delete(appointment)
+        db.session.commit()
+        return jsonify({"message": "Appointment deleted successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
