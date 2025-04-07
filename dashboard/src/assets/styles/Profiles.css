@@ -93,7 +93,7 @@
 }
 
 .wide-button{
-    width: 130px;
+    width: 138px;
 }
 
 .dropdown-full{
@@ -227,6 +227,14 @@
   .save-profile-btn::before {
     content: "⧉";
     margin-right: 5px;
+  }
+
+  .remove-btn:hover {
+    background-color: #1e4a8a;
+  }
+
+  .save-profile-btn:hover {
+    background-color: #1e4a8a;
   }
   
   .form-group {
