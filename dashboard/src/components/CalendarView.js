@@ -38,6 +38,14 @@ const CalendarView = () => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [currentRange, setCurrentRange] = useState(null);
   const [filters, setFilters] = useState({ patient: [], doctor: [] });
+  const [selectedPatients, setSelectedPatients] = useState([]);
+  const [selectedCaretakers, setSelectedCaretakers] = useState([]);
+
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+    setSelectedPatients(newFilters.patient); // Update selected patients
+    setSelectedCaretakers(newFilters.doctor); // Update selected caretakers
+  };
   useEffect(() => {
     if (currentRange) {
       refreshEvents();
@@ -170,18 +178,20 @@ const CalendarView = () => {
       {/* ---- Top Navigation ---- */}
       <div className="calendar-header">
         <div className="left-section">
-          <button
-            className="icon-button"
-            onClick={() => setShowFilter(!showFilter)}
-          >
-            <FaFilter /> Filter <FaCaretDown />
-          </button>
-          {showFilter && (
-            <Filter
-              onClose={() => setShowFilter(false)}
-              onFilterChange={(newFilters) => setFilters(newFilters)}
-            />
-          )}
+        <button
+          className="icon-button"
+          onClick={() => setShowFilter(!showFilter)}
+        >
+          <FaFilter /> Filter <FaCaretDown />
+        </button>
+        {showFilter && (
+          <Filter
+            selectedPatients={selectedPatients}  // Pass selected patients to Filter
+            selectedCaretakers={selectedCaretakers}  // Pass selected caretakers to Filter
+            onClose={() => setShowFilter(false)}
+            onFilterChange={handleFilterChange}
+          />
+        )}
 
           <button
             className="icon-button"

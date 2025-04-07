@@ -10,18 +10,16 @@ import {
 import "../assets/styles/Filter.css";
 import { fetchPeople } from "../api/api";
 
-const Filter = ({ onClose = () => {}, onFilterChange = () => {} }) => {
+const Filter = ({
+  onClose = () => {},
+  onFilterChange = () => {},
+  selectedPatients = [],
+  selectedCaretakers = [],
+}) => {
   const [subFilter, setSubFilter] = useState(null);
   const [people, setPeople] = useState([]);
-
-  // Track which IDs are selected
-  const [selectedPatients, setSelectedPatients] = useState([]);
-  const [selectedCaretakers, setSelectedCaretakers] = useState([]);
-
-  // Separate search states for caretakers vs. patients
   const [caretakerSearch, setCaretakerSearch] = useState("");
   const [patientSearch, setPatientSearch] = useState("");
-
   const filterRef = useRef(null);
 
   // Fetch people on mount
@@ -70,13 +68,11 @@ const Filter = ({ onClose = () => {}, onFilterChange = () => {} }) => {
       newSelection = selectedPatients.includes(id)
         ? selectedPatients.filter((item) => item !== id)
         : [...selectedPatients, id];
-      setSelectedPatients(newSelection);
       onFilterChange({ patient: newSelection, doctor: selectedCaretakers });
     } else if (type === "caretaker") {
       newSelection = selectedCaretakers.includes(id)
         ? selectedCaretakers.filter((item) => item !== id)
         : [...selectedCaretakers, id];
-      setSelectedCaretakers(newSelection);
       onFilterChange({ patient: selectedPatients, doctor: newSelection });
     }
   };
@@ -88,11 +84,9 @@ const Filter = ({ onClose = () => {}, onFilterChange = () => {} }) => {
         className="filter-option"
         onClick={() => {
           // Clear all filters
-          setSelectedPatients([]);
-          setSelectedCaretakers([]);
+          onFilterChange({ patient: [], doctor: [] });
           setCaretakerSearch("");
           setPatientSearch("");
-          onFilterChange({ patient: [], doctor: [] });
           onClose();
         }}
       >
@@ -144,10 +138,7 @@ const Filter = ({ onClose = () => {}, onFilterChange = () => {} }) => {
           </div>
 
           {/* Search Bar */}
-          <div
-            className="filter-search"
-            style={{ position: "relative", marginBottom: "8px" }}
-          >
+          <div className="filter-search" style={{ position: "relative", marginBottom: "8px" }}>
             <FaSearch
               className="search-icon"
               style={{
@@ -160,11 +151,7 @@ const Filter = ({ onClose = () => {}, onFilterChange = () => {} }) => {
             />
             <input
               type="text"
-              placeholder={
-                subFilter === "caretaker"
-                  ? "Search caretaker..."
-                  : "Search patient..."
-              }
+              placeholder={subFilter === "caretaker" ? "Search caretaker..." : "Search patient..."}
               value={subFilter === "caretaker" ? caretakerSearch : patientSearch}
               onChange={(e) =>
                 subFilter === "caretaker"
@@ -182,10 +169,7 @@ const Filter = ({ onClose = () => {}, onFilterChange = () => {} }) => {
           </div>
 
           {/* List of People */}
-          <div
-            className="person-list"
-            style={{ maxHeight: "120px", overflowY: "auto" }}
-          >
+          <div className="person-list" style={{ maxHeight: "120px", overflowY: "auto" }}>
             {subFilter === "caretaker"
               ? filteredCaretakers.map((caretaker) => (
                   <label
@@ -204,9 +188,7 @@ const Filter = ({ onClose = () => {}, onFilterChange = () => {} }) => {
                     <input
                       type="checkbox"
                       checked={selectedCaretakers.includes(caretaker.id)}
-                      onChange={() =>
-                        handleCheckboxChange("caretaker", caretaker.id)
-                      }
+                      onChange={() => handleCheckboxChange("caretaker", caretaker.id)}
                     />
                   </label>
                 ))
