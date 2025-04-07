@@ -548,19 +548,19 @@ const Profiles = ({ onClose = () => {} }) => {
           <hr className="profile-hr" />
           <div className="profile-info-row">
             <strong>Address:</strong>
-            {editingCaretakerField === "phone" ? (
+            {editingCaretakerField === "address" ? (
             <input
-              value={editedCaretakerInfo.phone}
-              onChange={(e) => setEditedCaretakerInfo({ ...editedCaretakerInfo, phone: e.target.value })}
+              value={editedCaretakerInfo.address}
+              onChange={(e) => setEditedCaretakerInfo({ ...editedCaretakerInfo, address: e.target.value })}
               className="edit-box"
             />
           ) : (
-            <span className="profile-text">{editedCaretakerInfo.phone}</span>
+            <span className="profile-text">{editedCaretakerInfo.address}</span>
           )}
           <FaUserEdit
             className="edit-icon"
             onClick={() => {
-              setEditingCaretakerField(editingCaretakerField === "phone" ? "" : "phone");
+              setEditingCaretakerField(editingCaretakerField === "address" ? "" : "address");
             }}
           />
           </div>
