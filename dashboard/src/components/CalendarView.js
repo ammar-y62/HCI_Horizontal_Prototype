@@ -1,5 +1,5 @@
 // src/components/CalendarView.jsx
-import React, { useState, useRef,useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -14,14 +14,16 @@ import {
   FaChevronRight,
   FaEdit,
   FaCaretDown,
+  FaUserNurse
 } from "react-icons/fa";
 import { IoEnterOutline } from "react-icons/io5";
 import { FiPlusCircle } from "react-icons/fi";
-import { fetchAppointments } from "../api/api";
+import { fetchAppointments, fetchPeople } from "../api/api";
 import Filter from "./Filter";
 import Profiles from "./Profiles";
 import AppointmentPopup from "./Appointments";
 import "../assets/styles/CalendarView.css";
+
 const CalendarView = () => {
   // Ref for calling .prev() / .next() directly
   const calendarRef = useRef(null);
@@ -46,23 +48,14 @@ const CalendarView = () => {
     setSelectedPatients(newFilters.patient); // Update selected patients
     setSelectedCaretakers(newFilters.doctor); // Update selected caretakers
   };
+  
   useEffect(() => {
     if (currentRange) {
       refreshEvents();
     }
   }, [filters]);
-  /**
-   * Called automatically by FullCalendar whenever:
-   *   - The user clicks Next/Prev
-   *   - The user changes the view (Month <-> Day)
-   *   - The initial render occurs
-   *
-   * This is where we:
-   *   1) fetch all your appointments
-   *   2) filter them to the new date range
-   *   3) set them in state
-   *   4) update the header title to match FullCalendar's built‐in title
-   */
+  
+
   const handleDatesSet = async (dateInfo) => {
     try {
       const { start, end, view } = dateInfo;
@@ -78,31 +71,50 @@ const CalendarView = () => {
       }
       setTitleText(title);
       const data = await fetchAppointments();
+      
+      // Fetch people to get their names
+      const people = await fetchPeople();
+      
       const filtered = data.filter((apt) => {
         const apptDate = new Date(apt.date_time);
         return apptDate >= start && apptDate < end;
       });
-      const newEvents = filtered.map((apt) => ({
-        id: apt.id,
-        title: `Room ${apt.room_number}`,
-        start: apt.date_time,
-        date: apt.date_time.split("T")[0],
-        resourceId: String(apt.room_number),
-        extendedProps: {
-          patient: apt.patient_id,
-          doctor: apt.doctor_id,
-          urgency: apt.urgency,
-        },
-      }));
+      
+      const newEvents = filtered.map((apt) => {
+        // Find the patient and doctor names from the people list
+        const patient = people.find(p => p.id === apt.patient_id);
+        const doctor = people.find(p => p.id === apt.doctor_id);
+        
+        return {
+          id: apt.id,
+          title: `Room ${apt.room_number}`,
+          start: apt.date_time,
+          date: apt.date_time.split("T")[0],
+          resourceId: String(apt.room_number),
+          extendedProps: {
+            patient: apt.patient_id,
+            doctor: apt.doctor_id,
+            patient_name: patient ? patient.name : apt.patient_id,
+            doctor_name: doctor ? doctor.name : apt.doctor_id,
+            urgency: apt.urgency,
+            resourceId: apt.room_number,
+          },
+        };
+      });
+      
       setEvents(newEvents);
     } catch (error) {
       console.error("Failed to fetch appointments:", error);
     }
   };
+  
   const refreshEvents = async () => {
     if (!currentRange) return;
     try {
       const data = await fetchAppointments();
+      // Also fetch people to get their names
+      const people = await fetchPeople();
+      
       let filtered = data.filter((apt) => {
         const apptDate = new Date(apt.date_time);
         return apptDate >= currentRange.start && apptDate < currentRange.end;
@@ -117,38 +129,51 @@ const CalendarView = () => {
         filtered = filtered.filter(apt => filters.doctor.includes(apt.doctor_id));
       }
 
-      const newEvents = filtered.map((apt) => ({
-        id: apt.id,
-        title: `Room ${apt.room_number}`,
-        start: apt.date_time,
-        date: apt.date_time.split("T")[0],
-        resourceId: String(apt.room_number),
-        extendedProps: {
-          patient: apt.patient_id,
-          doctor: apt.doctor_id,
-          urgency: apt.urgency,
-        },
-      }));
+      const newEvents = filtered.map((apt) => {
+        // Find the patient and doctor names from the people list
+        const patient = people.find(p => p.id === apt.patient_id);
+        const doctor = people.find(p => p.id === apt.doctor_id);
+        
+        return {
+          id: apt.id,
+          title: `Room ${apt.room_number}`,
+          start: apt.date_time,
+          date: apt.date_time.split("T")[0],
+          resourceId: String(apt.room_number),
+          extendedProps: {
+            patient: apt.patient_id,
+            doctor: apt.doctor_id,
+            patient_name: patient ? patient.name : apt.patient_id,
+            doctor_name: doctor ? doctor.name : apt.doctor_id,
+            urgency: apt.urgency,
+            resourceId: apt.room_number,
+          },
+        };
+      });
+      
       setEvents(newEvents);
     } catch (error) {
       console.error("Failed to refresh events:", error);
     }
   };
+  
   /**
    * Custom buttons for month navigation
-   * We call getApi() on the FullCalendar instance (via ref),
-   * but only if it’s non‐null to avoid errors.
+   * Call getApi() on the FullCalendar instance (via ref),
+   * but only if it's non‐null to avoid errors.
    */
   const handlePrev = () => {
     if (calendarRef.current) {
       calendarRef.current.getApi().prev();
     }
   };
+  
   const handleNext = () => {
     if (calendarRef.current) {
       calendarRef.current.getApi().next();
     }
   };
+  
   /**
    * Switch to Month View or Day View
    */
@@ -158,12 +183,14 @@ const CalendarView = () => {
       calendarRef.current.getApi().changeView("dayGridMonth");
     }
   };
+  
   const switchToDayView = () => {
     setView("resourceTimeGridDay");
     if (calendarRef.current) {
       calendarRef.current.getApi().changeView("resourceTimeGridDay");
     }
   };
+  
   const resources = [
     { id: "1", title: "Room 1" },
     { id: "2", title: "Room 2" },
@@ -173,25 +200,26 @@ const CalendarView = () => {
     { id: "6", title: "Room 6" },
     { id: "7", title: "Room 7" },
   ];
+  
   return (
     <div className="calendar-container">
       {/* ---- Top Navigation ---- */}
       <div className="calendar-header">
         <div className="left-section">
-        <button
-          className="icon-button"
-          onClick={() => setShowFilter(!showFilter)}
-        >
-          <FaFilter /> Filter <FaCaretDown />
-        </button>
-        {showFilter && (
-          <Filter
-            selectedPatients={selectedPatients}  // Pass selected patients to Filter
-            selectedCaretakers={selectedCaretakers}  // Pass selected caretakers to Filter
-            onClose={() => setShowFilter(false)}
-            onFilterChange={handleFilterChange}
-          />
-        )}
+          <button
+            className="icon-button"
+            onClick={() => setShowFilter(!showFilter)}
+          >
+            <FaFilter /> Filter <FaCaretDown />
+          </button>
+          {showFilter && (
+            <Filter
+              selectedPatients={selectedPatients}  // Pass selected patients to Filter
+              selectedCaretakers={selectedCaretakers}  // Pass selected caretakers to Filter
+              onClose={() => setShowFilter(false)}
+              onFilterChange={handleFilterChange}
+            />
+          )}
 
           <button
             className="icon-button"
@@ -244,7 +272,7 @@ const CalendarView = () => {
           headerToolbar={false}
           footerToolbar={false}
           initialView={view}
-          // This fires whenever the user navigates or changes view
+          // Fires whenever the user navigates or changes view
           datesSet={handleDatesSet}
           // Our events from state
           events={events}
@@ -331,18 +359,21 @@ const CalendarView = () => {
                   urgencyColors[extendedProps.urgency] || "#d0f0ff"; // fallback
 
                 const handleEventClick = () => {
-                  console.log(event.extendedProps.resourceId,event.id);
+                  console.log("Event clicked:", event);
+                  // Extract the room number from either resourceId or extendedProps
+                  const roomNumber = event.resourceId || event.extendedProps.resourceId;
+                  console.log("Room number:", roomNumber);
+                  
                   // Open AppointmentPopup and pass the event's appointment data
                   setSelectedSlot({
-                    room: event.extendedProps.resourceId, // Room number
+                    room: roomNumber,
                     time: new Date(event.start).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
                     }),
+                    date: event.start, // Pass the actual Date object
                     appointmentId: event.id, // Pass the appointment ID to edit it
                   });
-
-
                 };
 
                 return (
@@ -356,6 +387,8 @@ const CalendarView = () => {
                       position: "relative",
                       overflow: "hidden",
                       cursor: "pointer",
+                      display: "flex",
+                      flexDirection: "column"
                     }}
                     onClick={handleEventClick} // Add onClick to open the popup
                     onMouseEnter={(e) => {
@@ -371,11 +404,14 @@ const CalendarView = () => {
                       if (overlay) overlay.style.opacity = "0";
                     }}
                   >
-                    <div>
-                      <strong>{title}</strong>
+                    <div style={{ fontWeight: "bold", fontSize: "1rem", marginBottom: "3px", color: "black" }}>
+                      {extendedProps.patient_name || extendedProps.patient || "Unassigned"}
                     </div>
-                    <div style={{ fontSize: "0.85rem" }}>
-                      {extendedProps.patient} w/ {extendedProps.doctor}
+                    <div style={{ fontSize: "0.85rem", display: "flex", alignItems: "center", color: "black"}}>
+                      <span style={{ marginRight: "4px" }}>
+                        <FaUserNurse size={20} />
+                      </span>
+                      {extendedProps.doctor_name || extendedProps.doctor || "Unassigned"}
                     </div>
                     {/* Hover overlay */}
                     <div
@@ -440,6 +476,8 @@ const CalendarView = () => {
                   hour: "2-digit",
                   minute: "2-digit",
                 }),
+                // Pass the actual Date object
+                date: info.start,
               });
             }
           }}
@@ -450,7 +488,7 @@ const CalendarView = () => {
         <AppointmentPopup
           room={selectedSlot.room}
           time={selectedSlot.time}
-          date={titleText}
+          date={selectedSlot.date}
           appointmentId={selectedSlot.appointmentId} // Pass the appointmentId for editing
           onClose={() => setSelectedSlot(null)}
           onAppointmentAdded={refreshEvents}
@@ -459,4 +497,5 @@ const CalendarView = () => {
     </div>
   );
 };
+
 export default CalendarView;
