@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaTimes, FaArrowLeft, FaUser, FaList, FaPlus, FaSearch, FaUserEdit, FaUserNurse } from "react-icons/fa";
 import "../assets/styles/Profiles.css"; // Separate styling for Profiles
-import { fetchPeople } from "../api/api";
+import { addPerson, fetchPeople } from "../api/api";
 
 
 
@@ -379,34 +379,44 @@ const Profiles = ({ onClose = () => {} }) => {
             <button className="remove-btn" onClick={() => setView("patients")}>Cancel</button>
             <button
               className="save-profile-btn"
-              onClick={() => {
-                const newId = `patient${patientList.length + 1}`;
-                const newEntry = { id: newId, name: newPatient.name };
-
-                // 1. Add to dropdown list
-                setPatientList([...patientList, newEntry]);
-
-                // 2. Add to patientDetailsMap
-                setPatientDetailsMap({
-                  ...patientDetailsMap,
-                  [newId]: {
+              onClick={async () => {
+                try {
+                  // Call the addPerson API with the new patient data
+                  await addPerson({
                     name: newPatient.name,
                     email: newPatient.email,
-                    phone: newPatient.phone,
-                    address: newPatient.address
-                  }
-                });
+                    phone_number: newPatient.phone,
+                    address: newPatient.address,
+                    status: "patient", // Set status as "patient"
+                  });
 
-                // 3. Clear form
-                setNewPatient({ name: "", email: "", phone: "", address: "" });
+                  // Update the patient list and details map
+                  const newId = `patient${patientList.length + 1}`;
+                  const newEntry = { id: newId, name: newPatient.name };
 
-                alert("Patient profile has been successfully added!");
-                setView("patients");
+                  setPatientList([...patientList, newEntry]);
+                  setPatientDetailsMap({
+                    ...patientDetailsMap,
+                    [newId]: {
+                      name: newPatient.name,
+                      email: newPatient.email,
+                      phone: newPatient.phone,
+                      address: newPatient.address,
+                    },
+                  });
+
+                  // Clear the form and navigate back
+                  setNewPatient({ name: "", email: "", phone: "", address: "" });
+                  alert("Patient profile has been successfully added!");
+                  setView("patients");
+                } catch (error) {
+                  console.error("Error adding patient:", error);
+                  alert("Failed to add patient. Please try again.");
+                }
               }}
             >
               Save
             </button>
-
           </div>
         </div>
       )}
@@ -660,35 +670,48 @@ const Profiles = ({ onClose = () => {} }) => {
           <div className="popup-buttons">
             <button className="remove-btn" onClick={() => setView("caretakers")}>Cancel</button>
             <button
-              className="save-profile-btn"
-              onClick={() => {
-                const newId = `caretaker${caretakerList.length + 1}`;
-                const newEntry = { id: newId, name: newCaretaker.name };
+                className="save-profile-btn"
+                onClick={async () => {
+                  try {
+                    // Call the addPerson API with the new caretaker data
+                    await addPerson({
+                      name: newCaretaker.name,
+                      email: newCaretaker.email,
+                      phone_number: newCaretaker.phone,
+                      address: newCaretaker.address,
+                      status: "caretaker", // Set status as "caretaker"
+                    });
 
-                setCaretakerList([...caretakerList, newEntry]);
+                    // Update the caretaker list and details map
+                    const newId = `caretaker${caretakerList.length + 1}`;
+                    const newEntry = { id: newId, name: newCaretaker.name };
 
-                setCaretakerDetailsMap({
-                  ...caretakerDetailsMap,
-                  [newId]: {
-                    name: newCaretaker.name,
-                    email: newCaretaker.email,
-                    phone: newCaretaker.phone,
-                    address: newCaretaker.address
+                    setCaretakerList([...caretakerList, newEntry]);
+                    setCaretakerDetailsMap({
+                      ...caretakerDetailsMap,
+                      [newId]: {
+                        name: newCaretaker.name,
+                        email: newCaretaker.email,
+                        phone: newCaretaker.phone,
+                        address: newCaretaker.address,
+                      },
+                    });
+
+                    // Clear the form and navigate back
+                    setNewCaretaker({ name: "", position: "", email: "", phone: "", address: "" });
+                    alert("Caretaker profile has been successfully added!");
+                    setView("caretakers");
+                  } catch (error) {
+                    console.error("Error adding caretaker:", error);
+                    alert("Failed to add caretaker. Please try again.");
                   }
-                });
-
-                setNewCaretaker({ name: "", position: "", email: "", phone: "", address: "" });
-
-                alert("Caretaker profile has been successfully added!");
-                setView("caretakers");
-              }}
-            >
-              Save
-            </button>
-
+                }}
+              >
+                Save
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
 
 
