@@ -1,20 +1,19 @@
 /* Profiles Popup Styling - Profiles.css */
 .profiles-popup {
-    position: absolute;
-    top: 70px;
-    left: 21%;
-    transform: translateX(-50%);
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 15px;
-    min-width: 200px;
-    min-height: 300px;
-    z-index: 200;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 10px solid #7A8AFF;
+  position: absolute;
+  top: 70px;
+  left: 160px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  min-width: 225px;
+  min-height: 300px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 10px solid #7a8aff;
 }
 /* .view-toggle button1 {
     border: none;
@@ -30,255 +29,254 @@
     border-radius: 50px;
     font-weight: bold;
   } */
-.profiles-main h3, .profiles-sub h3 {
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 45px;
-    margin-top: 20px;
-    
+.profiles-main h3,
+.profiles-sub h3 {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 45px;
+  margin-top: 20px;
 }
 
 .caretakers-sub h3 {
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 25px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 25px;
 }
 
 .custom-h3 {
-    text-align: center;
+  text-align: center;
 }
 
-.profile-option, .profile-action {
-    background: #2b6cb0;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 1000px;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 80%;
-    justify-content: center;
-    margin-left: auto;
-    margin-right: auto;
+.profile-option,
+.profile-action {
+  background: #2b6cb0;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 1000px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 80%;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.profile-option:hover, .profile-action:hover {
-    background: #1e4a8a;
+.profile-option:hover,
+.profile-action:hover {
+  background: #1e4a8a;
 }
 
-.back-button, .close-button {
-    background: none;
-    border: none;
-    color: red;
-    font-size: 16px;
-    position: absolute;
-    top: 15px;
-    right: 10px;
-    cursor: pointer;
+.back-button,
+.close-button {
+  background: none;
+  border: none;
+  color: red;
+  font-size: 16px;
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  cursor: pointer;
 }
 
 .back-button {
-    left: 10px;
-    right: auto;
-    color: #2b6cb0;
+  left: 10px;
+  right: auto;
+  color: #2b6cb0;
 }
 
 .back-button:hover {
-    color: #1e4a8a;
+  color: #1e4a8a;
 }
 
-.wide-button{
-    width: 138px;
+.wide-button {
+  width: 138px;
 }
 
-.dropdown-full{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
+.dropdown-full {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
 }
-
-
 
 .dropdown-box {
-    background: white;
-    border: 3px solid #7A8AFF;
-    border-radius: 10px;
-    padding: 0.8rem;
-    padding-left: 35px;
-    width: 200px;
-    box-sizing: border-box;
-    position: relative;
-    font-family: sans-serif;
-    font-size: 13px;
-    text-align: left;
+  background: white;
+  border: 3px solid #7a8aff;
+  border-radius: 10px;
+  padding: 0.8rem;
+  padding-left: 35px;
+  width: 225px;
+  box-sizing: border-box;
+  position: relative;
+  font-family: sans-serif;
+  font-size: 13px;
+  text-align: left;
 }
 
-.dropdown-box:focus{
-    outline: #1e4a8a;
+.dropdown-box:focus {
+  outline: #1e4a8a;
 }
-
 
 .dropdown-icon {
-    position: relative;
-    top: 50%;
-    right: 80px;
-    transform: translateY(-150%);
-    font-size: 25px;
-    color: #7A8AFF;
-    display: flex;
-    align-items: center;
+  position: relative;
+  top: 50%;
+  right: 90px;
+  transform: translateY(-150%);
+  font-size: 25px;
+  color: #7a8aff;
+  display: flex;
+  align-items: center;
 }
 
 .dropdown-menu {
-    position: absolute;
-    top: 75%;
-    left: 1;
-    width: 120%;
-    background: white;
-    border: 3px solid #7A8AFF;
-    border-radius: 10px;
-    max-height: 150px;
-    overflow-y: auto;
-    z-index: 10;
-    font-family: sans-serif;
+  position: absolute;
+  top: 75%;
+  left: 1;
+  width: 120%;
+  background: white;
+  border: 3px solid #7a8aff;
+  border-radius: 10px;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 10;
+  font-family: sans-serif;
 }
 
 .dropdown-item {
-    padding: 0.8rem;
-    cursor: pointer;
+  padding: 0.8rem;
+  cursor: pointer;
 }
 
 .dropdown-item:hover {
-    background-color: #f0f0ff;
+  background-color: #f0f0ff;
 }
 
 .profiles-info-sub h3 {
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 35px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 35px;
 }
 
 .profile-info-row {
-    background: #f6f6f6;
-    border-radius: 50px;
-    padding: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 16px;
-    font-family: sans-serif;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  .edit-box {
-    background: white;
-    border: 3px solid #7A8AFF;
-    text-align: left;
-    border-radius: 10px;
-    padding: 5px;
-    margin-left: 75px;
-    width: 150px;
-    position: absolute;
-    font-family: sans-serif;
+  background: #f6f6f6;
+  border-radius: 50px;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  font-family: sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-  .edit-icon {
-    background: #325ca8;
-    color: white;
-    padding: 6px;
-    border-radius: 50%;
-    font-size: 14px;
-  }
+.edit-box {
+  background: white;
+  border: 3px solid #7a8aff;
+  text-align: left;
+  border-radius: 10px;
+  padding: 5px;
+  margin-left: 75px;
+  width: 150px;
+  position: absolute;
+  font-family: sans-serif;
+}
 
-  .edit-icon:hover {
-    cursor: pointer;
-  }
+.edit-icon {
+  background: #325ca8;
+  color: white;
+  padding: 6px;
+  border-radius: 50%;
+  font-size: 14px;
+}
 
-  .remove-btn, .save-profile-btn {
-    background: #4F81BD;
-    margin-left: 10px;
-    color: white;
-    border: none;
-    border-radius: 25px;
-    padding: 8px 25px;
-    cursor: pointer;
-    font-size: 18px;
-    width: 130px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.edit-icon:hover {
+  cursor: pointer;
+}
 
-  .remove-btn::before {
-    content: "⊗";
-    margin-right: 5px;
-  }
-  
-  .save-profile-btn::before {
-    content: "⧉";
-    margin-right: 5px;
-  }
+.remove-btn,
+.save-profile-btn {
+  background: #4f81bd;
+  margin-left: 10px;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 8px 25px;
+  cursor: pointer;
+  font-size: 18px;
+  width: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .remove-btn:hover {
-    background-color: #1e4a8a;
-  }
+.remove-btn::before {
+  content: "⊗";
+  margin-right: 5px;
+}
 
-  .save-profile-btn:hover {
-    background-color: #1e4a8a;
-  }
-  
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 15px;
-    width: 100%;
-  }
-  
-  .form-group label {
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .form-group input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    box-sizing: border-box;
-  }
-  
-  
+.save-profile-btn::before {
+  content: "⧉";
+  margin-right: 5px;
+}
+
+.remove-btn:hover {
+  background-color: #1e4a8a;
+}
+
+.save-profile-btn:hover {
+  background-color: #1e4a8a;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+}
 
 hr {
-    width: 80%;
-    border: 0;
-    border-top: 1px solid #ccc;
-    margin: 10px 0;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    margin-left: auto;
-    margin-right: auto;
+  width: 80%;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 10px 0;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.profile-hr{
-    width: 90%;
-    border: 0;
-    border-top: 2px solid black;
-    margin: 10px 0;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    margin-left: auto;
-    margin-right: auto;
+.profile-hr {
+  width: 90%;
+  border: 0;
+  border-top: 2px solid black;
+  margin: 10px 0;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  margin-left: auto;
+  margin-right: auto;
 }

@@ -1,9 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FaTimes, FaArrowLeft, FaUser, FaList, FaPlus, FaSearch, FaUserEdit, FaUserNurse } from "react-icons/fa";
+import {
+  FaTimes,
+  FaArrowLeft,
+  FaUser,
+  FaList,
+  FaPlus,
+  FaSearch,
+  FaUserEdit,
+  FaUserNurse,
+} from "react-icons/fa";
 import "../assets/styles/Profiles.css"; // Separate styling for Profiles
 import { updatePerson, deletePerson, addPerson, fetchPeople } from "../api/api";
-
-
 
 const Profiles = ({ onClose = () => {} }) => {
   const [view, setView] = useState("main");
@@ -30,15 +37,19 @@ const Profiles = ({ onClose = () => {} }) => {
   const [patientDetailsMap, setPatientDetailsMap] = useState({});
   const [caretakerDetailsMap, setCaretakerDetailsMap] = useState({});
 
-
   // Fetch people from the backend and separate them into patients and caretakers
   useEffect(() => {
     const loadPeople = async () => {
       try {
         const peopleData = await fetchPeople();
-        const patients = peopleData.filter((person) => person.status === "patient");
+        const patients = peopleData.filter(
+          (person) => person.status === "patient"
+        );
         //TODO: Doctor or caretaker?
-        const caretakers = peopleData.filter((person) => person.status === "doctor" || person.status === "caretaker");
+        const caretakers = peopleData.filter(
+          (person) =>
+            person.status === "doctor" || person.status === "caretaker"
+        );
 
         setPatientList(patients.map((p) => ({ id: p.id, name: p.name })));
         setCaretakerList(caretakers.map((c) => ({ id: c.id, name: c.name })));
@@ -76,18 +87,17 @@ const Profiles = ({ onClose = () => {} }) => {
 
   const [newCaretaker, setNewCaretaker] = useState({
     name: "",
-    position: "",
     email: "",
     phone: "",
-    address: ""
+    address: "",
   });
 
   // Filter based on search input
-  const filteredPatients = patientList.filter(p =>
+  const filteredPatients = patientList.filter((p) =>
     p.name.toLowerCase().includes(patientSearch.toLowerCase())
   );
 
-  const filteredCaretakers = caretakerList.filter(p =>
+  const filteredCaretakers = caretakerList.filter((p) =>
     p.name.toLowerCase().includes(caretakerSearch.toLowerCase())
   );
 
@@ -99,6 +109,24 @@ const Profiles = ({ onClose = () => {} }) => {
   const hasCaretakerChanges = () => {
     const original = caretakerDetailsMap[selectedCaretaker];
     return JSON.stringify(original) !== JSON.stringify(editedCaretakerInfo);
+  };
+
+  const patientHasEmptyInput = (patient) => {
+    return (
+      !String(patient.name || "").trim() ||
+      !String(patient.email || "").trim() ||
+      !String(patient.phone || "").trim() ||
+      !String(patient.address || "").trim()
+    );
+  };
+
+  const caretakerHasEmptyInput = (caretaker) => {
+    return (
+      !String(caretaker.name || "").trim() ||
+      !String(caretaker.email || "").trim() ||
+      !String(caretaker.phone || "").trim() ||
+      !String(caretaker.address || "").trim()
+    );
   };
 
   // Delete a patient
@@ -159,14 +187,22 @@ const Profiles = ({ onClose = () => {} }) => {
     <div className="profiles-popup" ref={profilesRef}>
       {view === "main" && (
         <div className="profiles-main">
-          <button className="close-button" onClick={onClose}><FaTimes /></button>
+          <button className="close-button" onClick={onClose}>
+            <FaTimes />
+          </button>
           <h3>Profile Management</h3>
           <div className="center-container">
-            <button className="profile-option center-button" onClick={() => setView("patients")}>
+            <button
+              className="profile-option center-button"
+              onClick={() => setView("patients")}
+            >
               <FaUser /> Patients
             </button>
             <hr />
-            <button className="profile-option center-button" onClick={() => setView("caretakers")}>
+            <button
+              className="profile-option center-button"
+              onClick={() => setView("caretakers")}
+            >
               <FaUserNurse /> Caretakers
             </button>
           </div>
@@ -175,22 +211,44 @@ const Profiles = ({ onClose = () => {} }) => {
 
       {view === "patients" && (
         <div className="profiles-sub">
-          <button className="back-button" onClick={() => setView("main")}><FaArrowLeft /> </button>
-          <button className="close-button" onClick={onClose}><FaTimes /></button>
+          <button className="back-button" onClick={() => setView("main")}>
+            <FaArrowLeft />{" "}
+          </button>
+          <button className="close-button" onClick={onClose}>
+            <FaTimes />
+          </button>
           <h3>Patients</h3>
-          <button className="profile-action wide-button" onClick={() =>setView("view-patients")}><FaList /> View</button>
+          <button
+            className="profile-action wide-button"
+            onClick={() => setView("view-patients")}
+          >
+            <FaList /> View
+          </button>
           <hr />
-          <button className="profile-action wide-button" onClick={() => setView ("add-patients")}><FaPlus /> Add</button>
+          <button
+            className="profile-action wide-button"
+            onClick={() => setView("add-patients")}
+          >
+            <FaPlus /> Add
+          </button>
         </div>
       )}
 
       {view === "view-patients" && (
         <div className="profiles-sub">
-          <button className="back-button" onClick={() => setView("patients")}><FaArrowLeft /></button>
-          <button className="close-button" onClick={onClose}><FaTimes /></button>
+          <button className="back-button" onClick={() => setView("patients")}>
+            <FaArrowLeft />
+          </button>
+          <button className="close-button" onClick={onClose}>
+            <FaTimes />
+          </button>
           <h3>View Patient Profiles</h3>
 
-          <div className="dropdown-full" ref={patientDropdownRef} style={{flexDirection: "column" }}>
+          <div
+            className="dropdown-full"
+            ref={patientDropdownRef}
+            style={{ flexDirection: "column" }}
+          >
             <input
               type="text"
               className="dropdown-box"
@@ -208,7 +266,6 @@ const Profiles = ({ onClose = () => {} }) => {
               <div className="dropdown-menu">
                 {filteredPatients.map((patient) => (
                   <div
-
                     key={patient.id}
                     className="dropdown-item"
                     onClick={() => {
@@ -231,67 +288,99 @@ const Profiles = ({ onClose = () => {} }) => {
 
       {view === "view-patient-profile" && selectedPatient && (
         <div className="profiles-info-sub">
-          <button className="close-button" onClick={onClose}><FaTimes /></button>
-          <button className="back-button" onClick={() => setView("view-patients")}><FaArrowLeft /></button>
-          <h3>{patientDetailsMap[selectedPatient]?.name}<br />Profile</h3>
+          <button className="close-button" onClick={onClose}>
+            <FaTimes />
+          </button>
+          <button
+            className="back-button"
+            onClick={() => setView("view-patients")}
+          >
+            <FaArrowLeft />
+          </button>
+          <h3>
+            {patientDetailsMap[selectedPatient]?.name}
+            <br />
+            Profile
+          </h3>
 
           <div className="profile-info-row">
             <strong>Name:</strong>
             {editingPatientField === "name" ? (
-            <input
-              value={editedPatientInfo.name}
-              onChange={(e) => setEditedPatientInfo({ ...editedPatientInfo, name: e.target.value })}
-              className="edit-box"
+              <input
+                value={editedPatientInfo.name}
+                onChange={(e) =>
+                  setEditedPatientInfo({
+                    ...editedPatientInfo,
+                    name: e.target.value,
+                  })
+                }
+                className="edit-box"
+              />
+            ) : (
+              <span className="profile-text">{editedPatientInfo.name}</span>
+            )}
+            <FaUserEdit
+              className="edit-icon"
+              onClick={() => {
+                setEditingPatientField(
+                  editingPatientField === "name" ? "" : "name"
+                );
+              }}
             />
-          ) : (
-            <span className="profile-text">{editedPatientInfo.name}</span>
-          )}
-          <FaUserEdit
-            className="edit-icon"
-            onClick={() => {
-              setEditingPatientField(editingPatientField === "name" ? "" : "name");
-            }}
-          />
           </div>
 
           <hr className="profile-hr" />
           <div className="profile-info-row">
             <strong>Email:</strong>
             {editingPatientField === "email" ? (
-            <input
-              value={editedPatientInfo.email}
-              onChange={(e) => setEditedPatientInfo({ ...editedPatientInfo, email: e.target.value })}
-              className="edit-box"
+              <input
+                value={editedPatientInfo.email}
+                onChange={(e) =>
+                  setEditedPatientInfo({
+                    ...editedPatientInfo,
+                    email: e.target.value,
+                  })
+                }
+                className="edit-box"
+              />
+            ) : (
+              <span className="profile-text">{editedPatientInfo.email}</span>
+            )}
+            <FaUserEdit
+              className="edit-icon"
+              onClick={() => {
+                setEditingPatientField(
+                  editingPatientField === "email" ? "" : "email"
+                );
+              }}
             />
-          ) : (
-            <span className="profile-text">{editedPatientInfo.email}</span>
-          )}
-          <FaUserEdit
-            className="edit-icon"
-            onClick={() => {
-              setEditingPatientField(editingPatientField === "email" ? "" : "email");
-            }}
-          />
           </div>
 
           <hr className="profile-hr" />
           <div className="profile-info-row">
             <strong>Phone:</strong>
             {editingPatientField === "phone" ? (
-            <input
-              value={editedPatientInfo.phone}
-              onChange={(e) => setEditedPatientInfo({ ...editedPatientInfo, phone: e.target.value })}
-              className="edit-box"
+              <input
+                value={editedPatientInfo.phone}
+                onChange={(e) =>
+                  setEditedPatientInfo({
+                    ...editedPatientInfo,
+                    phone: e.target.value,
+                  })
+                }
+                className="edit-box"
+              />
+            ) : (
+              <span className="profile-text">{editedPatientInfo.phone}</span>
+            )}
+            <FaUserEdit
+              className="edit-icon"
+              onClick={() => {
+                setEditingPatientField(
+                  editingPatientField === "phone" ? "" : "phone"
+                );
+              }}
             />
-          ) : (
-            <span className="profile-text">{editedPatientInfo.phone}</span>
-          )}
-          <FaUserEdit
-            className="edit-icon"
-            onClick={() => {
-              setEditingPatientField(editingPatientField === "phone" ? "" : "phone");
-            }}
-          />
           </div>
 
           <hr className="profile-hr" />
@@ -300,7 +389,12 @@ const Profiles = ({ onClose = () => {} }) => {
             {editingPatientField === "address" ? (
               <input
                 value={editedPatientInfo.address}
-                onChange={(e) => setEditedPatientInfo({ ...editedPatientInfo, address: e.target.value })}
+                onChange={(e) =>
+                  setEditedPatientInfo({
+                    ...editedPatientInfo,
+                    address: e.target.value,
+                  })
+                }
                 className="edit-box"
               />
             ) : (
@@ -309,67 +403,86 @@ const Profiles = ({ onClose = () => {} }) => {
             <FaUserEdit
               className="edit-icon"
               onClick={() => {
-                setEditingPatientField(editingPatientField === "address" ? "" : "address");
+                setEditingPatientField(
+                  editingPatientField === "address" ? "" : "address"
+                );
               }}
             />
           </div>
 
           <div className="popup-buttons">
-                <button
-                  className="remove-btn"
-                  onClick={() => handleDeletePatient(patientDetailsMap[selectedPatient].id)}
-                >
-                  Remove
-                </button>
+            <button
+              className="remove-btn"
+              onClick={() =>
+                handleDeletePatient(patientDetailsMap[selectedPatient].id)
+              }
+            >
+              Remove
+            </button>
 
-                <button
-                  className="save-profile-btn"
-                  disabled={!hasPatientChanges()}
-                  style={{ opacity: hasPatientChanges() ? 1 : 0.5, cursor: hasPatientChanges() ? "pointer" : "not-allowed" }}
-                  onClick={async () => {
-                    try {
-                      // Call the updatePerson API with the edited patient data
-                      await updatePerson(selectedPatient, {
-                        name: editedPatientInfo.name,
-                        email: editedPatientInfo.email,
-                        phone_number: editedPatientInfo.phone,
-                        address: editedPatientInfo.address,
-                      });
+            <button
+              className="save-profile-btn"
+              disabled={
+                !hasPatientChanges() || patientHasEmptyInput(editedPatientInfo)
+              }
+              style={{
+                opacity:
+                  hasPatientChanges() &&
+                  !patientHasEmptyInput(editedPatientInfo)
+                    ? 1
+                    : 0.5,
+                cursor:
+                  hasPatientChanges() &&
+                  !patientHasEmptyInput(editedPatientInfo)
+                    ? "pointer"
+                    : "not-allowed",
+              }}
+              onClick={async () => {
+                try {
+                  // Call the updatePerson API with the edited patient data
+                  await updatePerson(selectedPatient, {
+                    name: editedPatientInfo.name,
+                    email: editedPatientInfo.email,
+                    phone_number: editedPatientInfo.phone,
+                    address: editedPatientInfo.address,
+                  });
 
-                      // Update the local state with the edited data
-                      setPatientDetailsMap({
-                        ...patientDetailsMap,
-                        [selectedPatient]: { ...editedPatientInfo },
-                      });
+                  // Update the local state with the edited data
+                  setPatientDetailsMap({
+                    ...patientDetailsMap,
+                    [selectedPatient]: { ...editedPatientInfo },
+                  });
 
-                      setPatientList(
-                        patientList.map((p) =>
-                          p.id === selectedPatient
-                            ? { ...p, name: editedPatientInfo.name }
-                            : p
-                        )
-                      );
+                  setPatientList(
+                    patientList.map((p) =>
+                      p.id === selectedPatient
+                        ? { ...p, name: editedPatientInfo.name }
+                        : p
+                    )
+                  );
 
-                      setEditingPatientField("");
-                      alert("Patient profile has been successfully saved!");
-                    } catch (error) {
-                      console.error("Error saving patient profile:", error);
-                      alert("Failed to save patient profile. Please try again.");
-                    }
-                  }}
-                >
+                  setEditingPatientField("");
+                  alert("Patient profile has been successfully saved!");
+                } catch (error) {
+                  console.error("Error saving patient profile:", error);
+                  alert("Failed to save patient profile. Please try again.");
+                }
+              }}
+            >
               Save
-          </button>
-
+            </button>
           </div>
         </div>
       )}
 
-
       {view === "add-patients" && (
         <div className="patients-sub">
-          <button className="back-button" onClick={() => setView("patients")}><FaArrowLeft /></button>
-          <button className="close-button" onClick={onClose}><FaTimes /></button>
+          <button className="back-button" onClick={() => setView("patients")}>
+            <FaArrowLeft />
+          </button>
+          <button className="close-button" onClick={onClose}>
+            <FaTimes />
+          </button>
           <h3 className="custom-h3">New Patient Profile</h3>
 
           <div className="form-group">
@@ -378,7 +491,9 @@ const Profiles = ({ onClose = () => {} }) => {
               type="text"
               placeholder="Enter name"
               value={newPatient.name}
-              onChange={(e) => setNewPatient({ ...newPatient, name: e.target.value })}
+              onChange={(e) =>
+                setNewPatient({ ...newPatient, name: e.target.value })
+              }
             />
           </div>
 
@@ -388,7 +503,9 @@ const Profiles = ({ onClose = () => {} }) => {
               type="email"
               placeholder="Enter email"
               value={newPatient.email}
-              onChange={(e) => setNewPatient({ ...newPatient, email: e.target.value })}
+              onChange={(e) =>
+                setNewPatient({ ...newPatient, email: e.target.value })
+              }
             />
           </div>
 
@@ -398,7 +515,9 @@ const Profiles = ({ onClose = () => {} }) => {
               type="tel"
               placeholder="Enter phone number"
               value={newPatient.phone}
-              onChange={(e) => setNewPatient({ ...newPatient, phone: e.target.value })}
+              onChange={(e) =>
+                setNewPatient({ ...newPatient, phone: e.target.value })
+              }
             />
           </div>
 
@@ -408,14 +527,25 @@ const Profiles = ({ onClose = () => {} }) => {
               type="text"
               placeholder="Enter address"
               value={newPatient.address}
-              onChange={(e) => setNewPatient({ ...newPatient, address: e.target.value })}
+              onChange={(e) =>
+                setNewPatient({ ...newPatient, address: e.target.value })
+              }
             />
           </div>
 
           <div className="popup-buttons">
-            <button className="remove-btn" onClick={() => setView("patients")}>Cancel</button>
+            <button className="remove-btn" onClick={() => setView("patients")}>
+              Cancel
+            </button>
             <button
               className="save-profile-btn"
+              disabled={patientHasEmptyInput(newPatient)}
+              style={{
+                opacity: !patientHasEmptyInput(newPatient) ? 1 : 0.5,
+                cursor: !patientHasEmptyInput(newPatient)
+                  ? "pointer"
+                  : "not-allowed",
+              }}
               onClick={async () => {
                 try {
                   // Call the addPerson API with the new patient data
@@ -443,7 +573,12 @@ const Profiles = ({ onClose = () => {} }) => {
                   });
 
                   // Clear the form and navigate back
-                  setNewPatient({ name: "", email: "", phone: "", address: "" });
+                  setNewPatient({
+                    name: "",
+                    email: "",
+                    phone: "",
+                    address: "",
+                  });
                   alert("Patient profile has been successfully added!");
                   setView("patients");
                 } catch (error) {
@@ -460,22 +595,44 @@ const Profiles = ({ onClose = () => {} }) => {
 
       {view === "caretakers" && (
         <div className="profiles-sub">
-          <button className="back-button" onClick={() => setView("main")}><FaArrowLeft /> </button>
-          <button className="close-button" onClick={onClose}><FaTimes /></button>
+          <button className="back-button" onClick={() => setView("main")}>
+            <FaArrowLeft />{" "}
+          </button>
+          <button className="close-button" onClick={onClose}>
+            <FaTimes />
+          </button>
           <h3>Caretakers</h3>
-          <button className="profile-action wide-button" onClick={() => setView("view-caretakers")}><FaList /> View</button>
+          <button
+            className="profile-action wide-button"
+            onClick={() => setView("view-caretakers")}
+          >
+            <FaList /> View
+          </button>
           <hr />
-          <button className="profile-action wide-button" onClick={() => setView("add-caretakers")}><FaPlus /> Add</button>
+          <button
+            className="profile-action wide-button"
+            onClick={() => setView("add-caretakers")}
+          >
+            <FaPlus /> Add
+          </button>
         </div>
       )}
 
       {view === "view-caretakers" && (
         <div className="profiles-sub">
-          <button className="back-button" onClick={() => setView("caretakers")}><FaArrowLeft /></button>
-          <button className="close-button" onClick={onClose}><FaTimes /></button>
+          <button className="back-button" onClick={() => setView("caretakers")}>
+            <FaArrowLeft />
+          </button>
+          <button className="close-button" onClick={onClose}>
+            <FaTimes />
+          </button>
           <h3>View Caretaker Profiles</h3>
 
-          <div className="dropdown-full" ref={patientDropdownRef} style={{ flexDirection: "column" }}>
+          <div
+            className="dropdown-full"
+            ref={patientDropdownRef}
+            style={{ flexDirection: "column" }}
+          >
             <input
               type="text"
               className="dropdown-box"
@@ -513,104 +670,160 @@ const Profiles = ({ onClose = () => {} }) => {
         </div>
       )}
 
-
       {view === "view-caretaker-profile" && selectedCaretaker && (
         <div className="profiles-info-sub">
-          <button className="close-button" onClick={onClose}><FaTimes /></button>
-          <button className="back-button" onClick={() => setView("view-caretakers")}><FaArrowLeft /></button>
-          <h3>{caretakerDetailsMap[selectedCaretaker]?.name}<br />Profile</h3>
+          <button className="close-button" onClick={onClose}>
+            <FaTimes />
+          </button>
+          <button
+            className="back-button"
+            onClick={() => setView("view-caretakers")}
+          >
+            <FaArrowLeft />
+          </button>
+          <h3>
+            {caretakerDetailsMap[selectedCaretaker]?.name}
+            <br />
+            Profile
+          </h3>
 
           <div className="profile-info-row">
             <strong>Name:</strong>
             {editingCaretakerField === "name" ? (
-            <input
-              value={editedCaretakerInfo.name}
-              onChange={(e) => setEditedCaretakerInfo({ ...editedCaretakerInfo, name: e.target.value })}
-              className="edit-box"
+              <input
+                value={editedCaretakerInfo.name}
+                onChange={(e) =>
+                  setEditedCaretakerInfo({
+                    ...editedCaretakerInfo,
+                    name: e.target.value,
+                  })
+                }
+                className="edit-box"
+              />
+            ) : (
+              <span className="profile-text">{editedCaretakerInfo.name}</span>
+            )}
+            <FaUserEdit
+              className="edit-icon"
+              onClick={() => {
+                setEditingCaretakerField(
+                  editingCaretakerField === "name" ? "" : "name"
+                );
+              }}
             />
-          ) : (
-            <span className="profile-text">{editedCaretakerInfo.name}</span>
-          )}
-          <FaUserEdit
-            className="edit-icon"
-            onClick={() => {
-              setEditingCaretakerField(editingCaretakerField === "name" ? "" : "name");
-            }}
-          />
           </div>
 
           <hr className="profile-hr" />
           <div className="profile-info-row">
             <strong>Email:</strong>
             {editingCaretakerField === "email" ? (
-            <input
-              value={editedCaretakerInfo.email}
-              onChange={(e) => setEditedCaretakerInfo({ ...editedCaretakerInfo, email: e.target.value })}
-              className="edit-box"
+              <input
+                value={editedCaretakerInfo.email}
+                onChange={(e) =>
+                  setEditedCaretakerInfo({
+                    ...editedCaretakerInfo,
+                    email: e.target.value,
+                  })
+                }
+                className="edit-box"
+              />
+            ) : (
+              <span className="profile-text">{editedCaretakerInfo.email}</span>
+            )}
+            <FaUserEdit
+              className="edit-icon"
+              onClick={() => {
+                setEditingCaretakerField(
+                  editingCaretakerField === "email" ? "" : "email"
+                );
+              }}
             />
-          ) : (
-            <span className="profile-text">{editedCaretakerInfo.email}</span>
-          )}
-          <FaUserEdit
-            className="edit-icon"
-            onClick={() => {
-              setEditingCaretakerField(editingCaretakerField === "email" ? "" : "email");
-            }}
-          />
           </div>
 
           <hr className="profile-hr" />
           <div className="profile-info-row">
             <strong>Phone:</strong>
             {editingCaretakerField === "phone" ? (
-            <input
-              value={editedCaretakerInfo.phone}
-              onChange={(e) => setEditedCaretakerInfo({ ...editedCaretakerInfo, phone: e.target.value })}
-              className="edit-box"
+              <input
+                value={editedCaretakerInfo.phone}
+                onChange={(e) =>
+                  setEditedCaretakerInfo({
+                    ...editedCaretakerInfo,
+                    phone: e.target.value,
+                  })
+                }
+                className="edit-box"
+              />
+            ) : (
+              <span className="profile-text">{editedCaretakerInfo.phone}</span>
+            )}
+            <FaUserEdit
+              className="edit-icon"
+              onClick={() => {
+                setEditingCaretakerField(
+                  editingCaretakerField === "phone" ? "" : "phone"
+                );
+              }}
             />
-          ) : (
-            <span className="profile-text">{editedCaretakerInfo.phone}</span>
-          )}
-          <FaUserEdit
-            className="edit-icon"
-            onClick={() => {
-              setEditingCaretakerField(editingCaretakerField === "phone" ? "" : "phone");
-            }}
-          />
           </div>
 
           <hr className="profile-hr" />
           <div className="profile-info-row">
             <strong>Address:</strong>
             {editingCaretakerField === "address" ? (
-            <input
-              value={editedCaretakerInfo.address}
-              onChange={(e) => setEditedCaretakerInfo({ ...editedCaretakerInfo, address: e.target.value })}
-              className="edit-box"
+              <input
+                value={editedCaretakerInfo.address}
+                onChange={(e) =>
+                  setEditedCaretakerInfo({
+                    ...editedCaretakerInfo,
+                    address: e.target.value,
+                  })
+                }
+                className="edit-box"
+              />
+            ) : (
+              <span className="profile-text">
+                {editedCaretakerInfo.address}
+              </span>
+            )}
+            <FaUserEdit
+              className="edit-icon"
+              onClick={() => {
+                setEditingCaretakerField(
+                  editingCaretakerField === "address" ? "" : "address"
+                );
+              }}
             />
-          ) : (
-            <span className="profile-text">{editedCaretakerInfo.address}</span>
-          )}
-          <FaUserEdit
-            className="edit-icon"
-            onClick={() => {
-              setEditingCaretakerField(editingCaretakerField === "address" ? "" : "address");
-            }}
-          />
           </div>
 
           <div className="popup-buttons">
             <button
-                  className="remove-btn"
-                  onClick={() => handleDeleteCaretaker(caretakerDetailsMap[selectedCaretaker].id)}
-                >
+              className="remove-btn"
+              onClick={() =>
+                handleDeleteCaretaker(caretakerDetailsMap[selectedCaretaker].id)
+              }
+            >
               Remove
             </button>
 
             <button
               className="save-profile-btn"
-              disabled={!hasCaretakerChanges()}
-              style={{ opacity: hasCaretakerChanges() ? 1 : 0.5, cursor: hasCaretakerChanges() ? "pointer" : "not-allowed" }}
+              disabled={
+                !hasCaretakerChanges() ||
+                caretakerHasEmptyInput(editedCaretakerInfo)
+              }
+              style={{
+                opacity:
+                  hasCaretakerChanges() &&
+                  !caretakerHasEmptyInput(editedCaretakerInfo)
+                    ? 1
+                    : 0.5,
+                cursor:
+                  hasCaretakerChanges() &&
+                  !caretakerHasEmptyInput(editedCaretakerInfo)
+                    ? "pointer"
+                    : "not-allowed",
+              }}
               onClick={async () => {
                 try {
                   // Call the updatePerson API with the edited caretaker data
@@ -644,17 +857,19 @@ const Profiles = ({ onClose = () => {} }) => {
               }}
             >
               Save
-          </button>
-
+            </button>
           </div>
         </div>
       )}
 
-
       {view === "add-caretakers" && (
         <div className="caretakers-sub">
-          <button className="back-button" onClick={() => setView("caretakers")}><FaArrowLeft /> </button>
-          <button className="close-button" onClick={onClose}><FaTimes /></button>
+          <button className="back-button" onClick={() => setView("caretakers")}>
+            <FaArrowLeft />{" "}
+          </button>
+          <button className="close-button" onClick={onClose}>
+            <FaTimes />
+          </button>
           <h3>New Caretaker Profile</h3>
 
           <div className="form-group">
@@ -663,17 +878,9 @@ const Profiles = ({ onClose = () => {} }) => {
               type="text"
               placeholder="Enter name"
               value={newCaretaker.name}
-              onChange={(e) => setNewCaretaker({ ...newCaretaker, name: e.target.value })}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Position:</label>
-            <input
-              type="text"
-              placeholder="Enter Position"
-              value={newCaretaker.position}
-              onChange={(e) => setNewCaretaker({ ...newCaretaker, position: e.target.value })}
+              onChange={(e) =>
+                setNewCaretaker({ ...newCaretaker, name: e.target.value })
+              }
             />
           </div>
 
@@ -683,7 +890,9 @@ const Profiles = ({ onClose = () => {} }) => {
               type="email"
               placeholder="Enter email"
               value={newCaretaker.email}
-              onChange={(e) => setNewCaretaker({ ...newCaretaker, email: e.target.value })}
+              onChange={(e) =>
+                setNewCaretaker({ ...newCaretaker, email: e.target.value })
+              }
             />
           </div>
 
@@ -693,7 +902,9 @@ const Profiles = ({ onClose = () => {} }) => {
               type="tel"
               placeholder="Enter phone number"
               value={newCaretaker.phone}
-              onChange={(e) => setNewCaretaker({ ...newCaretaker, phone: e.target.value })}
+              onChange={(e) =>
+                setNewCaretaker({ ...newCaretaker, phone: e.target.value })
+              }
             />
           </div>
 
@@ -703,58 +914,74 @@ const Profiles = ({ onClose = () => {} }) => {
               type="text"
               placeholder="Enter address"
               value={newCaretaker.address}
-              onChange={(e) => setNewCaretaker({ ...newCaretaker, address: e.target.value })}
+              onChange={(e) =>
+                setNewCaretaker({ ...newCaretaker, address: e.target.value })
+              }
             />
           </div>
 
           <div className="popup-buttons">
-            <button className="remove-btn" onClick={() => setView("caretakers")}>Cancel</button>
             <button
-                className="save-profile-btn"
-                onClick={async () => {
-                  try {
-                    // Call the addPerson API with the new caretaker data
-                    await addPerson({
+              className="remove-btn"
+              onClick={() => setView("caretakers")}
+            >
+              Cancel
+            </button>
+            <button
+              className="save-profile-btn"
+              disabled={caretakerHasEmptyInput(newCaretaker)}
+              style={{
+                opacity: !caretakerHasEmptyInput(newCaretaker) ? 1 : 0.5,
+                cursor: !caretakerHasEmptyInput(newCaretaker)
+                  ? "pointer"
+                  : "not-allowed",
+              }}
+              onClick={async () => {
+                try {
+                  // Call the addPerson API with the new caretaker data
+                  await addPerson({
+                    name: newCaretaker.name,
+                    email: newCaretaker.email,
+                    phone_number: newCaretaker.phone,
+                    address: newCaretaker.address,
+                    status: "caretaker", // Set status as "caretaker"
+                  });
+
+                  // Update the caretaker list and details map
+                  const newId = `caretaker${caretakerList.length + 1}`;
+                  const newEntry = { id: newId, name: newCaretaker.name };
+
+                  setCaretakerList([...caretakerList, newEntry]);
+                  setCaretakerDetailsMap({
+                    ...caretakerDetailsMap,
+                    [newId]: {
                       name: newCaretaker.name,
                       email: newCaretaker.email,
-                      phone_number: newCaretaker.phone,
+                      phone: newCaretaker.phone,
                       address: newCaretaker.address,
-                      status: "caretaker", // Set status as "caretaker"
-                    });
+                    },
+                  });
 
-                    // Update the caretaker list and details map
-                    const newId = `caretaker${caretakerList.length + 1}`;
-                    const newEntry = { id: newId, name: newCaretaker.name };
-
-                    setCaretakerList([...caretakerList, newEntry]);
-                    setCaretakerDetailsMap({
-                      ...caretakerDetailsMap,
-                      [newId]: {
-                        name: newCaretaker.name,
-                        email: newCaretaker.email,
-                        phone: newCaretaker.phone,
-                        address: newCaretaker.address,
-                      },
-                    });
-
-                    // Clear the form and navigate back
-                    setNewCaretaker({ name: "", position: "", email: "", phone: "", address: "" });
-                    alert("Caretaker profile has been successfully added!");
-                    setView("caretakers");
-                  } catch (error) {
-                    console.error("Error adding caretaker:", error);
-                    alert("Failed to add caretaker. Please try again.");
-                  }
-                }}
-              >
-                Save
-              </button>
-            </div>
+                  // Clear the form and navigate back
+                  setNewCaretaker({
+                    name: "",
+                    email: "",
+                    phone: "",
+                    address: "",
+                  });
+                  alert("Caretaker profile has been successfully added!");
+                  setView("caretakers");
+                } catch (error) {
+                  console.error("Error adding caretaker:", error);
+                  alert("Failed to add caretaker. Please try again.");
+                }
+              }}
+            >
+              Save
+            </button>
           </div>
-        )}
-
-
-
+        </div>
+      )}
     </div>
   );
 };
