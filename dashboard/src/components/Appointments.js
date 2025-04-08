@@ -130,11 +130,11 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
         // Filter patients and caretakers, including their IDs
         const filteredPatients = people
           .filter(person => person.status === "patient")
-          .map(person => ({ id: person.id, name: person.name }));
+          .map(person => ({ id: person.id, name: person.name, email: person.email, phone_number: person.phone_number, address: person.address }));
 
         const filteredCaretakers = people
           .filter(person => person.status === "doctor")
-          .map(person => ({ id: person.id, name: person.name }));
+          .map(person => ({ id: person.id, name: person.name, email: person.email, phone_number: person.phone_number, address: person.address }));
 
         console.log("Filtered patients:", filteredPatients);
         console.log("Filtered caretakers:", filteredCaretakers);
@@ -216,13 +216,13 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
   const getPatientDetails = (patientId) => {
     // If the patientId is one of the loaded patients, use their name
     const patient = patients.find(p => p.id === patientId);
-    
+
     // Get details for the requested patient, or return a default if not found
     return patientDetailsMap[patientId] || {
       name: patient ? patient.name : `Patient ${patientId.replace("patient", "")}`,
-      email: "example@example.com",
-      phone: "403-123-4567",
-      address: "123 Example Street"
+      email: patient.email,
+      phone: patient.phone_number,
+      address: patient.address,
     };
   };
 
@@ -230,14 +230,14 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
   const getCaretakerDetails = (caretakerId) => {
     // If the caretakerId is one of the loaded caretakers, use their name
     const caretaker = caretakers.find(c => c.id === caretakerId);
-    
+
     // Get details for the requested caretaker, or return a default if not found
     return caretakerDetailsMap[caretakerId] || {
       name: caretaker ? caretaker.name : `Caretaker ${caretakerId.replace("caretaker", "")}`,
-      position: "Doctor",
-      email: "example@example.com",
-      phone: "403-123-4567",
-      address: "123 Example Street"
+      position: "Caretaker",
+      email: caretaker.email,
+      phone: caretaker.phone_number,
+      address: caretaker.address,
     };
   };
 
