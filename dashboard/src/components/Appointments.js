@@ -460,20 +460,20 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
             }}
             style={{ position: "relative", cursor: selectedPatient ? "pointer" : "default", textAlign: "center", display: "block", width: "100%", marginBottom: "15px" }}
           >
-            {selectedPatient ? 
+            {selectedPatient ?
               (() => {
                 const patient = patients.find(p => p.id === selectedPatient);
                 return patient ? patient.name : "Unassigned";
-              })() : 
+              })() :
               "Unassigned"}
-              
+
             {showPatientDetails && hoveredPatient && renderPatientDetails()}
           </span>
           <div className="input-with-icon">
             <div className="search-icon">
               <FaSearch />
             </div>
-            <input 
+            <input
               className="search-input"
               type="text"
               value={patientSearch}
@@ -486,14 +486,14 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
             />
           </div>
           {showPatientDropdown && filteredPatients.length > 0 && (
-            <div 
-              className="dropdown-display" 
+            <div
+              className="dropdown-display"
               ref={patientDropdownRef}
               style={{ display: 'block' }} // Force display
             >
               {filteredPatients.map((patient) => (
-                <div 
-                  key={patient.id} 
+                <div
+                  key={patient.id}
                   className="dropdown-item"
                   onClick={() => {
                     setSelectedPatient(patient.id);
@@ -518,7 +518,7 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
 
         <div className="popup-section">
           <label style={{ textAlign: "center", width: "100%", display: "block" }}>Caretaker:</label>
-          <span 
+          <span
             onMouseEnter={() => {
               if (selectedCaretaker) {
                 setHoveredCaretaker(selectedCaretaker);
@@ -531,20 +531,20 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
             }}
             style={{ position: "relative", cursor: selectedCaretaker ? "pointer" : "default", textAlign: "center", display: "block", width: "100%", marginBottom: "15px" }}
           >
-            {selectedCaretaker ? 
+            {selectedCaretaker ?
               (() => {
                 const caretaker = caretakers.find(c => c.id === selectedCaretaker);
                 return caretaker ? caretaker.name : "Unassigned";
-              })() : 
+              })() :
               "Unassigned"}
-              
+
             {showCaretakerDetails && hoveredCaretaker && renderCaretakerDetails()}
           </span>
           <div className="input-with-icon">
             <div className="search-icon">
               <FaSearch />
             </div>
-            <input 
+            <input
               className="search-input"
               type="text"
               value={caretakerSearch}
@@ -557,14 +557,14 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
             />
           </div>
           {showCaretakerDropdown && filteredCaretakers.length > 0 && (
-            <div 
-              className="dropdown-display" 
+            <div
+              className="dropdown-display"
               ref={caretakerDropdownRef}
               style={{ display: 'block' }} // Force display
             >
               {filteredCaretakers.map((caretaker) => (
-                <div 
-                  key={caretaker.id} 
+                <div
+                  key={caretaker.id}
                   className="dropdown-item"
                   onClick={() => {
                     setSelectedCaretaker(caretaker.id);
@@ -590,10 +590,10 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
         <div className="popup-section" style={{ marginTop: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: "10px" }}>
             <label style={{marginRight: "10px", fontSize: "22px", display: "inline-block"}}>Urgency:</label>
-            <div 
-              className={`urgency-box urgency-${selectedUrgency === 1 ? 'low' : selectedUrgency === 2 ? 'medium' : 'high'}`} 
+            <div
+              className={`urgency-box urgency-${selectedUrgency === 1 ? 'low' : selectedUrgency === 2 ? 'medium' : 'high'}`}
               onClick={() => setShowUrgencySelector(!showUrgencySelector)}
-              style={{ 
+              style={{
                 backgroundColor: selectedUrgency === 1 ? '#4caf50' : selectedUrgency === 2 ? '#ffc107' : '#f44336',
                 display: "inline-block",
                 cursor: "pointer",
@@ -603,22 +603,22 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
           </div>
           {showUrgencySelector && (
             <div className="urgency-selector">
-              <div 
-                className="urgency-option urgency-low" 
+              <div
+                className="urgency-option urgency-low"
                 onClick={() => {
                   setSelectedUrgency(1);
                   setShowUrgencySelector(false);
                 }}
               ></div>
-              <div 
-                className="urgency-option urgency-medium" 
+              <div
+                className="urgency-option urgency-medium"
                 onClick={() => {
                   setSelectedUrgency(2);
                   setShowUrgencySelector(false);
                 }}
               ></div>
-              <div 
-                className="urgency-option urgency-high" 
+              <div
+                className="urgency-option urgency-high"
                 onClick={() => {
                   setSelectedUrgency(3);
                   setShowUrgencySelector(false);
@@ -630,8 +630,8 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
 
         <div className="popup-buttons" style={{ flexDirection: "row" }}>
           <button className="clear-btn" onClick={handleClear}>Clear</button>
-          <button 
-            className="save-btn" 
+          <button
+            className="save-btn"
             onClick={handleSave}
             disabled={!selectedPatient || !selectedCaretaker}
             style={{
@@ -643,11 +643,11 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
             Save
           </button>
         </div>
-        
+
         {appointmentId && (
           <div style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}>
-            <button 
-              className="delete-btn" 
+            <button
+              className="delete-btn"
               onClick={handleDelete}
               style={{
                 backgroundColor: "#DC6D5E",

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaTimes, FaArrowLeft, FaUser, FaList, FaPlus, FaSearch, FaUserEdit, FaUserNurse } from "react-icons/fa";
 import "../assets/styles/Profiles.css"; // Separate styling for Profiles
-import { deletePerson, addPerson, fetchPeople } from "../api/api";
+import { updatePerson, deletePerson, addPerson, fetchPeople } from "../api/api";
 
 
 
@@ -322,28 +322,42 @@ const Profiles = ({ onClose = () => {} }) => {
                   Remove
                 </button>
 
-            <button
-              className="save-profile-btn"
-              disabled={!hasPatientChanges()}
-              style={{ opacity: hasPatientChanges() ? 1 : 0.5, cursor: hasPatientChanges() ? "pointer" : "not-allowed" }}
-              onClick={() => {
-                setPatientDetailsMap({
-                  ...patientDetailsMap,
-                  [selectedPatient]: { ...editedPatientInfo }
-                });
+                <button
+                  className="save-profile-btn"
+                  disabled={!hasPatientChanges()}
+                  style={{ opacity: hasPatientChanges() ? 1 : 0.5, cursor: hasPatientChanges() ? "pointer" : "not-allowed" }}
+                  onClick={async () => {
+                    try {
+                      // Call the updatePerson API with the edited patient data
+                      await updatePerson(selectedPatient, {
+                        name: editedPatientInfo.name,
+                        email: editedPatientInfo.email,
+                        phone_number: editedPatientInfo.phone,
+                        address: editedPatientInfo.address,
+                      });
 
-                setPatientList(
-                  patientList.map((p) =>
-                    p.id === selectedPatient
-                      ? { ...p, name: editedPatientInfo.name }
-                      : p
-                  )
-                );
+                      // Update the local state with the edited data
+                      setPatientDetailsMap({
+                        ...patientDetailsMap,
+                        [selectedPatient]: { ...editedPatientInfo },
+                      });
 
-                setEditingPatientField("");
-                alert("Patient profile has been successfully saved!");
-              }}
-            >
+                      setPatientList(
+                        patientList.map((p) =>
+                          p.id === selectedPatient
+                            ? { ...p, name: editedPatientInfo.name }
+                            : p
+                        )
+                      );
+
+                      setEditingPatientField("");
+                      alert("Patient profile has been successfully saved!");
+                    } catch (error) {
+                      console.error("Error saving patient profile:", error);
+                      alert("Failed to save patient profile. Please try again.");
+                    }
+                  }}
+                >
               Save
           </button>
 
@@ -597,22 +611,36 @@ const Profiles = ({ onClose = () => {} }) => {
               className="save-profile-btn"
               disabled={!hasCaretakerChanges()}
               style={{ opacity: hasCaretakerChanges() ? 1 : 0.5, cursor: hasCaretakerChanges() ? "pointer" : "not-allowed" }}
-              onClick={() => {
-                setCaretakerDetailsMap({
-                  ...caretakerDetailsMap,
-                  [selectedCaretaker]: { ...editedCaretakerInfo }
-                });
+              onClick={async () => {
+                try {
+                  // Call the updatePerson API with the edited caretaker data
+                  await updatePerson(selectedCaretaker, {
+                    name: editedCaretakerInfo.name,
+                    email: editedCaretakerInfo.email,
+                    phone_number: editedCaretakerInfo.phone,
+                    address: editedCaretakerInfo.address,
+                  });
 
-                setCaretakerList(
-                  caretakerList.map((c) =>
-                    c.id === selectedCaretaker
-                      ? { ...c, name: editedCaretakerInfo.name }
-                      : c
-                  )
-                );
+                  // Update the local state with the edited data
+                  setCaretakerDetailsMap({
+                    ...caretakerDetailsMap,
+                    [selectedCaretaker]: { ...editedCaretakerInfo },
+                  });
 
-                setEditingCaretakerField("");
-                alert("Caretaker profile has been successfully saved!");
+                  setCaretakerList(
+                    caretakerList.map((c) =>
+                      c.id === selectedCaretaker
+                        ? { ...c, name: editedCaretakerInfo.name }
+                        : c
+                    )
+                  );
+
+                  setEditingCaretakerField("");
+                  alert("Caretaker profile has been successfully saved!");
+                } catch (error) {
+                  console.error("Error saving caretaker profile:", error);
+                  alert("Failed to save caretaker profile. Please try again.");
+                }
               }}
             >
               Save

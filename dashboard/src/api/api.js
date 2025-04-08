@@ -5,19 +5,19 @@ const BASE_URL = "http://127.0.0.1:5000";
 async function apiFetch(endpoint, options = {}) {
   try {
     console.log(`Making API request to: ${BASE_URL}${endpoint}`, options);
-    
+
     const response = await fetch(`${BASE_URL}${endpoint}`, options);
-    
+
     // Log response status
     console.log(`API response status: ${response.status} ${response.statusText}`);
-    
+
     // If error, try to get more details
     if (!response.ok) {
       const errorText = await response.text();
       console.error(`API error response: ${errorText}`);
       throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
     }
-    
+
     // Parse and return JSON
     const data = await response.json();
     console.log("API response data:", data);
@@ -64,9 +64,9 @@ export const addAppointment = (appointmentData) => {
     // Urgency always as a number
     urgency: Number(appointmentData.urgency)
   };
-  
+
   console.log("Formatted data for API:", formattedData);
-  
+
   return apiFetch("/api/appointments", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -93,9 +93,9 @@ export const updateAppointment = (id, appointmentData) => {
     // Urgency always as a number
     urgency: Number(appointmentData.urgency)
   };
-  
+
   console.log(`Formatted data for API update (ID: ${id}):`, formattedData);
-  
+
   return apiFetch(`/api/appointments/${id}`, {
     method: "PUT", // Make sure your API supports PUT for updates
     headers: { "Content-Type": "application/json" },
@@ -112,4 +112,11 @@ export const deleteAppointment = (id) =>
 export const deletePerson = (id) =>
   apiFetch(`/api/people/${id}`, {
     method: "DELETE",
+  });
+// Update a person by ID
+export const updatePerson = (id, personData) =>
+  apiFetch(`/api/people/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(personData),
   });
