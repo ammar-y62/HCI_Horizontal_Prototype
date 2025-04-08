@@ -4,23 +4,15 @@ const BASE_URL = "http://127.0.0.1:5000";
 // Helper function to perform API requests
 async function apiFetch(endpoint, options = {}) {
   try {
-    console.log(`Making API request to: ${BASE_URL}${endpoint}`, options);
-
     const response = await fetch(`${BASE_URL}${endpoint}`, options);
 
-    // Log response status
-    console.log(`API response status: ${response.status} ${response.statusText}`);
-
-    // If error, try to get more details
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`API error response: ${errorText}`);
       throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
     // Parse and return JSON
     const data = await response.json();
-    console.log("API response data:", data);
     return data;
   } catch (error) {
     console.error(`Error in API call to ${endpoint}:`, error);
@@ -47,7 +39,6 @@ export const fetchAppointmentById = (id) => apiFetch(`/api/appointments/${id}`);
 
 // Add a new appointment
 export const addAppointment = (appointmentData) => {
-  // Try all possible field name combinations that your backend might expect
   const formattedData = {
     // Room field variations
     room: appointmentData.room_number || appointmentData.room,
@@ -65,7 +56,6 @@ export const addAppointment = (appointmentData) => {
     urgency: Number(appointmentData.urgency)
   };
 
-  console.log("Formatted data for API:", formattedData);
 
   return apiFetch("/api/appointments", {
     method: "POST",
@@ -76,7 +66,6 @@ export const addAppointment = (appointmentData) => {
 
 // Update an existing appointment
 export const updateAppointment = (id, appointmentData) => {
-  // Try all possible field name combinations that your backend might expect
   const formattedData = {
     // Room field variations
     room: appointmentData.room_number || appointmentData.room,
@@ -94,10 +83,8 @@ export const updateAppointment = (id, appointmentData) => {
     urgency: Number(appointmentData.urgency)
   };
 
-  console.log(`Formatted data for API update (ID: ${id}):`, formattedData);
-
   return apiFetch(`/api/appointments/${id}`, {
-    method: "PUT", // Make sure your API supports PUT for updates
+    method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formattedData),
   });

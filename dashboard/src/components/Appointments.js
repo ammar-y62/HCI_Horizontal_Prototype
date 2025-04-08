@@ -11,48 +11,6 @@ const patientDetailsMap = {
     phone: "403-123-4567",
     address: "123 Example Street"
   },
-  "patient2": {
-    name: "Patient 2",
-    email: "patient2@example.com",
-    phone: "403-234-5678",
-    address: "456 Sample Avenue"
-  },
-  "patient3": {
-    name: "Patient 3",
-    email: "patient3@example.com",
-    phone: "403-345-6789",
-    address: "789 Test Boulevard"
-  },
-  "patient4": {
-    name: "Patient 4",
-    email: "patient4@example.com",
-    phone: "403-456-7890",
-    address: "101 Test Street"
-  },
-  "patient5": {
-    name: "Patient 5",
-    email: "patient5@example.com",
-    phone: "403-567-8901",
-    address: "202 Sample Road"
-  },
-  "patient6": {
-    name: "Patient 6",
-    email: "patient6@example.com",
-    phone: "403-678-9012",
-    address: "303 Example Avenue"
-  },
-  "patient7": {
-    name: "Patient 7",
-    email: "patient7@example.com",
-    phone: "403-789-0123",
-    address: "404 Test Drive"
-  },
-  "patient8": {
-    name: "Patient 8",
-    email: "patient8@example.com",
-    phone: "403-890-1234",
-    address: "505 Sample Lane"
-  }
 };
 
 // Caretaker details mock data
@@ -64,41 +22,7 @@ const caretakerDetailsMap = {
     phone: "403-123-4567",
     address: "123 Example Street"
   },
-  "caretaker2": {
-    name: "Caretaker 2",
-    position: "Nurse",
-    email: "caretaker2@example.com",
-    phone: "403-234-5678",
-    address: "456 Sample Avenue"
-  },
-  "caretaker3": {
-    name: "Caretaker 3",
-    position: "Specialist",
-    email: "caretaker3@example.com",
-    phone: "403-345-6789",
-    address: "789 Test Boulevard"
-  },
-  "caretaker4": {
-    name: "Caretaker 4",
-    position: "Doctor",
-    email: "caretaker4@example.com",
-    phone: "403-456-7890",
-    address: "101 Example Road"
-  },
-  "caretaker5": {
-    name: "Caretaker 5",
-    position: "Nurse",
-    email: "caretaker5@example.com",
-    phone: "403-567-8901",
-    address: "202 Test Street"
-  },
-  "caretaker6": {
-    name: "Caretaker 6",
-    position: "Specialist",
-    email: "caretaker6@example.com",
-    phone: "403-678-9012",
-    address: "303 Sample Drive"
-  }
+
 };
 
 const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointmentAdded }) => {
@@ -125,19 +49,16 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
     const loadPeople = async () => {
       try {
         const people = await fetchPeople();
-        console.log("Loaded people data:", people);
-
-        // Filter patients and caretakers, including their IDs
+        // Filter patients
         const filteredPatients = people
           .filter(person => person.status === "patient")
           .map(person => ({ id: person.id, name: person.name, email: person.email, phone_number: person.phone_number, address: person.address }));
 
+        // Filter caretakers - include all non-patients 
         const filteredCaretakers = people
-          .filter(person => person.status === "doctor")
+          .filter(person => person.status !== "patient")
           .map(person => ({ id: person.id, name: person.name, email: person.email, phone_number: person.phone_number, address: person.address }));
 
-        console.log("Filtered patients:", filteredPatients);
-        console.log("Filtered caretakers:", filteredCaretakers);
 
         setPatients(filteredPatients);
         setCaretakers(filteredCaretakers);
@@ -154,20 +75,16 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
     const loadAppointmentDetails = async () => {
       if (appointmentId) {
         try {
-          console.log("Loading appointment details for ID:", appointmentId);
           
           // Directly fetch the appointment by ID
           const appointment = await fetchAppointmentById(appointmentId);
-          console.log("Direct fetch appointment result:", appointment);
           
           // Fall back to finding it in the list
           if (!appointment || Object.keys(appointment).length === 0) {
-            console.log("Falling back to appointment list search");
             const appointments = await fetchAppointments();
             const foundAppointment = appointments.find(a => a.id === appointmentId);
             
             if (foundAppointment) {
-              console.log("Found appointment in list:", foundAppointment);
               
               // Set patient, caretaker, and urgency
               setSelectedPatient(foundAppointment.patient_id);
@@ -177,7 +94,6 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
               console.warn("Appointment not found with ID:", appointmentId);
             }
           } else {
-            console.log("Setting appointment details from direct fetch");
             
             // Set patient, caretaker, and urgency
             setSelectedPatient(appointment.patient_id);
@@ -359,8 +275,6 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
       const formattedTime = convertTo24HourFormat(time);
       const formattedDateTime = `${formattedDate} ${formattedTime}`;
 
-      console.log("Room ID type:", typeof room, "Value:", room);
-
       // Make sure room is a number
       const roomNumber = parseInt(room, 10);
       
@@ -372,19 +286,13 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
         urgency: selectedUrgency,
       };
 
-      console.log("Complete appointment data payload:", appointmentData);
-
       try {
         if (appointmentId) {
           // Update existing appointment
-          console.log(`Updating appointment ${appointmentId} with:`, appointmentData);
           const response = await updateAppointment(appointmentId, appointmentData);
-          console.log("Update response:", response);
         } else {
           // Create new appointment
-          console.log("Creating new appointment with:", appointmentData);
           const response = await addAppointment(appointmentData);
-          console.log("Create response:", response);
         }
   
         // Trigger refresh of the calendar events
@@ -397,7 +305,6 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
       } catch (apiError) {
         console.error("API Error:", apiError);
         console.error("API Error details:", apiError.message);
-        // Show more detailed error to user
         alert(`Failed to save appointment: ${apiError.message}. Please check console for details.`);
       }
     } catch (error) {
@@ -420,7 +327,6 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
     try {
       // Confirm before deleting
       if (window.confirm("Are you sure you want to delete this appointment?")) {
-        console.log("Deleting appointment:", appointmentId);
         await deleteAppointment(appointmentId);
         
         // Refresh events
@@ -489,7 +395,13 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
             <div
               className="dropdown-display"
               ref={patientDropdownRef}
-              style={{ display: 'block' }} // Force display
+              style={{
+                display: 'block',
+                maxHeight: '160px', // Fits about 4 items
+                overflowY: 'auto', // Always show scrollbar capability
+                overscrollBehavior: 'contain', // Prevents scroll chaining
+                overflowX: 'hidden' // Prevent horizontal scrolling
+              }}
             >
               {filteredPatients.map((patient) => (
                 <div
@@ -560,7 +472,13 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
             <div
               className="dropdown-display"
               ref={caretakerDropdownRef}
-              style={{ display: 'block' }} // Force display
+              style={{
+                display: 'block',
+                maxHeight: '160px', // Fits about 4 items
+                overflowY: 'auto', // Always show scrollbar capability
+                overscrollBehavior: 'contain', // Prevents scroll chaining
+                overflowX: 'hidden' // Prevent horizontal scrolling
+              }}
             >
               {filteredCaretakers.map((caretaker) => (
                 <div

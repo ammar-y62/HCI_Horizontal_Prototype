@@ -55,7 +55,18 @@ const CalendarView = () => {
     }
   }, [filters]);
   
-
+  /**
+   * Called automatically by FullCalendar whenever:
+   *   - The user clicks Next/Prev
+   *   - The user changes the view (Month <-> Day)
+   *   - The initial render occurs
+   *
+   * This is where we:
+   *   1) fetch all your appointments
+   *   2) filter them to the new date range
+   *   3) set them in state
+   *   4) update the header title to match FullCalendar's built‐in title
+   */
   const handleDatesSet = async (dateInfo) => {
     try {
       const { start, end, view } = dateInfo;
@@ -72,7 +83,7 @@ const CalendarView = () => {
       setTitleText(title);
       const data = await fetchAppointments();
       
-      // Fetch people to get their names
+      // Also fetch people to get their names
       const people = await fetchPeople();
       
       const filtered = data.filter((apt) => {
@@ -159,7 +170,7 @@ const CalendarView = () => {
   
   /**
    * Custom buttons for month navigation
-   * Call getApi() on the FullCalendar instance (via ref),
+   * We call getApi() on the FullCalendar instance (via ref),
    * but only if it's non‐null to avoid errors.
    */
   const handlePrev = () => {
@@ -272,7 +283,7 @@ const CalendarView = () => {
           headerToolbar={false}
           footerToolbar={false}
           initialView={view}
-          // Fires whenever the user navigates or changes view
+          // This fires whenever the user navigates or changes view
           datesSet={handleDatesSet}
           // Our events from state
           events={events}
@@ -388,7 +399,9 @@ const CalendarView = () => {
                       overflow: "hidden",
                       cursor: "pointer",
                       display: "flex",
-                      flexDirection: "column"
+                      flexDirection: "column",
+                      alignItems: "center", // Center child elements horizontally
+                      justifyContent: "center" // Center child elements vertically
                     }}
                     onClick={handleEventClick} // Add onClick to open the popup
                     onMouseEnter={(e) => {
@@ -404,12 +417,26 @@ const CalendarView = () => {
                       if (overlay) overlay.style.opacity = "0";
                     }}
                   >
-                    <div style={{ fontWeight: "bold", fontSize: "1rem", marginBottom: "3px", color: "black" }}>
+                    <div style={{ 
+                      fontWeight: "bold", 
+                      fontSize: "1rem", 
+                      marginBottom: "3px",
+                      width: "100%",
+                      textAlign: "center",
+                      color: "black"
+                    }}>
                       {extendedProps.patient_name || extendedProps.patient || "Unassigned"}
                     </div>
-                    <div style={{ fontSize: "0.85rem", display: "flex", alignItems: "center", color: "black"}}>
-                      <span style={{ marginRight: "4px" }}>
-                        <FaUserNurse size={20} />
+                    <div style={{ 
+                      fontSize: "0.85rem", 
+                      display: "flex", 
+                      alignItems: "center",
+                      justifyContent: "center", // Center the icon and text
+                      width: "100%", // Full width to ensure proper centering  
+                      color: "black"
+                    }}>
+                      <span style={{ marginRight: "4px", marginTop: "4px" }}>
+                        <FaUserNurse size={18} />
                       </span>
                       {extendedProps.doctor_name || extendedProps.doctor || "Unassigned"}
                     </div>
