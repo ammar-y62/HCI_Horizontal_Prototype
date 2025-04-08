@@ -108,3 +108,8 @@ export const deleteAppointment = (id) =>
   apiFetch(`/api/appointments/${id}`, {
     method: "DELETE",
   });
+// Delete a person by ID
+export const deletePerson = (id) =>
+  apiFetch(`/api/people/${id}`, {
+    method: "DELETE",
+  });

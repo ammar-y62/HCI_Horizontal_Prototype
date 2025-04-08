@@ -162,5 +162,19 @@ def update_appointment(id):
     except Exception as e:
         print(f"Error updating appointment: {e}")
         return jsonify({"message": "Error updating appointment"}), 500
+
+@app.route("/api/people/<int:id>", methods=["DELETE"])
+def delete_person(id):
+    person = Person.query.get(id)
+    if not person:
+        return jsonify({"error": "Person not found"}), 404
+
+    try:
+        db.session.delete(person)
+        db.session.commit()
+        return jsonify({"message": "Person deleted successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
 if __name__ == "__main__":
     app.run(debug=True)

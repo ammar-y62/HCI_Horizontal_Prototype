@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaTimes, FaArrowLeft, FaUser, FaList, FaPlus, FaSearch, FaUserEdit, FaUserNurse } from "react-icons/fa";
 import "../assets/styles/Profiles.css"; // Separate styling for Profiles
-import { addPerson, fetchPeople } from "../api/api";
+import { deletePerson, addPerson, fetchPeople } from "../api/api";
 
 
 
@@ -46,6 +46,7 @@ const Profiles = ({ onClose = () => {} }) => {
         const patientDetails = {};
         patients.forEach((p) => {
           patientDetails[p.id] = {
+            id: p.id, // Ensure the ID is included
             name: p.name,
             email: p.email,
             phone: p.phone_number,
@@ -57,6 +58,7 @@ const Profiles = ({ onClose = () => {} }) => {
         const caretakerDetails = {};
         caretakers.forEach((c) => {
           caretakerDetails[c.id] = {
+            id: c.id,
             name: c.name,
             email: c.email,
             phone: c.phone_number,
@@ -98,9 +100,41 @@ const Profiles = ({ onClose = () => {} }) => {
     const original = caretakerDetailsMap[selectedCaretaker];
     return JSON.stringify(original) !== JSON.stringify(editedCaretakerInfo);
   };
-  
-  
-  
+
+  // Delete a patient
+  const handleDeletePatient = async (patientId) => {
+    if (window.confirm("Are you sure you want to delete this patient?")) {
+      try {
+        await deletePerson(patientId); // Call the API to delete the patient
+        setPatientList(patientList.filter((p) => p.id !== patientId)); // Update the state
+        const updatedMap = { ...patientDetailsMap };
+        delete updatedMap[patientId];
+        setPatientDetailsMap(updatedMap);
+        alert("Patient deleted successfully!");
+      } catch (error) {
+        console.error("Error deleting patient:", error);
+        alert("Failed to delete patient. Please try again.");
+      }
+    }
+  };
+
+  // Delete a caretaker
+  const handleDeleteCaretaker = async (caretakerId) => {
+    if (window.confirm("Are you sure you want to delete this caretaker?")) {
+      try {
+        await deletePerson(caretakerId); // Call the API to delete the caretaker
+        setCaretakerList(caretakerList.filter((c) => c.id !== caretakerId)); // Update the state
+        const updatedMap = { ...caretakerDetailsMap };
+        delete updatedMap[caretakerId];
+        setCaretakerDetailsMap(updatedMap);
+        alert("Caretaker deleted successfully!");
+      } catch (error) {
+        console.error("Error deleting caretaker:", error);
+        alert("Failed to delete caretaker. Please try again.");
+      }
+    }
+  };
+
   // Close profiles when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -281,23 +315,12 @@ const Profiles = ({ onClose = () => {} }) => {
           </div>
 
           <div className="popup-buttons">
-            <button
-              className="remove-btn"
-              onClick={() => {
-                const confirmDelete = window.confirm("Are you sure you want to remove this patient profile?");
-                if (confirmDelete) {
-                  setPatientList(patientList.filter(p => p.id !== selectedPatient));
-                  const updatedMap = { ...patientDetailsMap };
-                  delete updatedMap[selectedPatient];
-                  setPatientDetailsMap(updatedMap);
-                  setSelectedPatient("");
-                  setPatientSearch("");
-                  setView("view-patients");
-                }
-              }}
-            >
-              Remove
-            </button>
+                <button
+                  className="remove-btn"
+                  onClick={() => handleDeletePatient(patientDetailsMap[selectedPatient].id)}
+                >
+                  Remove
+                </button>
 
             <button
               className="save-profile-btn"
@@ -564,20 +587,9 @@ const Profiles = ({ onClose = () => {} }) => {
 
           <div className="popup-buttons">
             <button
-              className="remove-btn"
-              onClick={() => {
-                const confirmDelete = window.confirm("Are you sure you want to remove this caretaker profile?");
-                if (confirmDelete) {
-                  setCaretakerList(caretakerList.filter(c => c.id !== selectedCaretaker));
-                  const updatedMap = { ...caretakerDetailsMap };
-                  delete updatedMap[selectedCaretaker];
-                  setCaretakerDetailsMap(updatedMap);
-                  setSelectedCaretaker("");
-                  setCaretakerSearch("");
-                  setView("view-caretakers");
-                }
-              }}
-            >
+                  className="remove-btn"
+                  onClick={() => handleDeleteCaretaker(caretakerDetailsMap[selectedCaretaker].id)}
+                >
               Remove
             </button>
 
