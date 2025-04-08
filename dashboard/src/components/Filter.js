@@ -51,6 +51,7 @@ const Filter = ({
 
   // Separate people by status
   const patients = people.filter((person) => person.status === "patient");
+  //TODO: doctor or caretaker or both?
   const caretakers = people.filter((person) => person.status === "doctor");
 
   // Filter lists by the search term

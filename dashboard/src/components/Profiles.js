@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaTimes, FaArrowLeft, FaUser, FaList, FaPlus, FaSearch, FaUserEdit, FaUserNurse } from "react-icons/fa";
 import "../assets/styles/Profiles.css"; // Separate styling for Profiles
+import { fetchPeople } from "../api/api";
 
 
 
@@ -18,28 +19,59 @@ const Profiles = ({ onClose = () => {} }) => {
 
   const [caretakerSearch, setCaretakerSearch] = useState("");
   const [showCaretakerDropdown, setShowCaretakerDropdown] = useState(false);
-  
+
   const [isEditing, setIsEditing] = useState(false);
   const [editedPatientInfo, setEditedPatientInfo] = useState({});
   const [editedCaretakerInfo, setEditedCaretakerInfo] = useState({});
   const [editingPatientField, setEditingPatientField] = useState("");
   const [editingCaretakerField, setEditingCaretakerField] = useState("");
+  const [patientList, setPatientList] = useState([]);
+  const [caretakerList, setCaretakerList] = useState([]);
+  const [patientDetailsMap, setPatientDetailsMap] = useState({});
+  const [caretakerDetailsMap, setCaretakerDetailsMap] = useState({});
 
-  
 
-  // Mock patient list for now (replace with real fetched list)
-  const [patientList, setPatientList] = useState([
-    { id: "patient1", name: "Patient 1" },
-    { id: "patient2", name: "Patient 2" },
-    { id: "patient3", name: "Patient 3" },
-  ]);
+  // Fetch people from the backend and separate them into patients and caretakers
+  useEffect(() => {
+    const loadPeople = async () => {
+      try {
+        const peopleData = await fetchPeople();
+        const patients = peopleData.filter((person) => person.status === "patient");
+        //TODO: Doctor or caretaker?
+        const caretakers = peopleData.filter((person) => person.status === "doctor" || person.status === "caretaker");
 
-  const [caretakerList, setCaretakerList] = useState([
-    { id: "caretaker1", name: "Caretaker 1" },
-    { id: "caretaker2", name: "Caretaker 2" },
-    { id: "caretaker3", name: "Caretaker 3" },
-  ]);
-  
+        setPatientList(patients.map((p) => ({ id: p.id, name: p.name })));
+        setCaretakerList(caretakers.map((c) => ({ id: c.id, name: c.name })));
+
+        const patientDetails = {};
+        patients.forEach((p) => {
+          patientDetails[p.id] = {
+            name: p.name,
+            email: p.email,
+            phone: p.phone_number,
+            address: p.address,
+          };
+        });
+        setPatientDetailsMap(patientDetails);
+
+        const caretakerDetails = {};
+        caretakers.forEach((c) => {
+          caretakerDetails[c.id] = {
+            name: c.name,
+            email: c.email,
+            phone: c.phone_number,
+            address: c.address,
+          };
+        });
+        setCaretakerDetailsMap(caretakerDetails);
+      } catch (error) {
+        console.error("Error fetching people:", error);
+      }
+    };
+
+    loadPeople();
+  }, []);
+
   const [newCaretaker, setNewCaretaker] = useState({
     name: "",
     position: "",
@@ -47,51 +79,6 @@ const Profiles = ({ onClose = () => {} }) => {
     phone: "",
     address: ""
   });
-  
-  
-  const [patientDetailsMap, setPatientDetailsMap] = useState({
-    patient1: {
-      name: "Patient 1",
-      email: "example@example.com",
-      phone: "403-123-4567",
-      address: "123 Example Street"
-    },
-    patient2: {
-      name: "Patient 2",
-      email: "patient2@example.com",
-      phone: "403-234-5678",
-      address: "456 Sample Avenue"
-    },
-    patient3: {
-      name: "Patient 3",
-      email: "patient3@example.com",
-      phone: "403-345-6789",
-      address: "789 Test Boulevard"
-    }
-  });
-  
-
-  const [caretakerDetailsMap, setCaretakerDetailsMap] = useState({
-    caretaker1: {
-      name: "Caretaker 1",
-      email: "example@example.com",
-      phone: "403-123-4567",
-      address: "123 Example Street"
-    },
-    caretaker2: {
-      name: "Caretaker 2",
-      email: "Caretaker2@example.com",
-      phone: "403-234-5678",
-      address: "456 Sample Avenue"
-    },
-    caretaker3: {
-      name: "Caretaker 3",
-      email: "Caretaker3@example.com",
-      phone: "403-345-6789",
-      address: "789 Test Boulevard"
-    }
-  });
-  
 
   // Filter based on search input
   const filteredPatients = patientList.filter(p =>
@@ -168,7 +155,7 @@ const Profiles = ({ onClose = () => {} }) => {
           <button className="back-button" onClick={() => setView("patients")}><FaArrowLeft /></button>
           <button className="close-button" onClick={onClose}><FaTimes /></button>
           <h3>View Patient Profiles</h3>
-          
+
           <div className="dropdown-full" ref={patientDropdownRef} style={{flexDirection: "column" }}>
             <input
               type="text"
@@ -187,7 +174,7 @@ const Profiles = ({ onClose = () => {} }) => {
               <div className="dropdown-menu">
                 {filteredPatients.map((patient) => (
                   <div
-                    
+
                     key={patient.id}
                     className="dropdown-item"
                     onClick={() => {
@@ -321,7 +308,7 @@ const Profiles = ({ onClose = () => {} }) => {
                   ...patientDetailsMap,
                   [selectedPatient]: { ...editedPatientInfo }
                 });
-              
+
                 setPatientList(
                   patientList.map((p) =>
                     p.id === selectedPatient
@@ -329,10 +316,10 @@ const Profiles = ({ onClose = () => {} }) => {
                       : p
                   )
                 );
-              
+
                 setEditingPatientField("");
                 alert("Patient profile has been successfully saved!");
-              }}                         
+              }}
             >
               Save
           </button>
@@ -593,7 +580,7 @@ const Profiles = ({ onClose = () => {} }) => {
                   ...caretakerDetailsMap,
                   [selectedCaretaker]: { ...editedCaretakerInfo }
                 });
-              
+
                 setCaretakerList(
                   caretakerList.map((c) =>
                     c.id === selectedCaretaker
@@ -601,10 +588,10 @@ const Profiles = ({ onClose = () => {} }) => {
                       : c
                   )
                 );
-              
+
                 setEditingCaretakerField("");
                 alert("Caretaker profile has been successfully saved!");
-              }}              
+              }}
             >
               Save
           </button>
@@ -701,7 +688,7 @@ const Profiles = ({ onClose = () => {} }) => {
 
           </div>
         </div>
-      )}      
+      )}
 
 
 
