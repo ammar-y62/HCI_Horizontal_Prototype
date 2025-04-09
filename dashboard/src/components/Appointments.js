@@ -58,7 +58,7 @@ const AppointmentPopup = ({
   const [hoveredPatient, setHoveredPatient] = useState(null);
   const [showCaretakerDetails, setShowCaretakerDetails] = useState(false);
   const [hoveredCaretaker, setHoveredCaretaker] = useState(null);
-
+  const [notes, setNotes] = useState(""); // New state for notes
   // Fetch people (patients and caretakers) when component mounts
   useEffect(() => {
     const loadPeople = async () => {
@@ -110,12 +110,14 @@ const AppointmentPopup = ({
             const foundAppointment = appointments.find(
               (a) => a.id === appointmentId
             );
+            console.log("Fetched appointment:", appointment); // Debugging
 
             if (foundAppointment) {
               // Set patient, caretaker, and urgency
               setSelectedPatient(foundAppointment.patient_id);
               setSelectedCaretaker(foundAppointment.doctor_id);
               setSelectedUrgency(foundAppointment.urgency || 1);
+              setNotes(foundAppointment.notes || ""); // Set the notes field
             } else {
               console.warn("Appointment not found with ID:", appointmentId);
             }
@@ -124,6 +126,7 @@ const AppointmentPopup = ({
             setSelectedPatient(appointment.patient_id);
             setSelectedCaretaker(appointment.doctor_id);
             setSelectedUrgency(appointment.urgency || 1);
+            setNotes(appointment.notes || ""); // Set the notes field
           }
         } catch (error) {
           console.error("Error fetching appointment:", error);
@@ -323,6 +326,7 @@ const AppointmentPopup = ({
         patient_id: selectedPatient,
         doctor_id: selectedCaretaker,
         urgency: selectedUrgency,
+        notes: notes,
       };
 
       try {
@@ -649,7 +653,23 @@ const AppointmentPopup = ({
             </div>
           )}
         </div>
-
+        <div className="popup-section">
+          <label style={{ textAlign: "center", width: "100%", display: "block" }}>Notes:</label>
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Add any notes here..."
+            style={{
+              width: "100%",
+              height: "80px",
+              border: "2px solid #ccc",
+              borderRadius: "8px",
+              padding: "10px",
+              fontSize: "16px",
+              resize: "none",
+            }}
+          ></textarea>
+        </div>
         <div className="popup-buttons" style={{ flexDirection: "row" }}>
           <button className="clear-btn" onClick={handleClear}>
             <ImCancelCircle />

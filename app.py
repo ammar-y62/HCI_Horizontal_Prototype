@@ -31,6 +31,8 @@ class Appointment(db.Model):
     urgency = db.Column(db.Integer, nullable=False, default=1)  # Add urgency field
     doctor = db.relationship('Person', foreign_keys=[doctor_id])
     patient = db.relationship('Person', foreign_keys=[patient_id])
+    notes = db.Column(db.Text, nullable=True)  # Add notes field
+
 
 with app.app_context():
     # Create the tables if they don't exist
@@ -53,8 +55,8 @@ with app.app_context():
 
     db.session.query(Appointment).delete()  # Clear existing appointments
 
-    appointment1 = Appointment(room_number="1", date_time="2025-03-25 10:00", doctor_id=1, patient_id=3, urgency=1)
-    appointment2 = Appointment(room_number="2", date_time="2025-03-25 11:00", doctor_id=2, patient_id=4, urgency=2)
+    appointment1 = Appointment(room_number="1", date_time="2025-03-25 10:00", doctor_id=1, patient_id=3, urgency=1, notes="TestA")
+    appointment2 = Appointment(room_number="2", date_time="2025-03-25 11:00", doctor_id=2, patient_id=4, urgency=2, notes="TestB")
 
 
     # Add the appointments to the session and commit
@@ -87,7 +89,7 @@ def add_person():
 @app.route("/api/appointments", methods=["GET"])
 def get_appointments():
     appointments = Appointment.query.all()
-    return jsonify([{ "id": a.id, "room_number": a.room_number, "date_time": a.date_time, "doctor_id": a.doctor_id, "patient_id": a.patient_id, "urgency": a.urgency } for a in appointments])
+    return jsonify([{ "id": a.id, "room_number": a.room_number, "date_time": a.date_time, "doctor_id": a.doctor_id, "patient_id": a.patient_id, "urgency": a.urgency, "notes": a.notes } for a in appointments])
 
 @app.route("/api/appointments", methods=["POST"])
 def add_appointment():
@@ -103,6 +105,7 @@ def add_appointment():
             doctor_id=data['doctor'],  # Ensure doctor_id is being passed as well
             patient_id=data['patient'],
             urgency=data['urgency'],
+            notes=data.get('notes', '')  # Handle optional notes field
         )
         db.session.add(new_appointment)
         db.session.commit()
@@ -121,6 +124,7 @@ def get_appointment(id):
             "doctor_id": appointment.doctor_id,
             "patient_id": appointment.patient_id,
             "urgency": appointment.urgency,
+            "notes": appointment.notes
         })
     else:
         return jsonify({"error": "Appointment not found"}), 404
@@ -156,6 +160,7 @@ def update_appointment(id):
         appointment.doctor_id = data['doctor']
         appointment.patient_id = data['patient']
         appointment.urgency = data['urgency']
+        appointment.notes = data.get('notes', appointment.notes)  # Update notes field
 
         db.session.commit()
         return jsonify({"message": "Appointment updated successfully!"}), 200

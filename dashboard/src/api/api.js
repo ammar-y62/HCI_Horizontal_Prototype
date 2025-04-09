@@ -53,7 +53,9 @@ export const addAppointment = (appointmentData) => {
     doctor_id: appointmentData.doctor_id,
     doctor: appointmentData.doctor_id,
     // Urgency always as a number
-    urgency: Number(appointmentData.urgency)
+    urgency: Number(appointmentData.urgency),
+    notes: appointmentData.notes,
+
   };
 
 
@@ -80,7 +82,8 @@ export const updateAppointment = (id, appointmentData) => {
     doctor_id: appointmentData.doctor_id,
     doctor: appointmentData.doctor_id,
     // Urgency always as a number
-    urgency: Number(appointmentData.urgency)
+    urgency: Number(appointmentData.urgency),
+    notes: appointmentData.notes,
   };
 
   return apiFetch(`/api/appointments/${id}`, {
