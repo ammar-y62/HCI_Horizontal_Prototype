@@ -171,6 +171,17 @@ const CalendarView = () => {
       console.error("Failed to refresh events:", error);
     }
   };
+  const getEventOpacity = (event) => {
+    const { patient, doctor } = filters;
+    if (
+      (patient.length > 0 && !patient.includes(event.extendedProps.patient)) ||
+      (doctor.length > 0 && !doctor.includes(event.extendedProps.doctor))
+    ) {
+      return 0.3; // Reduced opacity for filtered-out events
+    }
+    return 1; // Full opacity for visible events
+  };
+
 
   /**
    * Custom buttons for month navigation
@@ -441,6 +452,7 @@ const CalendarView = () => {
                       flexDirection: "column",
                       alignItems: "center", // Center child elements horizontally
                       justifyContent: "center", // Center child elements vertically
+                      opacity: getEventOpacity(event), // Apply opacity based on filters
                     }}
                     onClick={handleEventClick} // Add onClick to open the popup
                     onMouseEnter={(e) => {
