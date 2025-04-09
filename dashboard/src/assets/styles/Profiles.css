@@ -203,7 +203,8 @@
   cursor: pointer;
 }
 
-.remove-btn,
+.delete-btn,
+.cancel-btn,
 .save-profile-btn {
   background: #4f81bd;
   margin-left: 10px;
@@ -215,21 +216,16 @@
   font-size: 18px;
   width: 130px;
   display: flex;
+  gap: 5px;
   align-items: center;
   justify-content: center;
 }
 
-.remove-btn::before {
-  content: "⊗";
-  margin-right: 5px;
+.delete-btn {
+  background: #dc6d5e;
 }
 
-.save-profile-btn::before {
-  content: "⧉";
-  margin-right: 5px;
-}
-
-.remove-btn:hover {
+.cancel-btn:hover {
   background-color: #1e4a8a;
 }
 

@@ -8,7 +8,10 @@ import {
   FaSearch,
   FaUserEdit,
   FaUserNurse,
+  FaRegSave,
 } from "react-icons/fa";
+import { ImCancelCircle } from "react-icons/im";
+import { FaRegTrashCan } from "react-icons/fa6";
 import "../assets/styles/Profiles.css"; // Separate styling for Profiles
 import { updatePerson, deletePerson, addPerson, fetchPeople } from "../api/api";
 
@@ -445,12 +448,13 @@ const Profiles = ({ onClose = () => {} }) => {
 
           <div className="popup-buttons">
             <button
-              className="remove-btn"
+              className="delete-btn"
               onClick={() =>
                 handleDeletePatient(patientDetailsMap[selectedPatient].id)
               }
             >
-              Remove
+              <FaRegTrashCan />
+              Delete
             </button>
 
             <button
@@ -503,6 +507,7 @@ const Profiles = ({ onClose = () => {} }) => {
                 }
               }}
             >
+              <FaRegSave />
               Save
             </button>
           </div>
@@ -569,7 +574,8 @@ const Profiles = ({ onClose = () => {} }) => {
           </div>
 
           <div className="popup-buttons">
-            <button className="remove-btn" onClick={() => setView("patients")}>
+            <button className="cancel-btn" onClick={() => setView("patients")}>
+              <ImCancelCircle />
               Cancel
             </button>
             <button
@@ -622,6 +628,7 @@ const Profiles = ({ onClose = () => {} }) => {
                 }
               }}
             >
+              <FaRegSave />
               Save
             </button>
           </div>
@@ -835,12 +842,13 @@ const Profiles = ({ onClose = () => {} }) => {
 
           <div className="popup-buttons">
             <button
-              className="remove-btn"
+              className="delete-btn"
               onClick={() =>
                 handleDeleteCaretaker(caretakerDetailsMap[selectedCaretaker].id)
               }
             >
-              Remove
+              <FaRegTrashCan />
+              Delete
             </button>
 
             <button
@@ -893,6 +901,7 @@ const Profiles = ({ onClose = () => {} }) => {
                 }
               }}
             >
+              <FaRegSave />
               Save
             </button>
           </div>
@@ -960,9 +969,10 @@ const Profiles = ({ onClose = () => {} }) => {
 
           <div className="popup-buttons">
             <button
-              className="remove-btn"
+              className="cancel-btn"
               onClick={() => setView("caretakers")}
             >
+              <ImCancelCircle />
               Cancel
             </button>
             <button
@@ -1015,6 +1025,7 @@ const Profiles = ({ onClose = () => {} }) => {
                 }
               }}
             >
+              <FaRegSave />
               Save
             </button>
           </div>
