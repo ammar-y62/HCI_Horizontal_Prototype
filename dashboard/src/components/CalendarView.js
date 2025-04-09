@@ -208,6 +208,9 @@ const CalendarView = () => {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
+      if (showFilter || showProfiles) {
+        return;
+      }
       if (selectedSlot !== null) {
         // If popup is open and Escape is pressed, close it
         if (e.key === "Escape") {
@@ -224,6 +227,10 @@ const CalendarView = () => {
         switchToMonthView();
       } else if (e.key.toLowerCase() === "d") {
         switchToDayView();
+      } else if (e.key.toLowerCase() === "f") {
+        setShowFilter(true);
+      } else if (e.key.toLowerCase() === "p") {
+        setShowProfiles(true);
       }
     };
 
@@ -231,7 +238,7 @@ const CalendarView = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [selectedSlot]);
+  }, [selectedSlot, showFilter, showProfiles]);
 
   const resources = [
     { id: "1", title: "Room 1" },
