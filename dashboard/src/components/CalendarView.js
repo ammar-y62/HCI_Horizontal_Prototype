@@ -42,7 +42,15 @@ const CalendarView = () => {
   const [filters, setFilters] = useState({ patient: [], doctor: [] });
   const [selectedPatients, setSelectedPatients] = useState([]);
   const [selectedCaretakers, setSelectedCaretakers] = useState([]);
-
+  const [filterApplied, setFilterApplied] = useState(false);
+  useEffect(() => {
+    // Check if any filter is applied (i.e., if patients or caretakers are selected)
+    if (selectedPatients.length > 0 || selectedCaretakers.length > 0) {
+      setFilterApplied(true);
+    } else {
+      setFilterApplied(false);
+    }
+  }, [selectedPatients, selectedCaretakers]);
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
     setSelectedPatients(newFilters.patient); // Update selected patients
@@ -267,8 +275,8 @@ const CalendarView = () => {
       <div className="calendar-header">
         <div className="left-section">
           <button
-            className="icon-button"
-            onClick={() => setShowFilter(!showFilter)}
+        className={`icon-button ${filterApplied ? 'filter-applied' : ''}`} // Apply conditional class
+        onClick={() => setShowFilter(!showFilter)}
           >
             <FaFilter /> Filter <FaCaretDown />
           </button>

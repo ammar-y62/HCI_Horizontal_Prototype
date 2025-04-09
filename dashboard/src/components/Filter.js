@@ -91,7 +91,9 @@ const Filter = ({
       onFilterChange({ patient: selectedPatients, doctor: newSelection });
     }
   };
-
+  // Track if a filter is applied
+  const isCaretakerFilterApplied = selectedCaretakers.length > 0;
+  const isPatientFilterApplied = selectedPatients.length > 0;
   return (
     <div className="filter-popup" ref={filterRef}>
       {/* ---- Main Buttons ---- */}
@@ -109,8 +111,9 @@ const Filter = ({
         <span className="button-text">Clear Filters</span>
       </button>
 
-      <button
-        className="filter-option"
+     {/* Caretaker Filter Button */}
+     <button
+        className={`filter-option ${isCaretakerFilterApplied ? 'filter-applied' : ''}`} // Apply conditional class
         onClick={() => setSubFilter("caretaker")}
       >
         <FaUserNurse className="icon-left" />
@@ -118,11 +121,16 @@ const Filter = ({
         <FaCaretRight className="icon-right" />
       </button>
 
-      <button className="filter-option" onClick={() => setSubFilter("patient")}>
+      {/* Patient Filter Button */}
+      <button
+        className={`filter-option ${isPatientFilterApplied ? 'filter-applied' : ''}`} // Apply conditional class
+        onClick={() => setSubFilter("patient")}
+      >
         <FaUser className="icon-left" />
         <span className="button-text">By Patient</span>
         <FaCaretRight className="icon-right" />
       </button>
+
 
       {/* ---- Sub‐Filter Popup ---- */}
       {subFilter && (

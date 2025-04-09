@@ -205,7 +205,10 @@
 .fc-day-sun {
   background: #e0e0e0;
 }
-
+.icon-button.filter-applied {
+  background-color: #e99241; /* Example color, change to desired */
+  color: rgb(105, 42, 42);
+}
 /* =====================================================
      FullCalendar – Day (Time Grid) View Styles
      ===================================================== */
