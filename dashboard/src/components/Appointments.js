@@ -628,29 +628,33 @@ const AppointmentPopup = ({
             ></div>
           </div>
           {showUrgencySelector && (
-            <div className="urgency-selector">
-              <div
-                className="urgency-option urgency-low"
-                onClick={() => {
-                  setSelectedUrgency(1);
-                  setShowUrgencySelector(false);
-                }}
-              ></div>
-              <div
-                className="urgency-option urgency-medium"
-                onClick={() => {
-                  setSelectedUrgency(2);
-                  setShowUrgencySelector(false);
-                }}
-              ></div>
-              <div
-                className="urgency-option urgency-high"
-                onClick={() => {
-                  setSelectedUrgency(3);
-                  setShowUrgencySelector(false);
-                }}
-              ></div>
-            </div>
+            <div
+            className="urgency-selector">
+            <div
+              className="urgency-option urgency-low"
+              onClick={() => {
+                setSelectedUrgency(1);
+                setShowUrgencySelector(false);
+              }}
+              title="Low" // Added title
+            ></div>
+            <div
+              className="urgency-option urgency-medium"
+              onClick={() => {
+                setSelectedUrgency(2);
+                setShowUrgencySelector(false);
+              }}
+              title="Medium" // Added title
+            ></div>
+            <div
+              className="urgency-option urgency-high"
+              onClick={() => {
+                setSelectedUrgency(3);
+                setShowUrgencySelector(false);
+              }}
+              title="High" // Added title
+            ></div>
+          </div>
           )}
         </div>
         <div className="popup-section">
@@ -660,8 +664,8 @@ const AppointmentPopup = ({
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Add any notes here..."
             style={{
-              width: "100%",
-              height: "80px",
+              width: "90%",
+              height: "50px",
               border: "2px solid #ccc",
               borderRadius: "8px",
               padding: "10px",
