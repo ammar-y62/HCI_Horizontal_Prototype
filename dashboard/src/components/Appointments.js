@@ -1,34 +1,49 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FaTimes, FaSearch } from "react-icons/fa";
-import { fetchPeople, fetchAppointments, addAppointment, deleteAppointment, updateAppointment, fetchAppointmentById } from "../api/api";
+import { FaTimes, FaSearch, FaRegSave } from "react-icons/fa";
+import { ImCancelCircle } from "react-icons/im";
+import { FaRegTrashCan } from "react-icons/fa6";
+import {
+  fetchPeople,
+  fetchAppointments,
+  addAppointment,
+  deleteAppointment,
+  updateAppointment,
+  fetchAppointmentById,
+} from "../api/api";
 import "../assets/styles/Appointments.css";
 
 // Patient details mock data
 const patientDetailsMap = {
-  "patient1": {
+  patient1: {
     name: "Patient 1",
     email: "example@example.com",
     phone: "403-123-4567",
-    address: "123 Example Street"
+    address: "123 Example Street",
   },
 };
 
 // Caretaker details mock data
 const caretakerDetailsMap = {
-  "caretaker1": {
+  caretaker1: {
     name: "Caretaker 1",
     position: "Doctor",
     email: "example@example.com",
     phone: "403-123-4567",
-    address: "123 Example Street"
+    address: "123 Example Street",
   },
-
 };
 
-const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointmentAdded }) => {
+const AppointmentPopup = ({
+  room,
+  time,
+  date,
+  onClose,
+  appointmentId,
+  onAppointmentAdded,
+}) => {
   const patientDropdownRef = useRef(null);
   const caretakerDropdownRef = useRef(null);
-  
+
   const [patients, setPatients] = useState([]);
   const [caretakers, setCaretakers] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState("");
@@ -51,14 +66,25 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
         const people = await fetchPeople();
         // Filter patients
         const filteredPatients = people
-          .filter(person => person.status === "patient")
-          .map(person => ({ id: person.id, name: person.name, email: person.email, phone_number: person.phone_number, address: person.address }));
+          .filter((person) => person.status === "patient")
+          .map((person) => ({
+            id: person.id,
+            name: person.name,
+            email: person.email,
+            phone_number: person.phone_number,
+            address: person.address,
+          }));
 
-        // Filter caretakers - include all non-patients 
+        // Filter caretakers - include all non-patients
         const filteredCaretakers = people
-          .filter(person => person.status !== "patient")
-          .map(person => ({ id: person.id, name: person.name, email: person.email, phone_number: person.phone_number, address: person.address }));
-
+          .filter((person) => person.status !== "patient")
+          .map((person) => ({
+            id: person.id,
+            name: person.name,
+            email: person.email,
+            phone_number: person.phone_number,
+            address: person.address,
+          }));
 
         setPatients(filteredPatients);
         setCaretakers(filteredCaretakers);
@@ -75,17 +101,17 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
     const loadAppointmentDetails = async () => {
       if (appointmentId) {
         try {
-          
           // Directly fetch the appointment by ID
           const appointment = await fetchAppointmentById(appointmentId);
-          
+
           // Fall back to finding it in the list
           if (!appointment || Object.keys(appointment).length === 0) {
             const appointments = await fetchAppointments();
-            const foundAppointment = appointments.find(a => a.id === appointmentId);
-            
+            const foundAppointment = appointments.find(
+              (a) => a.id === appointmentId
+            );
+
             if (foundAppointment) {
-              
               // Set patient, caretaker, and urgency
               setSelectedPatient(foundAppointment.patient_id);
               setSelectedCaretaker(foundAppointment.doctor_id);
@@ -94,7 +120,6 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
               console.warn("Appointment not found with ID:", appointmentId);
             }
           } else {
-            
             // Set patient, caretaker, and urgency
             setSelectedPatient(appointment.patient_id);
             setSelectedCaretaker(appointment.doctor_id);
@@ -112,11 +137,17 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
   // Add click outside listener to close dropdowns
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (patientDropdownRef.current && !patientDropdownRef.current.contains(event.target)) {
+      if (
+        patientDropdownRef.current &&
+        !patientDropdownRef.current.contains(event.target)
+      ) {
         // Delay hiding dropdown to allow click to register
         setTimeout(() => setShowPatientDropdown(false), 200);
       }
-      if (caretakerDropdownRef.current && !caretakerDropdownRef.current.contains(event.target)) {
+      if (
+        caretakerDropdownRef.current &&
+        !caretakerDropdownRef.current.contains(event.target)
+      ) {
         // Delay hiding dropdown to allow click to register
         setTimeout(() => setShowCaretakerDropdown(false), 200);
       }
@@ -131,52 +162,60 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
   // Get patient details
   const getPatientDetails = (patientId) => {
     // If the patientId is one of the loaded patients, use their name
-    const patient = patients.find(p => p.id === patientId);
+    const patient = patients.find((p) => p.id === patientId);
 
     // Get details for the requested patient, or return a default if not found
-    return patientDetailsMap[patientId] || {
-      name: patient ? patient.name : `Patient ${patientId.replace("patient", "")}`,
-      email: patient.email,
-      phone: patient.phone_number,
-      address: patient.address,
-    };
+    return (
+      patientDetailsMap[patientId] || {
+        name: patient
+          ? patient.name
+          : `Patient ${patientId.replace("patient", "")}`,
+        email: patient.email,
+        phone: patient.phone_number,
+        address: patient.address,
+      }
+    );
   };
 
   // Get caretaker details
   const getCaretakerDetails = (caretakerId) => {
     // If the caretakerId is one of the loaded caretakers, use their name
-    const caretaker = caretakers.find(c => c.id === caretakerId);
+    const caretaker = caretakers.find((c) => c.id === caretakerId);
 
     // Get details for the requested caretaker, or return a default if not found
-    return caretakerDetailsMap[caretakerId] || {
-      name: caretaker ? caretaker.name : `Caretaker ${caretakerId.replace("caretaker", "")}`,
-      position: "Caretaker",
-      email: caretaker.email,
-      phone: caretaker.phone_number,
-      address: caretaker.address,
-    };
+    return (
+      caretakerDetailsMap[caretakerId] || {
+        name: caretaker
+          ? caretaker.name
+          : `Caretaker ${caretakerId.replace("caretaker", "")}`,
+        position: "Caretaker",
+        email: caretaker.email,
+        phone: caretaker.phone_number,
+        address: caretaker.address,
+      }
+    );
   };
 
   // Filter patients based on search input
-  const filteredPatients = patients.filter(patient => {
+  const filteredPatients = patients.filter((patient) => {
     return patient.name.toLowerCase().includes(patientSearch.toLowerCase());
   });
 
   // Filter caretakers based on search input
-  const filteredCaretakers = caretakers.filter(caretaker => {
+  const filteredCaretakers = caretakers.filter((caretaker) => {
     return caretaker.name.toLowerCase().includes(caretakerSearch.toLowerCase());
   });
 
   // Render patient details popup
   const renderPatientDetails = () => {
     if (!hoveredPatient) return null;
-    
-    const patient = patients.find(p => p.id === hoveredPatient);
+
+    const patient = patients.find((p) => p.id === hoveredPatient);
     if (!patient) return null;
-    
+
     // Get patient details - In real app, this would use the actual patient ID
     const details = getPatientDetails(patient.id);
-    
+
     return (
       <div className="patient-details-popup">
         <div className="patient-details-header">
@@ -187,13 +226,13 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
         <div className="patient-details-content">
           <div className="patient-details-label">Name:</div>
           <div style={{ fontSize: "18px" }}>{details.name}</div>
-          
+
           <div className="patient-details-label">Email:</div>
           <div style={{ fontSize: "18px" }}>{details.email}</div>
-          
+
           <div className="patient-details-label">Phone:</div>
           <div style={{ fontSize: "18px" }}>{details.phone}</div>
-          
+
           <div className="patient-details-label">Address:</div>
           <div style={{ fontSize: "18px" }}>{details.address}</div>
         </div>
@@ -204,13 +243,13 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
   // Render caretaker details popup
   const renderCaretakerDetails = () => {
     if (!hoveredCaretaker) return null;
-    
-    const caretaker = caretakers.find(c => c.id === hoveredCaretaker);
+
+    const caretaker = caretakers.find((c) => c.id === hoveredCaretaker);
     if (!caretaker) return null;
-    
+
     // Get caretaker details
     const details = getCaretakerDetails(caretaker.id);
-    
+
     return (
       <div className="patient-details-popup">
         <div className="patient-details-header">
@@ -221,16 +260,16 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
         <div className="patient-details-content">
           <div className="patient-details-label">Name:</div>
           <div style={{ fontSize: "18px" }}>{details.name}</div>
-          
+
           <div className="patient-details-label">Position:</div>
           <div style={{ fontSize: "18px" }}>{details.position}</div>
-          
+
           <div className="patient-details-label">Email:</div>
           <div style={{ fontSize: "18px" }}>{details.email}</div>
-          
+
           <div className="patient-details-label">Phone:</div>
           <div style={{ fontSize: "18px" }}>{details.phone}</div>
-          
+
           <div className="patient-details-label">Address:</div>
           <div style={{ fontSize: "18px" }}>{details.address}</div>
         </div>
@@ -243,32 +282,32 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
     try {
       // Use the date passed from the calendar
       let formattedDate;
-      
+
       if (date instanceof Date) {
         // If it's already a Date object, use it directly
-        formattedDate = date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-      } else if (typeof date === 'string' && date.includes('T')) {
+        formattedDate = date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+      } else if (typeof date === "string" && date.includes("T")) {
         // Handle ISO string format
-        formattedDate = new Date(date).toISOString().split('T')[0];
+        formattedDate = new Date(date).toISOString().split("T")[0];
       } else {
         // No valid date provided, use current date as fallback
         console.warn("No valid date provided, using today's date");
-        formattedDate = new Date().toISOString().split('T')[0];
+        formattedDate = new Date().toISOString().split("T")[0];
       }
 
       // Function to convert 12-hour AM/PM format to 24-hour format
       const convertTo24HourFormat = (time12hr) => {
-        const [time, modifier] = time12hr.split(" ");  // Split time and AM/PM
-        let [hours, minutes] = time.split(":");  // Split hours and minutes
+        const [time, modifier] = time12hr.split(" "); // Split time and AM/PM
+        let [hours, minutes] = time.split(":"); // Split hours and minutes
         hours = parseInt(hours, 10); // Convert hours to number with radix 10
 
         if (modifier === "PM" && hours !== 12) {
-          hours += 12;  // Convert PM time to 24-hour format
+          hours += 12; // Convert PM time to 24-hour format
         } else if (modifier === "AM" && hours === 12) {
-          hours = 0;  // Convert 12 AM to 00:00
+          hours = 0; // Convert 12 AM to 00:00
         }
 
-        return `${hours.toString().padStart(2, '0')}:${minutes}`;  // Return formatted time
+        return `${hours.toString().padStart(2, "0")}:${minutes}`; // Return formatted time
       };
 
       // Convert the time to 24-hour format
@@ -277,9 +316,9 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
 
       // Make sure room is a number
       const roomNumber = parseInt(room, 10);
-      
+
       const appointmentData = {
-        room_number: roomNumber, 
+        room_number: roomNumber,
         date_time: formattedDateTime,
         patient_id: selectedPatient,
         doctor_id: selectedCaretaker,
@@ -289,23 +328,28 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
       try {
         if (appointmentId) {
           // Update existing appointment
-          const response = await updateAppointment(appointmentId, appointmentData);
+          const response = await updateAppointment(
+            appointmentId,
+            appointmentData
+          );
         } else {
           // Create new appointment
           const response = await addAppointment(appointmentData);
         }
-  
+
         // Trigger refresh of the calendar events
         if (onAppointmentAdded) {
           await onAppointmentAdded();
         }
-  
+
         // Close the popup after saving
         onClose();
       } catch (apiError) {
         console.error("API Error:", apiError);
         console.error("API Error details:", apiError.message);
-        alert(`Failed to save appointment: ${apiError.message}. Please check console for details.`);
+        alert(
+          `Failed to save appointment: ${apiError.message}. Please check console for details.`
+        );
       }
     } catch (error) {
       console.error("Error in handleSave function:", error);
@@ -319,21 +363,21 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
     setSelectedCaretaker("");
     setSelectedUrgency(1); // Reset to default urgency
   };
-  
+
   // Delete the appointment
   const handleDelete = async () => {
     if (!appointmentId) return;
-    
+
     try {
       // Confirm before deleting
       if (window.confirm("Are you sure you want to delete this appointment?")) {
         await deleteAppointment(appointmentId);
-        
+
         // Refresh events
         if (onAppointmentAdded) {
           await onAppointmentAdded();
         }
-        
+
         // Close the popup
         onClose();
       }
@@ -347,13 +391,23 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
     <div className="popup-container">
       <div className="popup-box">
         <div className="popup-header" style={{ justifyContent: "center" }}>
-          <span style={{ flexGrow: 1, textAlign: "center" }}>{`Room ${room} - ${time}`}</span>
-          <FaTimes className="close-icon" onClick={onClose} style={{ position: "absolute", right: "15px", top: "15px" }} />
+          <span
+            style={{ flexGrow: 1, textAlign: "center" }}
+          >{`Room ${room} - ${time}`}</span>
+          <FaTimes
+            className="close-icon"
+            onClick={onClose}
+            style={{ position: "absolute", right: "15px", top: "15px" }}
+          />
         </div>
 
         <div className="popup-section">
-          <label style={{ textAlign: "center", width: "100%", display: "block" }}>Patient:</label>
-          <span 
+          <label
+            style={{ textAlign: "center", width: "100%", display: "block" }}
+          >
+            Patient:
+          </label>
+          <span
             onMouseEnter={() => {
               if (selectedPatient) {
                 setHoveredPatient(selectedPatient);
@@ -364,14 +418,23 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
               setShowPatientDetails(false);
               setHoveredPatient(null);
             }}
-            style={{ position: "relative", cursor: selectedPatient ? "pointer" : "default", textAlign: "center", display: "block", width: "100%", marginBottom: "15px" }}
+            style={{
+              position: "relative",
+              cursor: selectedPatient ? "pointer" : "default",
+              textAlign: "center",
+              display: "block",
+              width: "100%",
+              marginBottom: "15px",
+            }}
           >
-            {selectedPatient ?
-              (() => {
-                const patient = patients.find(p => p.id === selectedPatient);
-                return patient ? patient.name : "Unassigned";
-              })() :
-              "Unassigned"}
+            {selectedPatient
+              ? (() => {
+                  const patient = patients.find(
+                    (p) => p.id === selectedPatient
+                  );
+                  return patient ? patient.name : "Unassigned";
+                })()
+              : "Unassigned"}
 
             {showPatientDetails && hoveredPatient && renderPatientDetails()}
           </span>
@@ -396,11 +459,11 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
               className="dropdown-display"
               ref={patientDropdownRef}
               style={{
-                display: 'block',
-                maxHeight: '160px', // Fits about 4 items
-                overflowY: 'auto', // Always show scrollbar capability
-                overscrollBehavior: 'contain', // Prevents scroll chaining
-                overflowX: 'hidden' // Prevent horizontal scrolling
+                display: "block",
+                maxHeight: "160px", // Fits about 4 items
+                overflowY: "auto", // Always show scrollbar capability
+                overscrollBehavior: "contain", // Prevents scroll chaining
+                overflowX: "hidden", // Prevent horizontal scrolling
               }}
             >
               {filteredPatients.map((patient) => (
@@ -429,7 +492,11 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
         </div>
 
         <div className="popup-section">
-          <label style={{ textAlign: "center", width: "100%", display: "block" }}>Caretaker:</label>
+          <label
+            style={{ textAlign: "center", width: "100%", display: "block" }}
+          >
+            Caretaker:
+          </label>
           <span
             onMouseEnter={() => {
               if (selectedCaretaker) {
@@ -441,16 +508,27 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
               setShowCaretakerDetails(false);
               setHoveredCaretaker(null);
             }}
-            style={{ position: "relative", cursor: selectedCaretaker ? "pointer" : "default", textAlign: "center", display: "block", width: "100%", marginBottom: "15px" }}
+            style={{
+              position: "relative",
+              cursor: selectedCaretaker ? "pointer" : "default",
+              textAlign: "center",
+              display: "block",
+              width: "100%",
+              marginBottom: "15px",
+            }}
           >
-            {selectedCaretaker ?
-              (() => {
-                const caretaker = caretakers.find(c => c.id === selectedCaretaker);
-                return caretaker ? caretaker.name : "Unassigned";
-              })() :
-              "Unassigned"}
+            {selectedCaretaker
+              ? (() => {
+                  const caretaker = caretakers.find(
+                    (c) => c.id === selectedCaretaker
+                  );
+                  return caretaker ? caretaker.name : "Unassigned";
+                })()
+              : "Unassigned"}
 
-            {showCaretakerDetails && hoveredCaretaker && renderCaretakerDetails()}
+            {showCaretakerDetails &&
+              hoveredCaretaker &&
+              renderCaretakerDetails()}
           </span>
           <div className="input-with-icon">
             <div className="search-icon">
@@ -473,11 +551,11 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
               className="dropdown-display"
               ref={caretakerDropdownRef}
               style={{
-                display: 'block',
-                maxHeight: '160px', // Fits about 4 items
-                overflowY: 'auto', // Always show scrollbar capability
-                overscrollBehavior: 'contain', // Prevents scroll chaining
-                overflowX: 'hidden' // Prevent horizontal scrolling
+                display: "block",
+                maxHeight: "160px", // Fits about 4 items
+                overflowY: "auto", // Always show scrollbar capability
+                overscrollBehavior: "contain", // Prevents scroll chaining
+                overflowX: "hidden", // Prevent horizontal scrolling
               }}
             >
               {filteredCaretakers.map((caretaker) => (
@@ -506,16 +584,42 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
         </div>
 
         <div className="popup-section" style={{ marginTop: "20px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: "10px" }}>
-            <label style={{marginRight: "10px", fontSize: "22px", display: "inline-block"}}>Urgency:</label>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: "10px",
+            }}
+          >
+            <label
+              style={{
+                marginRight: "10px",
+                fontSize: "22px",
+                display: "inline-block",
+              }}
+            >
+              Urgency:
+            </label>
             <div
-              className={`urgency-box urgency-${selectedUrgency === 1 ? 'low' : selectedUrgency === 2 ? 'medium' : 'high'}`}
+              className={`urgency-box urgency-${
+                selectedUrgency === 1
+                  ? "low"
+                  : selectedUrgency === 2
+                  ? "medium"
+                  : "high"
+              }`}
               onClick={() => setShowUrgencySelector(!showUrgencySelector)}
               style={{
-                backgroundColor: selectedUrgency === 1 ? '#4caf50' : selectedUrgency === 2 ? '#ffc107' : '#f44336',
+                backgroundColor:
+                  selectedUrgency === 1
+                    ? "#4caf50"
+                    : selectedUrgency === 2
+                    ? "#ffc107"
+                    : "#f44336",
                 display: "inline-block",
                 cursor: "pointer",
-                border: "3px solid #000"
+                border: "3px solid #000",
               }}
             ></div>
           </div>
@@ -547,40 +651,39 @@ const AppointmentPopup = ({ room, time, date, onClose, appointmentId, onAppointm
         </div>
 
         <div className="popup-buttons" style={{ flexDirection: "row" }}>
-          <button className="clear-btn" onClick={handleClear}>Clear</button>
+          <button className="clear-btn" onClick={handleClear}>
+            <ImCancelCircle />
+            Clear
+          </button>
           <button
             className="save-btn"
             onClick={handleSave}
             disabled={!selectedPatient || !selectedCaretaker}
             style={{
-              backgroundColor: (!selectedPatient || !selectedCaretaker) ? '#a9b7d0' : '#4F81BD',
-              cursor: (!selectedPatient || !selectedCaretaker) ? 'not-allowed' : 'pointer',
-              opacity: (!selectedPatient || !selectedCaretaker) ? 0.7 : 1
+              backgroundColor:
+                !selectedPatient || !selectedCaretaker ? "#a9b7d0" : "#4F81BD",
+              cursor:
+                !selectedPatient || !selectedCaretaker
+                  ? "not-allowed"
+                  : "pointer",
+              opacity: !selectedPatient || !selectedCaretaker ? 0.7 : 1,
             }}
           >
+            <FaRegSave />
             Save
           </button>
         </div>
 
         {appointmentId && (
-          <div style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}>
-            <button
-              className="delete-btn"
-              onClick={handleDelete}
-              style={{
-                backgroundColor: "#DC6D5E",
-                color: "white",
-                border: "none",
-                borderRadius: "25px",
-                padding: "10px 25px",
-                cursor: "pointer",
-                fontSize: "18px",
-                width: "130px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-            >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "10px",
+            }}
+          >
+            <button className="delete-btn" onClick={handleDelete}>
+              <FaRegTrashCan />
               Delete
             </button>
           </div>
