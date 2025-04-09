@@ -49,6 +49,20 @@ const Filter = ({
     };
   }, [onClose]);
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setSubFilter(null);
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
+
   // Separate people by status
   const patients = people.filter((person) => person.status === "patient");
   //TODO: doctor or caretaker or both?
@@ -95,7 +109,10 @@ const Filter = ({
         <span className="button-text">Clear Filters</span>
       </button>
 
-      <button className="filter-option" onClick={() => setSubFilter("caretaker")}>
+      <button
+        className="filter-option"
+        onClick={() => setSubFilter("caretaker")}
+      >
         <FaUserNurse className="icon-left" />
         <span className="button-text">By Caretaker</span>
         <FaCaretRight className="icon-right" />
@@ -134,12 +151,17 @@ const Filter = ({
               <FaArrowLeft />
             </button>
             <h3 className="sub-filter-title" style={{ margin: 0 }}>
-              {subFilter === "caretaker" ? "Filter By Caretaker" : "Filter By Patient"}
+              {subFilter === "caretaker"
+                ? "Filter By Caretaker"
+                : "Filter By Patient"}
             </h3>
           </div>
 
           {/* Search Bar */}
-          <div className="filter-search" style={{ position: "relative", marginBottom: "8px" }}>
+          <div
+            className="filter-search"
+            style={{ position: "relative", marginBottom: "8px" }}
+          >
             <FaSearch
               className="search-icon"
               style={{
@@ -152,8 +174,14 @@ const Filter = ({
             />
             <input
               type="text"
-              placeholder={subFilter === "caretaker" ? "Search caretaker..." : "Search patient..."}
-              value={subFilter === "caretaker" ? caretakerSearch : patientSearch}
+              placeholder={
+                subFilter === "caretaker"
+                  ? "Search caretaker..."
+                  : "Search patient..."
+              }
+              value={
+                subFilter === "caretaker" ? caretakerSearch : patientSearch
+              }
               onChange={(e) =>
                 subFilter === "caretaker"
                   ? setCaretakerSearch(e.target.value)
@@ -170,7 +198,10 @@ const Filter = ({
           </div>
 
           {/* List of People */}
-          <div className="person-list" style={{ maxHeight: "120px", overflowY: "auto" }}>
+          <div
+            className="person-list"
+            style={{ maxHeight: "120px", overflowY: "auto" }}
+          >
             {subFilter === "caretaker"
               ? filteredCaretakers.map((caretaker) => (
                   <label
@@ -189,7 +220,9 @@ const Filter = ({
                     <input
                       type="checkbox"
                       checked={selectedCaretakers.includes(caretaker.id)}
-                      onChange={() => handleCheckboxChange("caretaker", caretaker.id)}
+                      onChange={() =>
+                        handleCheckboxChange("caretaker", caretaker.id)
+                      }
                     />
                   </label>
                 ))
@@ -210,7 +243,9 @@ const Filter = ({
                     <input
                       type="checkbox"
                       checked={selectedPatients.includes(patient.id)}
-                      onChange={() => handleCheckboxChange("patient", patient.id)}
+                      onChange={() =>
+                        handleCheckboxChange("patient", patient.id)
+                      }
                     />
                   </label>
                 ))}

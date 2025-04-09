@@ -14,7 +14,7 @@ import {
   FaChevronRight,
   FaEdit,
   FaCaretDown,
-  FaUserNurse
+  FaUserNurse,
 } from "react-icons/fa";
 import { IoEnterOutline } from "react-icons/io5";
 import { FiPlusCircle } from "react-icons/fi";
@@ -48,13 +48,13 @@ const CalendarView = () => {
     setSelectedPatients(newFilters.patient); // Update selected patients
     setSelectedCaretakers(newFilters.doctor); // Update selected caretakers
   };
-  
+
   useEffect(() => {
     if (currentRange) {
       refreshEvents();
     }
   }, [filters]);
-  
+
   /**
    * Called automatically by FullCalendar whenever:
    *   - The user clicks Next/Prev
@@ -82,20 +82,20 @@ const CalendarView = () => {
       }
       setTitleText(title);
       const data = await fetchAppointments();
-      
+
       // Also fetch people to get their names
       const people = await fetchPeople();
-      
+
       const filtered = data.filter((apt) => {
         const apptDate = new Date(apt.date_time);
         return apptDate >= start && apptDate < end;
       });
-      
+
       const newEvents = filtered.map((apt) => {
         // Find the patient and doctor names from the people list
-        const patient = people.find(p => p.id === apt.patient_id);
-        const doctor = people.find(p => p.id === apt.doctor_id);
-        
+        const patient = people.find((p) => p.id === apt.patient_id);
+        const doctor = people.find((p) => p.id === apt.doctor_id);
+
         return {
           id: apt.id,
           title: `Room ${apt.room_number}`,
@@ -112,20 +112,20 @@ const CalendarView = () => {
           },
         };
       });
-      
+
       setEvents(newEvents);
     } catch (error) {
       console.error("Failed to fetch appointments:", error);
     }
   };
-  
+
   const refreshEvents = async () => {
     if (!currentRange) return;
     try {
       const data = await fetchAppointments();
       // Also fetch people to get their names
       const people = await fetchPeople();
-      
+
       let filtered = data.filter((apt) => {
         const apptDate = new Date(apt.date_time);
         return apptDate >= currentRange.start && apptDate < currentRange.end;
@@ -133,18 +133,22 @@ const CalendarView = () => {
 
       // Apply patient filter if any
       if (filters.patient.length > 0) {
-        filtered = filtered.filter(apt => filters.patient.includes(apt.patient_id));
+        filtered = filtered.filter((apt) =>
+          filters.patient.includes(apt.patient_id)
+        );
       }
       // Apply doctor filter if any
       if (filters.doctor.length > 0) {
-        filtered = filtered.filter(apt => filters.doctor.includes(apt.doctor_id));
+        filtered = filtered.filter((apt) =>
+          filters.doctor.includes(apt.doctor_id)
+        );
       }
 
       const newEvents = filtered.map((apt) => {
         // Find the patient and doctor names from the people list
-        const patient = people.find(p => p.id === apt.patient_id);
-        const doctor = people.find(p => p.id === apt.doctor_id);
-        
+        const patient = people.find((p) => p.id === apt.patient_id);
+        const doctor = people.find((p) => p.id === apt.doctor_id);
+
         return {
           id: apt.id,
           title: `Room ${apt.room_number}`,
@@ -161,13 +165,13 @@ const CalendarView = () => {
           },
         };
       });
-      
+
       setEvents(newEvents);
     } catch (error) {
       console.error("Failed to refresh events:", error);
     }
   };
-  
+
   /**
    * Custom buttons for month navigation
    * We call getApi() on the FullCalendar instance (via ref),
@@ -178,13 +182,13 @@ const CalendarView = () => {
       calendarRef.current.getApi().prev();
     }
   };
-  
+
   const handleNext = () => {
     if (calendarRef.current) {
       calendarRef.current.getApi().next();
     }
   };
-  
+
   /**
    * Switch to Month View or Day View
    */
@@ -194,14 +198,41 @@ const CalendarView = () => {
       calendarRef.current.getApi().changeView("dayGridMonth");
     }
   };
-  
+
   const switchToDayView = () => {
     setView("resourceTimeGridDay");
     if (calendarRef.current) {
       calendarRef.current.getApi().changeView("resourceTimeGridDay");
     }
   };
-  
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (selectedSlot !== null) {
+        // If popup is open and Escape is pressed, close it
+        if (e.key === "Escape") {
+          setSelectedSlot(null);
+        }
+        return; // Block other keys while popup is open
+      }
+
+      if (e.key === "ArrowLeft") {
+        handlePrev();
+      } else if (e.key === "ArrowRight") {
+        handleNext();
+      } else if (e.key.toLowerCase() === "m") {
+        switchToMonthView();
+      } else if (e.key.toLowerCase() === "d") {
+        switchToDayView();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedSlot]);
+
   const resources = [
     { id: "1", title: "Room 1" },
     { id: "2", title: "Room 2" },
@@ -211,7 +242,7 @@ const CalendarView = () => {
     { id: "6", title: "Room 6" },
     { id: "7", title: "Room 7" },
   ];
-  
+
   return (
     <div className="calendar-container">
       {/* ---- Top Navigation ---- */}
@@ -225,8 +256,8 @@ const CalendarView = () => {
           </button>
           {showFilter && (
             <Filter
-              selectedPatients={selectedPatients}  // Pass selected patients to Filter
-              selectedCaretakers={selectedCaretakers}  // Pass selected caretakers to Filter
+              selectedPatients={selectedPatients} // Pass selected patients to Filter
+              selectedCaretakers={selectedCaretakers} // Pass selected caretakers to Filter
               onClose={() => setShowFilter(false)}
               onFilterChange={handleFilterChange}
             />
@@ -372,9 +403,10 @@ const CalendarView = () => {
                 const handleEventClick = () => {
                   console.log("Event clicked:", event);
                   // Extract the room number from either resourceId or extendedProps
-                  const roomNumber = event.resourceId || event.extendedProps.resourceId;
+                  const roomNumber =
+                    event.resourceId || event.extendedProps.resourceId;
                   console.log("Room number:", roomNumber);
-                  
+
                   // Open AppointmentPopup and pass the event's appointment data
                   setSelectedSlot({
                     room: roomNumber,
@@ -401,7 +433,7 @@ const CalendarView = () => {
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center", // Center child elements horizontally
-                      justifyContent: "center" // Center child elements vertically
+                      justifyContent: "center", // Center child elements vertically
                     }}
                     onClick={handleEventClick} // Add onClick to open the popup
                     onMouseEnter={(e) => {
@@ -417,28 +449,36 @@ const CalendarView = () => {
                       if (overlay) overlay.style.opacity = "0";
                     }}
                   >
-                    <div style={{ 
-                      fontWeight: "bold", 
-                      fontSize: "1rem", 
-                      marginBottom: "3px",
-                      width: "100%",
-                      textAlign: "center",
-                      color: "black"
-                    }}>
-                      {extendedProps.patient_name || extendedProps.patient || "Unassigned"}
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "1rem",
+                        marginBottom: "3px",
+                        width: "100%",
+                        textAlign: "center",
+                        color: "black",
+                      }}
+                    >
+                      {extendedProps.patient_name ||
+                        extendedProps.patient ||
+                        "Unassigned"}
                     </div>
-                    <div style={{ 
-                      fontSize: "0.85rem", 
-                      display: "flex", 
-                      alignItems: "center",
-                      justifyContent: "center", // Center the icon and text
-                      width: "100%", // Full width to ensure proper centering  
-                      color: "black"
-                    }}>
+                    <div
+                      style={{
+                        fontSize: "0.85rem",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center", // Center the icon and text
+                        width: "100%", // Full width to ensure proper centering
+                        color: "black",
+                      }}
+                    >
                       <span style={{ marginRight: "4px", marginTop: "4px" }}>
                         <FaUserNurse size={18} />
                       </span>
-                      {extendedProps.doctor_name || extendedProps.doctor || "Unassigned"}
+                      {extendedProps.doctor_name ||
+                        extendedProps.doctor ||
+                        "Unassigned"}
                     </div>
                     {/* Hover overlay */}
                     <div

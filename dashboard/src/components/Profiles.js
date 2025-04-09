@@ -217,6 +217,20 @@ const Profiles = ({ onClose = () => {} }) => {
     };
   }, [onClose]);
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setView("main"); // Reset to main before closing
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
+
   return (
     <div className="profiles-popup" ref={profilesRef}>
       {view === "main" && (
