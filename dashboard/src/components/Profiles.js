@@ -120,6 +120,12 @@ const Profiles = ({ onClose = () => {} }) => {
     );
   };
 
+  const patientHasInvalidInput = (patient) => {
+    return (
+      patientHasEmptyInput(patient) || !isPhoneNumberFormatted(patient.phone)
+    );
+  };
+
   const caretakerHasEmptyInput = (caretaker) => {
     return (
       !String(caretaker.name || "").trim() ||
@@ -127,6 +133,31 @@ const Profiles = ({ onClose = () => {} }) => {
       !String(caretaker.phone || "").trim() ||
       !String(caretaker.address || "").trim()
     );
+  };
+
+  const caretakerHasInvalidInput = (caretaker) => {
+    return (
+      caretakerHasEmptyInput(caretaker) ||
+      !isPhoneNumberFormatted(caretaker.phone)
+    );
+  };
+
+  const isPhoneNumberFormatted = (phone) => {
+    return /^\d{3}-\d{3}-\d{4}$/.test(phone);
+  };
+
+  const formatPhoneNumber = (value) => {
+    // Remove non-digit characters
+    const digits = value.replace(/\D/g, "").slice(0, 10);
+
+    // Format into xxx-xxx-xxxx
+    const part1 = digits.slice(0, 3);
+    const part2 = digits.slice(3, 6);
+    const part3 = digits.slice(6, 10);
+
+    if (digits.length <= 3) return part1;
+    if (digits.length <= 6) return `${part1}-${part2}`;
+    return `${part1}-${part2}-${part3}`;
   };
 
   // Delete a patient
@@ -361,13 +392,15 @@ const Profiles = ({ onClose = () => {} }) => {
             <strong>Phone:</strong>
             {editingPatientField === "phone" ? (
               <input
+                placeholder="Enter phone number"
                 value={editedPatientInfo.phone}
-                onChange={(e) =>
+                onChange={(e) => {
+                  const formattedValue = formatPhoneNumber(e.target.value);
                   setEditedPatientInfo({
                     ...editedPatientInfo,
-                    phone: e.target.value,
-                  })
-                }
+                    phone: formattedValue,
+                  });
+                }}
                 className="edit-box"
               />
             ) : (
@@ -423,17 +456,18 @@ const Profiles = ({ onClose = () => {} }) => {
             <button
               className="save-profile-btn"
               disabled={
-                !hasPatientChanges() || patientHasEmptyInput(editedPatientInfo)
+                !hasPatientChanges() ||
+                patientHasInvalidInput(editedPatientInfo)
               }
               style={{
                 opacity:
                   hasPatientChanges() &&
-                  !patientHasEmptyInput(editedPatientInfo)
+                  !patientHasInvalidInput(editedPatientInfo)
                     ? 1
                     : 0.5,
                 cursor:
                   hasPatientChanges() &&
-                  !patientHasEmptyInput(editedPatientInfo)
+                  !patientHasInvalidInput(editedPatientInfo)
                     ? "pointer"
                     : "not-allowed",
               }}
@@ -515,9 +549,10 @@ const Profiles = ({ onClose = () => {} }) => {
               type="tel"
               placeholder="Enter phone number"
               value={newPatient.phone}
-              onChange={(e) =>
-                setNewPatient({ ...newPatient, phone: e.target.value })
-              }
+              onChange={(e) => {
+                const formattedValue = formatPhoneNumber(e.target.value);
+                setNewPatient({ ...newPatient, phone: formattedValue });
+              }}
             />
           </div>
 
@@ -539,10 +574,10 @@ const Profiles = ({ onClose = () => {} }) => {
             </button>
             <button
               className="save-profile-btn"
-              disabled={patientHasEmptyInput(newPatient)}
+              disabled={patientHasInvalidInput(newPatient)}
               style={{
-                opacity: !patientHasEmptyInput(newPatient) ? 1 : 0.5,
-                cursor: !patientHasEmptyInput(newPatient)
+                opacity: !patientHasInvalidInput(newPatient) ? 1 : 0.5,
+                cursor: !patientHasInvalidInput(newPatient)
                   ? "pointer"
                   : "not-allowed",
               }}
@@ -745,13 +780,15 @@ const Profiles = ({ onClose = () => {} }) => {
             <strong>Phone:</strong>
             {editingCaretakerField === "phone" ? (
               <input
+                placeholder="Enter phone number"
                 value={editedCaretakerInfo.phone}
-                onChange={(e) =>
+                onChange={(e) => {
+                  const formattedValue = formatPhoneNumber(e.target.value);
                   setEditedCaretakerInfo({
                     ...editedCaretakerInfo,
-                    phone: e.target.value,
-                  })
-                }
+                    phone: formattedValue,
+                  });
+                }}
                 className="edit-box"
               />
             ) : (
@@ -810,17 +847,17 @@ const Profiles = ({ onClose = () => {} }) => {
               className="save-profile-btn"
               disabled={
                 !hasCaretakerChanges() ||
-                caretakerHasEmptyInput(editedCaretakerInfo)
+                caretakerHasInvalidInput(editedCaretakerInfo)
               }
               style={{
                 opacity:
                   hasCaretakerChanges() &&
-                  !caretakerHasEmptyInput(editedCaretakerInfo)
+                  !caretakerHasInvalidInput(editedCaretakerInfo)
                     ? 1
                     : 0.5,
                 cursor:
                   hasCaretakerChanges() &&
-                  !caretakerHasEmptyInput(editedCaretakerInfo)
+                  !caretakerHasInvalidInput(editedCaretakerInfo)
                     ? "pointer"
                     : "not-allowed",
               }}
@@ -902,9 +939,10 @@ const Profiles = ({ onClose = () => {} }) => {
               type="tel"
               placeholder="Enter phone number"
               value={newCaretaker.phone}
-              onChange={(e) =>
-                setNewCaretaker({ ...newCaretaker, phone: e.target.value })
-              }
+              onChange={(e) => {
+                const formattedValue = formatPhoneNumber(e.target.value);
+                setNewCaretaker({ ...newCaretaker, phone: formattedValue });
+              }}
             />
           </div>
 
@@ -929,10 +967,10 @@ const Profiles = ({ onClose = () => {} }) => {
             </button>
             <button
               className="save-profile-btn"
-              disabled={caretakerHasEmptyInput(newCaretaker)}
+              disabled={caretakerHasInvalidInput(newCaretaker)}
               style={{
-                opacity: !caretakerHasEmptyInput(newCaretaker) ? 1 : 0.5,
-                cursor: !caretakerHasEmptyInput(newCaretaker)
+                opacity: !caretakerHasInvalidInput(newCaretaker) ? 1 : 0.5,
+                cursor: !caretakerHasInvalidInput(newCaretaker)
                   ? "pointer"
                   : "not-allowed",
               }}
