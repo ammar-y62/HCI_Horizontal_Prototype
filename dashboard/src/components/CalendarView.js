@@ -190,7 +190,6 @@ const CalendarView = () => {
     return 1; // Full opacity for visible events
   };
 
-
   /**
    * Custom buttons for month navigation
    * We call getApi() on the FullCalendar instance (via ref),
@@ -275,8 +274,8 @@ const CalendarView = () => {
       <div className="calendar-header">
         <div className="left-section">
           <button
-        className={`icon-button ${filterApplied ? 'filter-applied' : ''}`} // Apply conditional class
-        onClick={() => setShowFilter(!showFilter)}
+            className={`icon-button ${filterApplied ? "filter-applied" : ""}`} // Apply conditional class
+            onClick={() => setShowFilter(!showFilter)}
           >
             <FaFilter /> Filter <FaCaretDown />
           </button>
@@ -373,7 +372,7 @@ const CalendarView = () => {
                 let html = `<div class="custom-day-content">`;
                 html += `<div class="fc-daygrid-day-number">${dayNumber}</div>`;
                 if (dayEvents.length > 0) {
-                  html += `<div class="month-appointments">${dayEvents.length} appointments</div>`;
+                  html += `<div class="month-appointments">${dayEvents.length} Appointments</div>`;
                 }
                 html += `</div>`;
                 return { html };
