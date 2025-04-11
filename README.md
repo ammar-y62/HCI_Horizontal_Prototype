@@ -1,7 +1,13 @@
 # Medical Clinic Scheduling Tool
 
 A small web application to manage medical clinic schedules, built with a Flask backend and a React frontend (located in the "dashboard" folder).
+## Contributors
 
+- **Ammar Elzeftawy** - [ammar.elzeftawy1@ucalgary.ca](mailto:ammar.elzeftawy1@ucalgary.ca)
+- **Christopher Axten** - [christopher.axten@ucalgary.ca](mailto:christopher.axten@ucalgary.ca)
+- **Austin Lee** - [austin.lee1@ucalgary.ca](mailto:austin.lee1@ucalgary.ca)
+- **Andy Huynh** - [andy.huynh2@ucalgary.ca](mailto:andy.huynh2@ucalgary.ca)
+- **Tavish Handa** - [tavish.handa@ucalgary.ca](mailto:tavish.handa@ucalgary.ca)
 ## Table of Contents
 
 - [Project Overview](#project-overview)
@@ -113,7 +119,7 @@ This project allows you to:
 ## Exact Walkthrough (Step-by-Step Instructions)
 
 1. **Launching the App:**
-   - Open your browser and navigate to [http://localhost:3000](http://localhost:3000) after running `npm start`.
+   - Open your browser and navigate to [http://localhost:3000](http://localhost:3000) after running `npm start`. Or you can open [https://ammar-y62.github.io/HCI_Horizontal_Prototype/](https://ammar-y62.github.io/HCI_Horizontal_Prototype/), but the host needs to be running the backend on his device.
 
 2. **Navigating Month View:**
    - The app opens in Month View with today’s date highlighted.
