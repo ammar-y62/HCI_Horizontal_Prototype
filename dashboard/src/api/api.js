@@ -1,5 +1,5 @@
 // src/api/api.js
-const BASE_URL = "http://127.0.0.1:5000";
+const BASE_URL = "https://medical-clinic-tool.onrender.com";
 
 // Helper function to perform API requests
 async function apiFetch(endpoint, options = {}) {

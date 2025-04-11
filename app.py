@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+import os
+
 # from flask_migrate import Migrate
 
 app = Flask(__name__)
@@ -198,5 +200,7 @@ def update_person(id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))
+    # Bind to 0.0.0.0 so that Render can access it externally.
+    app.run(host="0.0.0.0", port=port, debug=False)
