@@ -58,6 +58,7 @@ const AppointmentPopup = ({
   const [showCaretakerDetails, setShowCaretakerDetails] = useState(false);
   const [hoveredCaretaker, setHoveredCaretaker] = useState(null);
   const [notes, setNotes] = useState(""); // New state for notes
+  const [existingAppointment, setExistingAppointment] = useState(null);
   // Fetch people (patients and caretakers) when component mounts
   useEffect(() => {
     const loadPeople = async () => {
@@ -117,6 +118,7 @@ const AppointmentPopup = ({
               setSelectedCaretaker(foundAppointment.doctor_id);
               setSelectedUrgency(foundAppointment.urgency || 1);
               setNotes(foundAppointment.notes || ""); // Set the notes field
+              setExistingAppointment(foundAppointment);
             } else {
               console.warn("Appointment not found with ID:", appointmentId);
             }
@@ -126,6 +128,7 @@ const AppointmentPopup = ({
             setSelectedCaretaker(appointment.doctor_id);
             setSelectedUrgency(appointment.urgency || 1);
             setNotes(appointment.notes || ""); // Set the notes field
+            setExistingAppointment(appointment);
           }
         } catch (error) {
           console.error("Error fetching appointment:", error);
@@ -135,6 +138,16 @@ const AppointmentPopup = ({
 
     loadAppointmentDetails();
   }, [appointmentId]);
+
+  const hasAppointmentChanges = () => {
+    if (!existingAppointment) return true;
+    return (
+      existingAppointment.patient_id !== selectedPatient ||
+      existingAppointment.doctor_id !== selectedCaretaker ||
+      existingAppointment.urgency !== selectedUrgency ||
+      existingAppointment.notes !== notes
+    );
+  };
 
   // Add click outside listener to close dropdowns
   useEffect(() => {
@@ -684,15 +697,28 @@ const AppointmentPopup = ({
           <button
             className="save-btn"
             onClick={handleSave}
-            disabled={!selectedPatient || !selectedCaretaker}
+            disabled={
+              !selectedPatient || !selectedCaretaker || !hasAppointmentChanges()
+            }
             style={{
               backgroundColor:
-                !selectedPatient || !selectedCaretaker ? "#a9b7d0" : "#4F81BD",
+                !selectedPatient ||
+                !selectedCaretaker ||
+                !hasAppointmentChanges()
+                  ? "#a9b7d0"
+                  : "#4F81BD",
               cursor:
-                !selectedPatient || !selectedCaretaker
+                !selectedPatient ||
+                !selectedCaretaker ||
+                !hasAppointmentChanges()
                   ? "not-allowed"
                   : "pointer",
-              opacity: !selectedPatient || !selectedCaretaker ? 0.7 : 1,
+              opacity:
+                !selectedPatient ||
+                !selectedCaretaker ||
+                !hasAppointmentChanges()
+                  ? 0.7
+                  : 1,
             }}
           >
             <FaRegSave />
