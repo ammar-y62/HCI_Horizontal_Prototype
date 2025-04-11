@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/HCI_Horizontal_Prototype/static/css/main.89b9914e.css",
+    "main.js": "/HCI_Horizontal_Prototype/static/js/main.7828cba0.js",
+    "static/js/453.59b8a61b.chunk.js": "/HCI_Horizontal_Prototype/static/js/453.59b8a61b.chunk.js",
+    "index.html": "/HCI_Horizontal_Prototype/index.html",
+    "main.89b9914e.css.map": "/HCI_Horizontal_Prototype/static/css/main.89b9914e.css.map",
+    "main.7828cba0.js.map": "/HCI_Horizontal_Prototype/static/js/main.7828cba0.js.map",
+    "453.59b8a61b.chunk.js.map": "/HCI_Horizontal_Prototype/static/js/453.59b8a61b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.89b9914e.css",
+    "static/js/main.7828cba0.js"
+  ]
+}
