@@ -374,6 +374,7 @@ const AppointmentPopup = ({
     setSelectedPatient("");
     setSelectedCaretaker("");
     setSelectedUrgency(1); // Reset to default urgency
+    setNotes("");
   };
 
   // Delete the appointment
