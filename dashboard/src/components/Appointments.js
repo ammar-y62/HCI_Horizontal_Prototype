@@ -26,7 +26,6 @@ const patientDetailsMap = {
 const caretakerDetailsMap = {
   caretaker1: {
     name: "Caretaker 1",
-    position: "Doctor",
     email: "example@example.com",
     phone: "403-123-4567",
     address: "123 Example Street",
@@ -191,7 +190,6 @@ const AppointmentPopup = ({
         name: caretaker
           ? caretaker.name
           : `Caretaker ${caretakerId.replace("caretaker", "")}`,
-        position: "Caretaker",
         email: caretaker.email,
         phone: caretaker.phone_number,
         address: caretaker.address,
@@ -263,9 +261,6 @@ const AppointmentPopup = ({
         <div className="patient-details-content">
           <div className="patient-details-label">Name:</div>
           <div style={{ fontSize: "18px" }}>{details.name}</div>
-
-          <div className="patient-details-label">Position:</div>
-          <div style={{ fontSize: "18px" }}>{details.position}</div>
 
           <div className="patient-details-label">Email:</div>
           <div style={{ fontSize: "18px" }}>{details.email}</div>
@@ -628,37 +623,40 @@ const AppointmentPopup = ({
             ></div>
           </div>
           {showUrgencySelector && (
-            <div
-            className="urgency-selector">
-            <div
-              className="urgency-option urgency-low"
-              onClick={() => {
-                setSelectedUrgency(1);
-                setShowUrgencySelector(false);
-              }}
-              title="Low" // Added title
-            ></div>
-            <div
-              className="urgency-option urgency-medium"
-              onClick={() => {
-                setSelectedUrgency(2);
-                setShowUrgencySelector(false);
-              }}
-              title="Medium" // Added title
-            ></div>
-            <div
-              className="urgency-option urgency-high"
-              onClick={() => {
-                setSelectedUrgency(3);
-                setShowUrgencySelector(false);
-              }}
-              title="High" // Added title
-            ></div>
-          </div>
+            <div className="urgency-selector">
+              <div
+                className="urgency-option urgency-low"
+                onClick={() => {
+                  setSelectedUrgency(1);
+                  setShowUrgencySelector(false);
+                }}
+                title="Low" // Added title
+              ></div>
+              <div
+                className="urgency-option urgency-medium"
+                onClick={() => {
+                  setSelectedUrgency(2);
+                  setShowUrgencySelector(false);
+                }}
+                title="Medium" // Added title
+              ></div>
+              <div
+                className="urgency-option urgency-high"
+                onClick={() => {
+                  setSelectedUrgency(3);
+                  setShowUrgencySelector(false);
+                }}
+                title="High" // Added title
+              ></div>
+            </div>
           )}
         </div>
         <div className="popup-section">
-          <label style={{ textAlign: "center", width: "100%", display: "block" }}>Notes:</label>
+          <label
+            style={{ textAlign: "center", width: "100%", display: "block" }}
+          >
+            Notes:
+          </label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
