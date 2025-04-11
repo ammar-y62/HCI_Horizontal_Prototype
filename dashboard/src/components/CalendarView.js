@@ -78,7 +78,7 @@ const CalendarView = () => {
   const handleDatesSet = async (dateInfo) => {
     try {
       const { start, end, view } = dateInfo;
-      setCurrentRange({ start, end }); // store current range
+      setCurrentRange({ start, end });
       let title = view.title;
       if (view.type === "resourceTimeGridDay") {
         const dayOptions = { weekday: "long" };
@@ -90,14 +90,24 @@ const CalendarView = () => {
       }
       setTitleText(title);
       const data = await fetchAppointments();
-
-      // Also fetch people to get their names
       const people = await fetchPeople();
 
-      const filtered = data.filter((apt) => {
+      let filtered = data.filter((apt) => {
         const apptDate = new Date(apt.date_time);
         return apptDate >= start && apptDate < end;
       });
+
+      // Apply active filters for patients and doctors
+      if (filters.patient.length > 0) {
+        filtered = filtered.filter((apt) =>
+          filters.patient.includes(apt.patient_id)
+        );
+      }
+      if (filters.doctor.length > 0) {
+        filtered = filtered.filter((apt) =>
+          filters.doctor.includes(apt.doctor_id)
+        );
+      }
 
       const newEvents = filtered.map((apt) => {
         // Find the patient and doctor names from the people list
