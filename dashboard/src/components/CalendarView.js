@@ -97,20 +97,7 @@ const CalendarView = () => {
         return apptDate >= start && apptDate < end;
       });
 
-      // Apply active filters for patients and doctors
-      if (filters.patient.length > 0) {
-        filtered = filtered.filter((apt) =>
-          filters.patient.includes(apt.patient_id)
-        );
-      }
-      if (filters.doctor.length > 0) {
-        filtered = filtered.filter((apt) =>
-          filters.doctor.includes(apt.doctor_id)
-        );
-      }
-
       const newEvents = filtered.map((apt) => {
-        // Find the patient and doctor names from the people list
         const patient = people.find((p) => p.id === apt.patient_id);
         const doctor = people.find((p) => p.id === apt.doctor_id);
 
@@ -141,7 +128,6 @@ const CalendarView = () => {
     if (!currentRange) return;
     try {
       const data = await fetchAppointments();
-      // Also fetch people to get their names
       const people = await fetchPeople();
 
       let filtered = data.filter((apt) => {
@@ -149,21 +135,7 @@ const CalendarView = () => {
         return apptDate >= currentRange.start && apptDate < currentRange.end;
       });
 
-      // Apply patient filter if any
-      if (filters.patient.length > 0) {
-        filtered = filtered.filter((apt) =>
-          filters.patient.includes(apt.patient_id)
-        );
-      }
-      // Apply doctor filter if any
-      if (filters.doctor.length > 0) {
-        filtered = filtered.filter((apt) =>
-          filters.doctor.includes(apt.doctor_id)
-        );
-      }
-
       const newEvents = filtered.map((apt) => {
-        // Find the patient and doctor names from the people list
         const patient = people.find((p) => p.id === apt.patient_id);
         const doctor = people.find((p) => p.id === apt.doctor_id);
 
@@ -378,11 +350,13 @@ const CalendarView = () => {
                     .split("T")[0];
                   return evtDate === localDateStr;
                 });
-                // Build custom HTML
+                const filteredCount = dayEvents.filter(
+                  (evt) => getEventOpacity(evt) === 1
+                ).length;
                 let html = `<div class="custom-day-content">`;
                 html += `<div class="fc-daygrid-day-number">${dayNumber}</div>`;
-                if (dayEvents.length > 0) {
-                  html += `<div class="month-appointments">${dayEvents.length} Appointments</div>`;
+                if (filteredCount > 0) {
+                  html += `<div class="month-appointments">${filteredCount} Appointments</div>`;
                 }
                 html += `</div>`;
                 return { html };
