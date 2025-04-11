@@ -18,7 +18,128 @@ A small web application to manage medical clinic schedules, built with a Flask b
 
 ## Project Overview
 
-The Medical Clinic Scheduling Tool provides a calendar-based interface to manage appointments and scheduling for a medical clinic. The backend is powered by Flask, while the frontend is built using React. This repository contains both the backend code and the frontend code in the "dashboard" folder.
+This project allows you to:
+
+- **View all scheduled appointments in Month View:** Each day in the calendar shows a count of scheduled appointments. When any filters are applied (e.g., by patient or caretaker), the daily counts dynamically update to display only the appointments matching those filters.
+- **Switch between Month and Day views:**
+  - **Month View:** Displays a calendar grid with the current month and highlights the total appointments each day.
+  - **Day View:** Displays a time-and-room grid for the currently selected date.
+- **Manage Appointments:** Create, edit, or delete appointments by clicking on time slots.
+- **Filter Appointments:** Use various filtering criteria (e.g., by patient or caretaker) to adjust the appointments displayed.
+- **Manage Patient and Caretaker Profiles:** Add, view, update, and delete profiles with relevant information.
+
+---
+
+## Key Features / Cases Implemented
+
+1. **Month View**
+   - Displays all days of the current month.
+   - Shows the total number of scheduled appointments per day.
+   - Navigation:
+     - Use the left and right arrow keys or the on-screen arrow buttons to move to the previous or next month.
+     - Press **m** to switch to Month View (if currently in Day View).
+
+2. **Day View**
+   - Shows a grid where columns are **room numbers** and rows represent **hourly time slots** (e.g., 9 AM to 5 PM).
+   - Navigation:
+     - Use the left and right arrow keys or the on-screen arrow buttons to move to the previous or next day.
+     - Press **d** to switch to Day View for the currently selected date.
+   - The currently selected date is highlighted in Month View (today’s date is highlighted yellow by default).
+
+3. **Hover Effects in Month View**
+   - Hovering over a day slot triggers a blue, highlighted overlay with an enter icon, indicating that clicking will switch to the Day View for that date.
+   - The mouse cursor becomes a pointer when hovering over a day slot.
+
+4. **Hover Effects in Day View**
+   - Hovering over an appointment slot adds a blue, transparent overlay which shifts the slot’s content into the background.
+   - For an empty appointment slot, a plus symbol appears, indicating that clicking will create a new appointment.
+   - For a filled appointment slot, an edit symbol appears, indicating that clicking will edit the existing appointment.
+   - The mouse cursor becomes a pointer on hover.
+
+5. **Filter Menu**
+   - Click on the **Filter** button or press **f** to open the filter categories menu.
+   - Each filter category displays a list of potential filtering options with an integrated search bar.
+   - When a filter criterion is selected:
+     - The corresponding filter button changes its appearance (e.g., the box fills with blue and shows a checkmark).
+     - The **Filter** button turns orange to indicate active filtering.
+   - Filtered-out appointments in the Day View appear with reduced opacity (transparent), but are still visible.
+   - Use the **Clear Filters** option to deselect all active filters and display all appointments normally.
+
+6. **Appointment Creation Dialog Popup (Day View Schedule)**
+   - Clicking on an appointment slot opens a central dialog popup with a faded background.
+   - The popup displays the room and time of the slot.
+   - For empty slots, default values (e.g., “Unassigned”) appear for the patient and caretaker.
+   - For existing appointments, the popup pre-fills with existing appointment data and includes a delete button.
+   - Patient and Caretaker selection fields include a searchable dropdown list.
+   - Hovering over a profile or selected profile shows a summary popup with more details.
+   - Pressing the **Clear** button resets the fields to default values.
+   - The **Save** button remains disabled unless both the patient and caretaker fields are assigned.
+
+7. **Appointment Editing Dialog Popup (Day View Schedule)**
+   - Similar to the creation dialog but pre-populated with existing appointment data.
+   - Includes functionality for editing and deleting an appointment.
+
+8. **Patient Profile Management Dialog Pages**
+   - **Add:** Press the add button to open a page for creating a new patient profile.
+   - **View:** Use the view button to browse or search for existing patient profiles.
+   - **Edit:** Clicking on a patient profile displays their details for editing.
+   - **Remove:** A remove button allows deleting a patient profile from the system.
+
+9. **Caretaker Profile Management Dialog Pages**
+   - **Add:** Press the add button to open a page for creating a new caretaker profile.
+   - **View:** Use the view button to browse or search for existing caretaker profiles.
+   - **Edit:** Clicking on a caretaker profile shows their details for editing.
+   - **Remove:** A remove button allows deleting a caretaker profile from the system.
+
+---
+
+## Data Entry Guide (What Data Goes Where and When)
+
+1. **Before Scheduling Appointments:**
+   - Add new patient and caretaker profiles using the profile management dialogs. This ensures they appear in the selection dropdown in the appointment creation dialog.
+
+2. **When Creating/Editing an Appointment:**
+   - **Patient:** Must be selected (required).
+   - **Caretaker:** Must be selected (required).
+   - **Room:** Determined by the time slot clicked in Day View.
+   - **Date and Time:** Automatically set based on the selected slot.
+
+3. **Using Filters:**
+   - Select which patient(s) and/or caretaker(s) to filter appointments.
+   - The count of appointments displayed (e.g., on each day in Month View) updates to reflect the filtering criteria.
+
+---
+
+## Exact Walkthrough (Step-by-Step Instructions)
+
+1. **Launching the App:**
+   - Open your browser and navigate to [http://localhost:3000](http://localhost:3000) after running `npm start`.
+
+2. **Navigating Month View:**
+   - The app opens in Month View with today’s date highlighted.
+   - Hover over any day slot to see a blue overlay with an enter icon, indicating that clicking will switch to the Day View for that day.
+   - Use the left/right arrow buttons or arrow keys to navigate to previous/next months.
+
+3. **Switching to Day View:**
+   - Click the **Day** toggle button in the top toolbar, or press **d**.
+   - The Day View grid appears with room numbers as columns and hourly slots as rows.
+
+4. **Creating/Editing an Appointment:**
+   - In Day View, hover over an empty slot to display a plus icon and click to open the appointment creation dialog.
+   - For an existing appointment, click the slot (it shows an edit icon on hover) to open the editing dialog.
+   - Fill in or update the appointment details, then click **Save** (or **Delete** for removal).
+
+5. **Applying Filters:**
+   - Click the **Filter** button or press **f** to open the filter menu.
+   - Select/deselect filtering criteria for patients or caretakers.
+   - Observe that the appointment counts update dynamically in the Month View and filtered-out appointments appear transparent.
+
+6. **Managing Profiles:**
+   - Click the **Profiles** button in the top toolbar.
+   - Use the provided dialogs to add, view, edit, or remove patient and caretaker profiles.
+   - Newly added profiles will be available when creating or editing appointments.
+
+---
 
 ## System Requirements
 
