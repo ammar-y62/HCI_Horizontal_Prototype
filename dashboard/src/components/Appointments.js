@@ -473,6 +473,8 @@ const AppointmentPopup = ({
                     setSelectedPatient(patient.id);
                     setPatientSearch("");
                     setShowPatientDropdown(false);
+                    setShowPatientDetails(false);
+                    setHoveredPatient(null);
                   }}
                   onMouseEnter={() => {
                     setHoveredPatient(patient.id);
@@ -565,6 +567,8 @@ const AppointmentPopup = ({
                     setSelectedCaretaker(caretaker.id);
                     setCaretakerSearch("");
                     setShowCaretakerDropdown(false);
+                    setShowCaretakerDetails(false);
+                    setHoveredCaretaker(null);
                   }}
                   onMouseEnter={() => {
                     setHoveredCaretaker(caretaker.id);
