@@ -119,7 +119,7 @@ This project allows you to:
 ## Exact Walkthrough (Step-by-Step Instructions)
 
 1. **Launching the App:**
-   - Open your browser and navigate to [http://localhost:3000](http://localhost:3000) after running `npm start`. Or you can open [https://ammar-y62.github.io/HCI_Horizontal_Prototype/](https://ammar-y62.github.io/HCI_Horizontal_Prototype/), but the host needs to be running the backend on his device.
+   - Open your browser and navigate to [https://ammar-y62.github.io/HCI_Horizontal_Prototype/](https://ammar-y62.github.io/HCI_Horizontal_Prototype/), or you can follow the steps in [Project Setup](#project-setup) and set up the environment locally.
 
 2. **Navigating Month View:**
    - The app opens in Month View with today’s date highlighted.
