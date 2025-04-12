@@ -172,6 +172,10 @@ This project allows you to:
 - Open Profile Popup: P
 - Close Popup: Esc
 
+**Video Presentation:**
+
+[![Presentation Video](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://youtu.be/Mp1PNabv4pA)
+
 ---
 
 ## System Requirements
