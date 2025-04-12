@@ -95,6 +95,13 @@ const Profiles = ({ onClose = () => {} }) => {
     address: "",
   });
 
+  const transformToBackendFormat = (person) => ({
+    name: person.name,
+    email: person.email,
+    phone_number: person.phone, // backend expects this
+    address: person.address,
+  });
+
   // Filter based on search input
   const filteredPatients = patientList.filter((p) =>
     p.name.toLowerCase().includes(patientSearch.toLowerCase())
@@ -492,12 +499,15 @@ const Profiles = ({ onClose = () => {} }) => {
               onClick={async () => {
                 try {
                   // Call the updatePerson API with the edited patient data
-                  await updatePerson(selectedPatient, {
-                    name: editedPatientInfo.name,
-                    email: editedPatientInfo.email,
-                    phone_number: editedPatientInfo.phone,
-                    address: editedPatientInfo.address,
-                  });
+                  await updatePerson(
+                    selectedPatient,
+                    transformToBackendFormat({
+                      name: editedPatientInfo.name,
+                      email: editedPatientInfo.email,
+                      phone_number: editedPatientInfo.phone,
+                      address: editedPatientInfo.address,
+                    })
+                  );
 
                   // Update the local state with the edited data
                   setPatientDetailsMap({
@@ -886,12 +896,15 @@ const Profiles = ({ onClose = () => {} }) => {
               onClick={async () => {
                 try {
                   // Call the updatePerson API with the edited caretaker data
-                  await updatePerson(selectedCaretaker, {
-                    name: editedCaretakerInfo.name,
-                    email: editedCaretakerInfo.email,
-                    phone_number: editedCaretakerInfo.phone,
-                    address: editedCaretakerInfo.address,
-                  });
+                  await updatePerson(
+                    selectedCaretaker,
+                    transformToBackendFormat({
+                      name: editedCaretakerInfo.name,
+                      email: editedCaretakerInfo.email,
+                      phone_number: editedCaretakerInfo.phone,
+                      address: editedCaretakerInfo.address,
+                    })
+                  );
 
                   // Update the local state with the edited data
                   setCaretakerDetailsMap({
