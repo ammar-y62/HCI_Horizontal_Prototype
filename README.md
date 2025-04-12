@@ -320,9 +320,6 @@ Verify your package versions by checking `requirements.txt` for the backend and 
 
 - Add more scheduling features, user authentication, and extended calendar functionality.
 
-### Database Integration:
-
-- Connect a database (e.g., SQLite, PostgreSQL) for persistent data storage.
 
 ### UI Improvements:
 
