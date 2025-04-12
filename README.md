@@ -145,6 +145,14 @@ This project allows you to:
    - Use the provided dialogs to add, view, edit, or remove patient and caretaker profiles.
    - Newly added profiles will be available when creating or editing appointments.
 
+**Keyboard Shortcuts:**
+- Switch to Month View: M
+- Switch to Day View: D
+- Previous Month/Day: Left Arrow
+- Next Month/Day: Right Arrow
+- Open Filter Popup: F
+- Open Profile Popup: P
+- Close Popup: Esc
 ---
 
 ## System Requirements
