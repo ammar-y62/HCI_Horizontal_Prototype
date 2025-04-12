@@ -44,12 +44,12 @@ with app.app_context():
     db.session.query(Person).delete()
 
     # Add hardcoded people (doctors, patients, caretakers) with unique emails
-    doctor1 = Person(name="Dr. John Doe", email="johndoe@example.com", phone_number="1234567890", address="123 Medical St", status="doctor")
-    doctor2 = Person(name="Dr. Jane Smith", email="janesmith@example.com", phone_number="0987654321", address="456 Health Rd", status="doctor")
-    patient1 = Person(name="Patient A", email="patientA@example.com", phone_number="1112233445", address="789 Patient Ave", status="patient")
-    patient2 = Person(name="Patient B", email="patientB@example.com", phone_number="5544332211", address="101 Patient Blvd", status="patient")
-    caretaker1 = Person(name="Caretaker X", email="caretakerX@example.com", phone_number="2233445566", address="202 Caretaker St", status="caretaker")
-    caretaker2 = Person(name="Caretaker Y", email="caretakerY@example.com", phone_number="6677889900", address="303 Caretaker Rd", status="caretaker")
+    doctor1 = Person(name="Dr. John Doe", email="johndoe@example.com", phone_number="123-456-7890", address="123 Medical St", status="doctor")
+    doctor2 = Person(name="Dr. Jane Smith", email="janesmith@example.com", phone_number="098-765-4321", address="456 Health Rd", status="doctor")
+    patient1 = Person(name="Patient A", email="patientA@example.com", phone_number="111-223-3445", address="789 Patient Ave", status="patient")
+    patient2 = Person(name="Patient B", email="patientB@example.com", phone_number="554-433-2211", address="101 Patient Blvd", status="patient")
+    caretaker1 = Person(name="Caretaker X", email="caretakerX@example.com", phone_number="223-344-5566", address="202 Caretaker St", status="caretaker")
+    caretaker2 = Person(name="Caretaker Y", email="caretakerY@example.com", phone_number="667-788-9900", address="303 Caretaker Rd", status="caretaker")
 
     # Add the people to the session and commit
     db.session.add_all([doctor1, doctor2, patient1, patient2, caretaker1, caretaker2])
