@@ -176,7 +176,6 @@ This project allows you to:
 
 [![Presentation Video](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://youtu.be/Mp1PNabv4pA)
 
----
 
 ## System Requirements
 
